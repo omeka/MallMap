@@ -24,21 +24,56 @@
         </select>
         <label for="time-period">Time Period</label>
         <select id="time-period" name="time-period">
-            <option>1780 - 1800</option>
-            <option>1800 - 1850</option>
-            <option>1850 - 1900</option>
-            <option>1900 - 1950</option>
-            <option>1950 - present</option>
+            <option>Select below...</option>
+            <option value="1791">1791</option>
+            <option value="1828">1828</option>
+            <option value="1858">1858</option>
+            <option value="1887">1887</option>
+            <option value="1917">1917</option>
+            <option value="1942">1942</option>
+            <option value="1996">1996</option>
         </select>
-        <label for="has-activity">
-        <input type="checkbox" />Activity available?
+        <label for="toggle-map">
+        <input type="checkbox" id="toggle-map"/>Toggle Map
         </label>
-        
     </div>
     <div id="map"></div>
     <script type="text/javascript">
-        var map = L.map('map').setView([38.88963, -77.00901], 13);
-        L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+        jQuery(document).ready(function () {
+            var map = L.map('map').setView([38.89083, -77.02849], 15);
+            var historicMapLayer;
+            
+            // Add the base layer.
+            L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+            
+            // Change historic map layer.
+            jQuery('#time-period').change(function () {
+                jQuery('#toggle-map').attr('checked', false)
+                if (historicMapLayer) {
+                    map.removeLayer(historicMapLayer);
+                }
+                historicMapLayer = L.tileLayer(
+                    'http://localhost/omeka/plugins/MallMap/' + jQuery(this).val() + '/{z}/{x}/{y}.jpg', 
+                    {tms: true, opacity: 0.85}
+                );
+                map.addLayer(historicMapLayer);
+            });
+            
+            // Toggle historic map layer.
+            jQuery('#toggle-map').change(function () {
+                if (this.checked) {
+                    if (historicMapLayer) {
+                        map.removeLayer(historicMapLayer);
+                    }
+                } else {
+                    map.addLayer(historicMapLayer);
+                }
+            });
+            function onMapClick(e) {
+                console.log("You clicked the map at zoom " + map.getZoom() + '; ' + e.latlng);
+            }
+            map.on('click', onMapClick);
+        });
     </script>
 </body>
 </html> 
