@@ -13,43 +13,64 @@
  */
 class MallMap_IndexController extends Omeka_Controller_AbstractActionController
 {
-    public function indexAction()
-    {}
+    private $_formData = array(
+        'item_types' => array(
+            array('id' => 1, 'name' => 'Place'), 
+            array('id' => 2, 'name' => 'Event'), 
+            array('id' => 3, 'name' => 'Document'), 
+            array('id' => 4, 'name' => 'Image'), // Still Image
+            array('id' => 5, 'name' => 'Video'), // Moving Image
+            array('id' => 6, 'name' => 'Audio'), // Sound
+        ), 
+        // "Dublin Core":Coverage
+        'map_coverages' => array(
+            'element_id' => 1, 
+            'texts' => array(
+                array('text' => 1791, 'title' => ''), 
+                array('text' => 1828, 'title' => ''), 
+                array('text' => 1858, 'title' => ''), 
+                array('text' => 1887, 'title' => ''), 
+                array('text' => 1917, 'title' => ''), 
+                array('text' => 1942, 'title' => ''), 
+                array('text' => 1996, 'title' => ''), 
+            ), 
+        ), 
+        // "Item Type Metadata":Type
+        'place_types' => array(
+            'element_id' => 12, 
+            'texts' => array(
+                array('text' => 'Statues and Sculpture'), 
+                array('text' => 'Monuments'), 
+                array('text' => 'Memorials'), 
+                array('text' => 'Ghost Sites'), 
+                array('text' => 'Museums'), 
+                array('text' => 'Art Galleries'), 
+                array('text' => 'Landscapes'), 
+                array('text' => 'Concert Venues'), 
+                array('text' => 'Government Offices'), 
+            ), 
+        ), 
+        // "Item Type Metadata":"Event Type"
+        'event_types' => array(
+            'element_id' => 123, 
+            'texts' => array(
+                array('text' => 'Marches and Rallies'), 
+                array('text' => 'Encampment'), 
+                array('text' => 'Concert'), 
+                array('text' => 'Openings and Dedications'), 
+                array('text' => 'Cultural Gathering'), 
+                array('text' => 'Remembrance'), 
+                array('text' => 'Inauguration'), 
+                array('text' => 'Environmental Disaster'), 
+                array('text' => 'D.C. History'), 
+                array('text' => 'Planning and Design'), 
+            ), 
+        ), 
+    );
     
-    /**
-     * Get data to be used by the filter map form.
-     * 
-     * If all the data is static, it may be preferable to hard-code it in 
-     * JavaScript instead of querying the database on every page load.
-     */
-    public function getFormDataAction()
+    public function indexAction()
     {
-        // Process only AJAX requests.
-        if (!$this->_request->isXmlHttpRequest()) {
-            throw new Omeka_Controller_Exception_404;
-        }
-        
-        $db = $this->_helper->db->getDb();
-        $data = array();
-        
-        // Get eras.
-        $sql = 
-        "SELECT elements.id, element_texts.text " . 
-        "FROM $db->ElementText AS element_texts " . 
-        "JOIN $db->Element AS elements ON element_texts.element_id = elements.id " . 
-        "JOIN $db->ElementSet AS element_sets ON elements.element_set_id = element_sets.id " . 
-        "WHERE element_texts.record_type = 'Item' " . 
-        "AND elements.name = 'Coverage' " . 
-        "AND element_sets.name = 'Dublin Core'";
-        $data['eras'] = $db->query($sql)->fetchAll();
-        
-        // Get item types.
-        $sql = 
-        "SELECT item_types.id, item_types.name " . 
-        "FROM $db->ItemType AS item_types";
-        $data['item_types'] = $db->query($sql)->fetchAll();
-        
-        $this->_helper->json($data);
+        $this->view->form_data = $this->_formData;
     }
     
     /**
@@ -62,7 +83,7 @@ class MallMap_IndexController extends Omeka_Controller_AbstractActionController
     {
         // Process only AJAX requests.
         if (!$this->_request->isXmlHttpRequest()) {
-            //throw new Omeka_Controller_Exception_404;
+            throw new Omeka_Controller_Exception_404;
         }
         
         $db = $this->_helper->db->getDb();
@@ -103,9 +124,7 @@ class MallMap_IndexController extends Omeka_Controller_AbstractActionController
             $sql .= " $where";
         }
         
-        //echo '<pre>';print_r($joins);echo '</pre>';
-        //echo '<pre>';print_r($wheres);echo '</pre>';
-        //exit($sql);
+//exit($sql);
         
         // Once all item IDs have been retrieved, fetch all the item data that 
         // is needed for the geoJSON response.

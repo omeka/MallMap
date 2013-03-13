@@ -11,69 +11,50 @@
     <?php echo head_css(); ?>
     <script src="http://cdn.leafletjs.com/leaflet-0.5/leaflet.js"></script>
     <?php echo head_js(); ?>
+    <script type="text/javascript">
+        var mapCoverageElementId = <?php echo $this->form_data['map_coverages']['element_id'] ?>;
+        var placeTypeElementId = <?php echo $this->form_data['place_types']['element_id'] ?>;
+        var eventTypeElementId = <?php echo $this->form_data['event_types']['element_id'] ?>;
+    </script>
 </head>
 <body>
     <a href="#" id="filter-button">Filters</a>
+    <a href="#" id="toggle-map-button" style="display: none;">Toggle Map</a>
     <div id="filters">
         <h1>Select Filters</h1>
+        <label for="map-coverage">Map Era</label>
+        <select id="map-coverage" name="map-coverage">
+            <option value="0">Select below...</option>
+            <?php foreach ($this->form_data['map_coverages']['texts'] as $map_coverage): ?>
+            <option value="<?php echo $map_coverage['text']; ?>" title="<?php echo htmlspecialchars($map_coverage['title']); ?>"><?php echo $map_coverage['text']; ?></option>
+            <?php endforeach; ?>
+        </select>
         <label for="item-type">Item Type</label>
         <select id="item-type" name="item-type">
-            <option>Monument</option>
-            <option>Home</option>
-            <option>Museum</option>
+            <option value="0">Select below...</option>
+            <?php foreach ($this->form_data['item_types'] as $item_type): ?>
+            <option value="<?php echo $item_type['id']; ?>"><?php echo $item_type['name']; ?></option>
+            <?php endforeach; ?>
         </select>
-        <label for="time-period">Time Period</label>
-        <select id="time-period" name="time-period">
-            <option>Select below...</option>
-            <option value="1791">1791</option>
-            <option value="1828">1828</option>
-            <option value="1858">1858</option>
-            <option value="1887">1887</option>
-            <option value="1917">1917</option>
-            <option value="1942">1942</option>
-            <option value="1996">1996</option>
-        </select>
-        <label for="toggle-map">
-        <input type="checkbox" id="toggle-map"/>Toggle Map
-        </label>
+        <div id="place-type-div" style="display: none;">
+            <label for="place-type">Place Type</label>
+            <select id="place-type" name="place-type">
+                <option value="0">Select below...</option>
+                <?php foreach ($this->form_data['place_types']['texts'] as $place_type): ?>
+                <option value="<?php echo htmlspecialchars($place_type['text']); ?>"><?php echo $place_type['text']; ?></option>
+                <?php endforeach; ?>
+            </select>
+        </div>
+        <div id="event-type-div" style="display: none;">
+            <label for="event-type">Event Type</label>
+            <select id="event-type" name="event-type">
+                <option value="0">Select below...</option>
+                <?php foreach ($this->form_data['event_types']['texts'] as $event_type): ?>
+                <option value="<?php echo htmlspecialchars($event_type['text']); ?>"><?php echo $event_type['text']; ?></option>
+                <?php endforeach; ?>
+            </select>
+        </div>
     </div>
     <div id="map"></div>
-    <script type="text/javascript">
-        jQuery(document).ready(function () {
-            var map = L.map('map').setView([38.89083, -77.02849], 15);
-            var historicMapLayer;
-            
-            // Add the base layer.
-            L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
-            
-            // Change historic map layer.
-            jQuery('#time-period').change(function () {
-                jQuery('#toggle-map').attr('checked', false)
-                if (historicMapLayer) {
-                    map.removeLayer(historicMapLayer);
-                }
-                historicMapLayer = L.tileLayer(
-                    'http://localhost/omeka/plugins/MallMap/' + jQuery(this).val() + '/{z}/{x}/{y}.jpg', 
-                    {tms: true, opacity: 0.85}
-                );
-                map.addLayer(historicMapLayer);
-            });
-            
-            // Toggle historic map layer.
-            jQuery('#toggle-map').change(function () {
-                if (this.checked) {
-                    if (historicMapLayer) {
-                        map.removeLayer(historicMapLayer);
-                    }
-                } else {
-                    map.addLayer(historicMapLayer);
-                }
-            });
-            function onMapClick(e) {
-                console.log("You clicked the map at zoom " + map.getZoom() + '; ' + e.latlng);
-            }
-            map.on('click', onMapClick);
-        });
-    </script>
 </body>
 </html> 

@@ -16,7 +16,7 @@ html, body, #map {
     height: 100%;
 }
 
-a#filter-button { 
+a#filter-button, a#toggle-map-button { 
     text-decoration: none;
     color: #fff;
     background-color: #EB5252;
@@ -28,6 +28,13 @@ a#filter-button {
     position: fixed;
     top: 20px;
     right: 20px;
+    z-index: 100;
+}
+
+#toggle-map-button {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
     z-index: 100;
 }
 
