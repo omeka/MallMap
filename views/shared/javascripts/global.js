@@ -1,11 +1,13 @@
 jQuery(document).ready(function () {
-    var map = L.map('map').setView([38.89083, -77.02849], 15);
+    var map = L.map('map').
+        setView([38.89083, -77.02849], 15).
+        addLayer(L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'));
     var historicMapLayer;
     var geoJsonLayer;
     
-    // Add the base layer.
-    L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
-    
+    /*
+     * Handle the filter form.
+     */
     jQuery('#filter-button').click(function(e) {
         e.preventDefault();
         var clicks = jQuery(this).data('clicks');
@@ -21,7 +23,9 @@ jQuery(document).ready(function () {
         jQuery(this).data('clicks', !clicks);
     });
     
-    // Filter historic map layer.
+    /*
+     * Filter historic map layer.
+     */
     jQuery('#map-coverage').change(function () {
         if (historicMapLayer) {
             jQuery('#toggle-map-button').data('clicks', false);
@@ -44,7 +48,9 @@ jQuery(document).ready(function () {
         doFilters();
     });
     
-    // Filter item type.
+    /*
+     * Filter item type.
+     */
     jQuery('#item-type').change(function () {
         if ('Place' == jQuery(this).find(':selected').text()) {
             jQuery('#place-type-div').show({duration: 'fast'});
@@ -63,17 +69,23 @@ jQuery(document).ready(function () {
         doFilters();
     });
     
-    // Filter place type.
+    /*
+     * Filter place type.
+     */
     jQuery('#place-type').change(function () {
         doFilters();
     });
     
-    // Filter event type.
+    /*
+     * Filter event type.
+     */
     jQuery('#event-type').change(function () {
         doFilters();
     });
     
-    // Toggle historic map layer on and off.
+    /*
+     * Toggle historic map layer on and off.
+     */
     jQuery('#toggle-map-button').click(function () {
         var clicks = jQuery(this).data('clicks');
         if (clicks) {
@@ -86,7 +98,9 @@ jQuery(document).ready(function () {
         jQuery(this).data('clicks', !clicks);
     });
     
-    // Filter markers after every form change.
+    /*
+     * Filter markers after every form change.
+     */
     function doFilters() {
         var mapCoverage = jQuery('#map-coverage');
         var itemType = jQuery('#item-type');
@@ -95,16 +109,16 @@ jQuery(document).ready(function () {
         
         var getData = {et: {}};
         if ('0' != mapCoverage.val()) {
-            getData.et[mapCoverageElementId] = mapCoverage.val();
+            getData['et'][mapCoverageElementId] = mapCoverage.val();
         }
         if ('0' != itemType.val()) {
-            getData.it = itemType.val();
+            getData['it'] = itemType.val();
         }
         if ('0' != placeType.val()) {
-            getData.et[placeTypeElementId] = placeType.val();
+            getData['et'][placeTypeElementId] = placeType.val();
         }
         if ('0' != eventType.val()) {
-            getData.et[eventTypeElementId] = eventType.val();
+            getData['et'][eventTypeElementId] = eventType.val();
         }
         
         // Make the request, handle the geoJson response, and add markers.
@@ -124,9 +138,7 @@ jQuery(document).ready(function () {
         });
     }
     
-    function onMapClick(e) {
-        console.log("You clicked the map at zoom " + map.getZoom() + '; ' + e.latlng);
-    }
-    map.on('click', onMapClick);
+    map.on('click', function (e) {
+        console.log("Map clicked at zoom " + map.getZoom() + '; ' + e.latlng);
+    });
 });
-
