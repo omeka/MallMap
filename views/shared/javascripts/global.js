@@ -2,6 +2,7 @@ jQuery(document).ready(function () {
     var map = L.map('map').
         setView([38.89083, -77.02849], 15).
         addLayer(L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'));
+    map.attributionControl.setPrefix('');
     var historicMapLayer;
     var geoJsonLayer;
     
@@ -30,6 +31,7 @@ jQuery(document).ready(function () {
         if (historicMapLayer) {
             jQuery('#toggle-map-button').data('clicks', false);
             map.removeLayer(historicMapLayer);
+            map.attributionControl.setPrefix('');
         }
         if ('0' == jQuery('#map-coverage').val()) {
             jQuery('#toggle-map-button').hide();

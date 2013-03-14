@@ -26,13 +26,13 @@ class MallMap_IndexController extends Omeka_Controller_AbstractActionController
         'map_coverages' => array(
             'element_id' => 1, 
             'texts' => array(
-                array('text' => 1791, 'title' => ''), 
-                array('text' => 1828, 'title' => ''), 
-                array('text' => 1858, 'title' => ''), 
-                array('text' => 1887, 'title' => ''), 
-                array('text' => 1917, 'title' => ''), 
-                array('text' => 1942, 'title' => ''), 
-                array('text' => 1996, 'title' => ''), 
+                array('text' => 1791, 'title' => 'Map by Faehtz, E.F.M.'), 
+                array('text' => 1828, 'title' => 'Map by Elliot, William'), 
+                array('text' => 1858, 'title' => 'Map by Boschke, A.'), 
+                array('text' => 1887, 'title' => 'Map by Silversparre, Axel'), 
+                array('text' => 1917, 'title' => 'Map by U.S. Public Buildings Commission'), 
+                array('text' => 1942, 'title' => 'Map by General Drafting Company'), 
+                array('text' => 1996, 'title' => 'Map by Joseph Passonneau and Partners'), 
             ), 
         ), 
         // "Item Type Metadata":Type
