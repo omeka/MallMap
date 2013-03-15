@@ -127,7 +127,6 @@ jQuery(document).ready(function () {
         }
         if ('0' != eventType.val()) {
             getData['et'][eventTypeElementId].push(eventType.val());
-            getData['et'][eventTypeElementId].push('foo bar baz bat');
         }
         
         // Make the request, handle the geoJson response, and add markers.
