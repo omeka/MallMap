@@ -101,7 +101,7 @@ jQuery(document).ready(function () {
     });
     
     /*
-     * Filter markers after every form change.
+     * Handle a form change.
      */
     function doFilters() {
         var mapCoverage = jQuery('#map-coverage');
@@ -109,18 +109,25 @@ jQuery(document).ready(function () {
         var placeType = jQuery('#place-type');
         var eventType = jQuery('#event-type');
         
+        // Prepare data object for request.
         var getData = {et: {}};
+        getData['et'][mapCoverageElementId] = [];
+        getData['et'][placeTypeElementId] = [];
+        getData['et'][eventTypeElementId] = [];
+        
+        // Handle each filter, adding to the data object.
         if ('0' != mapCoverage.val()) {
-            getData['et'][mapCoverageElementId] = mapCoverage.val();
+            getData['et'][mapCoverageElementId].push(mapCoverage.val());
         }
         if ('0' != itemType.val()) {
             getData['it'] = itemType.val();
         }
         if ('0' != placeType.val()) {
-            getData['et'][placeTypeElementId] = placeType.val();
+            getData['et'][placeTypeElementId].push(placeType.val());
         }
         if ('0' != eventType.val()) {
-            getData['et'][eventTypeElementId] = eventType.val();
+            getData['et'][eventTypeElementId].push(eventType.val());
+            getData['et'][eventTypeElementId].push('foo bar baz bat');
         }
         
         // Make the request, handle the geoJson response, and add markers.

@@ -101,16 +101,18 @@ class MallMap_IndexController extends Omeka_Controller_AbstractActionController
         // Filter items by element texts.
         if ($request->getParam('et')) {
             $i = 1;
-            foreach ($request->getParam('et') as $elementId => $text) {
-                $alias = "et$i";
-                $joins[] = $db->quoteInto(
-                    "$db->ElementText AS $alias ON $alias.record_id = items.id " . 
-                    "AND $alias.record_type = 'Item' " . 
-                    "AND $alias.element_id = ?", 
-                    $elementId
-                );
-                $wheres[] = $db->quoteInto("$alias.text = ?", $text);
-                $i++;
+            foreach ($request->getParam('et') as $elementId => $texts) {
+                foreach ($texts as $text) {
+                    $alias = "et$i";
+                    $joins[] = $db->quoteInto(
+                        "$db->ElementText AS $alias ON $alias.record_id = items.id " . 
+                        "AND $alias.record_type = 'Item' " . 
+                        "AND $alias.element_id = ?", 
+                        $elementId
+                    );
+                    $wheres[] = $db->quoteInto("$alias.text = ?", $text);
+                    $i++;
+                }
             }
         }
         
