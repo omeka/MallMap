@@ -37,22 +37,14 @@
             <?php endforeach; ?>
         </select>
         <div id="place-type-div" style="display: none;">
-            <label for="place-type">Place Type</label>
-            <select id="place-type" name="place-type">
-                <option value="0">Select below...</option>
-                <?php foreach ($this->form_data['place_types']['texts'] as $place_type): ?>
-                <option value="<?php echo htmlspecialchars($place_type['text']); ?>"><?php echo $place_type['text']; ?></option>
-                <?php endforeach; ?>
-            </select>
+            <?php foreach ($this->form_data['place_types']['texts'] as $place_type): ?>
+            <label><input type="checkbox" name="place-type" value="<?php echo htmlspecialchars($place_type['text']); ?>" /> <?php echo $place_type['text']; ?></label><br />
+            <?php endforeach; ?>
         </div>
         <div id="event-type-div" style="display: none;">
-            <label for="event-type">Event Type</label>
-            <select id="event-type" name="event-type">
-                <option value="0">Select below...</option>
-                <?php foreach ($this->form_data['event_types']['texts'] as $event_type): ?>
-                <option value="<?php echo htmlspecialchars($event_type['text']); ?>"><?php echo $event_type['text']; ?></option>
-                <?php endforeach; ?>
-            </select>
+            <?php foreach ($this->form_data['event_types']['texts'] as $event_type): ?>
+            <label><input type="checkbox" name="event-type" value="<?php echo htmlspecialchars($event_type['text']); ?>" /> <?php echo $event_type['text']; ?></label><br />
+            <?php endforeach; ?>
         </div>
     </div>
     <div id="map"></div>

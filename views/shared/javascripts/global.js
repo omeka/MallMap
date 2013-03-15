@@ -58,14 +58,14 @@ jQuery(document).ready(function () {
             jQuery('#place-type-div').show({duration: 'fast'});
         } else {
             // Reset and hide the place type select.
-            jQuery('#place-type').val('0');
+            jQuery('input[name=place-type]').removeAttr('checked');
             jQuery('#place-type-div').hide({duration: 'fast'});
         }
         if ('Event' == jQuery(this).find(':selected').text()) {
             jQuery('#event-type-div').show({duration: 'fast'});
         } else {
-            // Reset and hide the event type select.
-            jQuery('#event-type').val('0');
+            // Reset and hide the event type checkboxes.
+            jQuery('input[name=event-type]').removeAttr('checked');
             jQuery('#event-type-div').hide({duration: 'fast'});
         }
         doFilters();
@@ -74,14 +74,14 @@ jQuery(document).ready(function () {
     /*
      * Filter place type.
      */
-    jQuery('#place-type').change(function () {
+    jQuery('input[name=place-type]').change(function () {
         doFilters();
     });
     
     /*
      * Filter event type.
      */
-    jQuery('#event-type').change(function () {
+    jQuery('input[name=event-type]').change(function () {
         doFilters();
     });
     
@@ -106,8 +106,8 @@ jQuery(document).ready(function () {
     function doFilters() {
         var mapCoverage = jQuery('#map-coverage');
         var itemType = jQuery('#item-type');
-        var placeType = jQuery('#place-type');
-        var eventType = jQuery('#event-type');
+        var placeTypes = jQuery('input[name=place-type]:checked');
+        var eventTypes = jQuery('input[name=event-type]:checked');
         
         // Prepare data object for request.
         var getData = {et: {}};
@@ -122,11 +122,15 @@ jQuery(document).ready(function () {
         if ('0' != itemType.val()) {
             getData['it'] = itemType.val();
         }
-        if ('0' != placeType.val()) {
-            getData['et'][placeTypeElementId].push(placeType.val());
+        if (placeTypes) {
+            placeTypes.each(function () {
+                getData['et'][placeTypeElementId].push(this.value);
+            });
         }
-        if ('0' != eventType.val()) {
-            getData['et'][eventTypeElementId].push(eventType.val());
+        if (eventTypes) {
+            eventTypes.each(function () {
+                getData['et'][eventTypeElementId].push(this.value);
+            });
         }
         
         // Make the request, handle the geoJson response, and add markers.
