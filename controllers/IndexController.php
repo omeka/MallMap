@@ -91,7 +91,7 @@ class MallMap_IndexController extends Omeka_Controller_AbstractActionController
         $joins = array();
         $wheres = array();
         
-        $joins[] = "$db->Location AS locations ON items.id = locations.item_id";
+        $joins[] = "$db->Item AS items ON items.id = locations.item_id";
         
         // Filter items by item type.
         if ($request->getParam('it')) {
@@ -117,7 +117,7 @@ class MallMap_IndexController extends Omeka_Controller_AbstractActionController
         }
         
         // Build the SQL.
-        $sql = "SELECT items.id, locations.latitude, locations.longitude FROM $db->Item AS items";
+        $sql = "SELECT items.id, locations.latitude, locations.longitude\nFROM $db->Location AS locations";
         foreach ($joins as $join) {
             $sql .= "\nJOIN $join";
         }
