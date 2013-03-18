@@ -14,11 +14,11 @@ jQuery(document).ready(function () {
         var clicks = jQuery(this).data('clicks');
         if (clicks) {
             jQuery('#filters').animate({
-                left: '+=30%'
+                left: '+=100%'
             }, 200, 'linear');
         } else {
             jQuery('#filters').animate({
-                left: '-=30%'
+                left: '-=100%'
             }, 200, 'linear');
         }
         jQuery(this).data('clicks', !clicks);
