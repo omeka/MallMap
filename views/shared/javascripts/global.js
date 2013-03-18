@@ -5,6 +5,7 @@ jQuery(document).ready(function () {
     map.attributionControl.setPrefix('');
     var historicMapLayer;
     var geoJsonLayer;
+    var jqXhr;
     
     /*
      * Handle the filter form.
@@ -104,6 +105,11 @@ jQuery(document).ready(function () {
      * Handle a form change.
      */
     function doFilters() {
+        // Prevent concurrent filter requests.
+        if (jqXhr) {
+            jqXhr.abort()
+        }
+        
         var mapCoverage = jQuery('#map-coverage');
         var itemType = jQuery('#item-type');
         var placeTypes = jQuery('input[name=place-type]:checked');
@@ -134,7 +140,7 @@ jQuery(document).ready(function () {
         }
         
         // Make the request, handle the geoJson response, and add markers.
-        jQuery.get('mall-map/index/filter', getData, function (response) {
+        jqXhr = jQuery.get('mall-map/index/filter', getData, function (response) {
             if (geoJsonLayer) {
                 map.removeLayer(geoJsonLayer);
             }
