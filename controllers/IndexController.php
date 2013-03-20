@@ -15,56 +15,97 @@ class MallMap_IndexController extends Omeka_Controller_AbstractActionController
 {
     private $_formData = array(
         'item_types' => array(
-            array('id' => 1, 'name' => 'Place'), 
-            array('id' => 2, 'name' => 'Event'), 
-            array('id' => 3, 'name' => 'Document'), 
-            array('id' => 4, 'name' => 'Image'), // Still Image
-            array('id' => 5, 'name' => 'Video'), // Moving Image
-            array('id' => 6, 'name' => 'Audio'), // Sound
+            array('id' => 14, 'name' => 'Place'), 
+            array('id' => 8, 'name' => 'Event'), 
+            array('id' => 1, 'name' => 'Document'), 
+            array('id' => 6, 'name' => 'Image'), // Still Image
+            array('id' => 3, 'name' => 'Video'), // Moving Image
+            array('id' => 5, 'name' => 'Audio'), // Sound
         ), 
         // "Dublin Core":Coverage
         'map_coverages' => array(
-            'element_id' => 1, 
+            'element_id' => 38, 
             'texts' => array(
-                array('text' => 1791, 'title' => 'Map by Faehtz, E.F.M.'), 
-                array('text' => 1828, 'title' => 'Map by Elliot, William'), 
-                array('text' => 1858, 'title' => 'Map by Boschke, A.'), 
-                array('text' => 1887, 'title' => 'Map by Silversparre, Axel'), 
-                array('text' => 1917, 'title' => 'Map by U.S. Public Buildings Commission'), 
-                array('text' => 1942, 'title' => 'Map by General Drafting Company'), 
-                array('text' => 1996, 'title' => 'Map by Joseph Passonneau and Partners'), 
+                'Pre-1800s', 
+                '1800-1829', 
+                '1830-1859', 
+                '1860-1889', 
+                '1890-1919', 
+                '1920-1949', 
+                '1950-1979', 
+                '1980-1999', 
+                '2000-present', 
             ), 
         ), 
         // "Item Type Metadata":Type
         'place_types' => array(
-            'element_id' => 12, 
+            'element_id' => 87, 
             'texts' => array(
-                array('text' => 'Statues and Sculpture'), 
-                array('text' => 'Monuments'), 
-                array('text' => 'Memorials'), 
-                array('text' => 'Ghost Sites'), 
-                array('text' => 'Museums'), 
-                array('text' => 'Art Galleries'), 
-                array('text' => 'Landscapes'), 
-                array('text' => 'Concert Venues'), 
-                array('text' => 'Government Offices'), 
+                'Statues and Sculpture', 
+                'Monuments', 
+                'Memorials', 
+                'Ghost Sites', 
+                'Museums', 
+                'Art Galleries', 
+                'Landscapes', 
+                'Concert Venues', 
+                'Government Offices', 
             ), 
         ), 
         // "Item Type Metadata":"Event Type"
         'event_types' => array(
-            'element_id' => 123, 
+            'element_id' => 29, 
             'texts' => array(
-                array('text' => 'Marches and Rallies'), 
-                array('text' => 'Encampment'), 
-                array('text' => 'Concert'), 
-                array('text' => 'Openings and Dedications'), 
-                array('text' => 'Cultural Gathering'), 
-                array('text' => 'Remembrance'), 
-                array('text' => 'Inauguration'), 
-                array('text' => 'Environmental Disaster'), 
-                array('text' => 'D.C. History'), 
-                array('text' => 'Planning and Design'), 
+                'Marches and Rallies', 
+                'Encampment', 
+                'Concert', 
+                'Openings and Dedications', 
+                'Cultural Gathering', 
+                'Remembrance', 
+                'Inauguration', 
+                'Environmental Disaster', 
+                'D.C. History', 
+                'Planning and Design', 
             ), 
+        ), 
+    );
+    
+    private $_historicMapData = array(
+        'Pre-1800s' => array(
+            'url' => 'http://localhost/omeka/plugins/MallMap/1791/{z}/{x}/{y}.jpg', 
+            'title' => 'Map by Faehtz, E.F.M.', 
+        ), 
+        '1800-1829' => array(
+            'url' => 'http://localhost/omeka/plugins/MallMap/1828/{z}/{x}/{y}.jpg', 
+            'title' => 'Map by Elliot, William', 
+        ), 
+        '1830-1859' => array(
+            'url' => 'http://localhost/omeka/plugins/MallMap/1858/{z}/{x}/{y}.jpg', 
+            'title' => 'Map by Boschke, A.', 
+        ), 
+        '1860-1889' => array(
+            'url' => 'http://localhost/omeka/plugins/MallMap/1887/{z}/{x}/{y}.jpg', 
+            'title' => 'Map by Silversparre, Axel', 
+        ), 
+        '1890-1919' => array(
+            'url' => 'http://localhost/omeka/plugins/MallMap/1917/{z}/{x}/{y}.jpg', 
+            'title' => 'Map by U.S. Public Buildings Commission', 
+        ), 
+        '1920-1949' => array(
+            'url' => 'http://localhost/omeka/plugins/MallMap/1942/{z}/{x}/{y}.jpg', 
+            'title' => 'Map by General Drafting Company', 
+        ), 
+        '1950-1979' => array(
+            'url' => null, 
+            'title' => null,
+        ), 
+        '1980-1999' => array(
+            'url' => 'http://localhost/omeka/plugins/MallMap/1996/{z}/{x}/{y}.jpg', 
+            'title' => 'Map by Joseph Passonneau and Partners', 
+        ), 
+        '2000-present' => array(
+            'url' => null, 
+            'title' => null, 
         ), 
     );
     
@@ -126,24 +167,21 @@ class MallMap_IndexController extends Omeka_Controller_AbstractActionController
             $sql .= " $where";
         }
         
-//exit($sql);
-        
         // Once all item IDs have been retrieved, fetch all the item data that 
         // is needed for the geoJSON response.
-        //$items = $db->query($sql);
+        $items = array();
+        foreach ($db->query($sql)->fetchAll() as $row) {
+            $item = get_record_by_id('item', $row['id']);
+            $items[] = array(
+                'id' => $row['id'], 
+                'latitude' => $row['latitude'], 
+                'longitude' => $row['longitude'], 
+                'title' => metadata($item, array('Dublin Core', 'Title')), 
+                'thumbnail' => item_image('thumbnail', array(), 0, $item), 
+            );
+        }
         
-        // Dummy data for testing.
-        $items = array(
-            array('id' => 1, 'latitude' => 38.89768, 'longitude' => -77.03656, 'title' => 'The White House', 'description' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut quam lacus, sagittis quis consequat et, porttitor dictum ante. Donec sed porttitor nisi. Vestibulum ut varius massa.'), 
-            array('id' => 2, 'latitude' => 38.88981, 'longitude' => -77.00905, 'title' => 'United States Capitol', 'description' => 'Nunc nec sem sed dolor feugiat consectetur at a eros. Mauris semper, lectus nec pharetra adipiscing, risus dui ultricies est, a suscipit lorem nulla eget felis.'), 
-            array('id' => 3, 'latitude' => 38.88947, 'longitude' => -77.03525, 'title' => 'Washington Monument', 'description' => 'In lobortis nibh eget odio imperdiet pretium. Vivamus sollicitudin sollicitudin aliquet. Fusce congue mi eget justo aliquam non posuere purus tincidunt. Curabitur eu magna risus, ut eleifend mauris.'), 
-            array('id' => 4, 'latitude' => 38.88877, 'longitude' => -77.02597, 'title' => 'Smithsonian Institution', 'description' => 'Duis consectetur elit quis lacus hendrerit rutrum. Morbi sem elit, ornare at sollicitudin sed, facilisis vitae neque. Etiam gravida interdum gravida. In hac habitasse platea dictumst.'), 
-        );
-        
-        // Build geoJSON
-        // http://www.geojson.org/geojson-spec.html
-        // http://leafletjs.com/reference.html#geojson
-        // http://leafletjs.com/examples/geojson.html
+        // Build geoJSON: http://www.geojson.org/geojson-spec.html
         $data = array('type' => 'FeatureCollection', 'features' => array());
         foreach ($items as $item) {
             $data['features'][] = array(
@@ -155,6 +193,7 @@ class MallMap_IndexController extends Omeka_Controller_AbstractActionController
                 'properties' => array(
                     'title' => $item['title'], 
                     'description' => $item['description'], 
+                    'thumbnail' => $item['thumbnail'], 
                     'url' => url(array('module' => 'default', 
                                        'controller' => 'items', 
                                        'action' => 'show', 
@@ -164,6 +203,19 @@ class MallMap_IndexController extends Omeka_Controller_AbstractActionController
             );
         }
         
+        $this->_helper->json($data);
+    }
+    
+    /**
+     * Get data about the selected historical map.
+     */
+    public function historicMapDataAction()
+    {
+        // Process only AJAX requests.
+        if (!$this->_request->isXmlHttpRequest()) {
+            throw new Omeka_Controller_Exception_404;
+        }
+        $data = $this->_historicMapData[$this->getRequest()->getParam('text')];
         $this->_helper->json($data);
     }
 

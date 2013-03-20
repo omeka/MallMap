@@ -38,15 +38,20 @@ jQuery(document).ready(function () {
             jQuery('#toggle-map-button').hide();
             return;
         }
-        historicMapLayer = L.tileLayer(
-            'http://localhost/omeka/plugins/MallMap/' + jQuery(this).val() + '/{z}/{x}/{y}.jpg', 
-            {tms: true, opacity: 1.00}
-        );
-        map.addLayer(historicMapLayer);
-        jQuery('#toggle-map-button').show();
         
-        // Set the map title as the map attribution prefix.
-        map.attributionControl.setPrefix(jQuery(this).find(':selected').attr('title'));
+        // Get the map data and set the historic map layer.
+        var getData = {'text': jQuery('#map-coverage').val()};
+        jQuery.get('mall-map/index/historic-map-data', getData, function (response) {
+            historicMapLayer = L.tileLayer(
+                response.url, 
+                {tms: true, opacity: 1.00}
+            );
+            map.addLayer(historicMapLayer);
+            jQuery('#toggle-map-button').show();
+            
+            // Set the map title as the map attribution prefix.
+            map.attributionControl.setPrefix(response.title);
+        });
         
         doFilters();
     });
@@ -148,7 +153,7 @@ jQuery(document).ready(function () {
                 onEachFeature: function (feature, layer) {
                     layer.bindPopup(
                         '<a href="' + feature.properties.url + '">' + feature.properties.title + '</a><br/>' + 
-                        feature.properties.description
+                        feature.properties.thumbnail
                     );
                 }
             });

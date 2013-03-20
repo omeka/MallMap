@@ -12,9 +12,9 @@
     <script src="http://cdn.leafletjs.com/leaflet-0.5/leaflet.js"></script>
     <?php echo head_js(); ?>
     <script type="text/javascript">
-        var mapCoverageElementId = <?php echo $this->form_data['map_coverages']['element_id'] ?>;
-        var placeTypeElementId = <?php echo $this->form_data['place_types']['element_id'] ?>;
-        var eventTypeElementId = <?php echo $this->form_data['event_types']['element_id'] ?>;
+        var mapCoverageElementId = <?php echo $this->form_data['map_coverages']['element_id']; ?>;
+        var placeTypeElementId = <?php echo $this->form_data['place_types']['element_id']; ?>;
+        var eventTypeElementId = <?php echo $this->form_data['event_types']['element_id']; ?>;
     </script>
 </head>
 <body>
@@ -26,7 +26,7 @@
         <select id="map-coverage" name="map-coverage">
             <option value="0">Select below...</option>
             <?php foreach ($this->form_data['map_coverages']['texts'] as $map_coverage): ?>
-            <option value="<?php echo $map_coverage['text']; ?>" title="<?php echo htmlspecialchars($map_coverage['title']); ?>"><?php echo $map_coverage['text']; ?></option>
+            <option value="<?php echo $map_coverage; ?>"><?php echo $map_coverage; ?></option>
             <?php endforeach; ?>
         </select>
         <label for="item-type">Item Type</label>
@@ -38,12 +38,12 @@
         </select>
         <div id="place-type-div" style="display: none;">
             <?php foreach ($this->form_data['place_types']['texts'] as $place_type): ?>
-            <label><input type="checkbox" name="place-type" value="<?php echo htmlspecialchars($place_type['text']); ?>" /> <?php echo $place_type['text']; ?></label><br />
+            <label><input type="checkbox" name="place-type" value="<?php echo htmlspecialchars($place_type); ?>" /> <?php echo $place_type; ?></label><br />
             <?php endforeach; ?>
         </div>
         <div id="event-type-div" style="display: none;">
             <?php foreach ($this->form_data['event_types']['texts'] as $event_type): ?>
-            <label><input type="checkbox" name="event-type" value="<?php echo htmlspecialchars($event_type['text']); ?>" /> <?php echo $event_type['text']; ?></label><br />
+            <label><input type="checkbox" name="event-type" value="<?php echo htmlspecialchars($event_type); ?>" /> <?php echo $event_type; ?></label><br />
             <?php endforeach; ?>
         </div>
     </div>
