@@ -1,5 +1,5 @@
-<?php queue_css_file('style'); ?>
-<?php queue_js_file('global'); ?>
+<?php queue_css_file('mall-map'); ?>
+<?php queue_js_file('mall-map'); ?>
 <!doctype html>
 <html lang="en">
 <head>
