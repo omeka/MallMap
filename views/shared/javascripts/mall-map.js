@@ -39,23 +39,21 @@ jQuery(document).ready(function () {
         }
         if ('0' == jQuery('#map-coverage').val()) {
             jQuery('#toggle-map-button').hide();
-            return;
+        } else {
+            // Get the map data and set the historic map layer.
+            var getData = {'text': jQuery('#map-coverage').val()};
+            jQuery.get('mall-map/index/historic-map-data', getData, function (response) {
+                historicMapLayer = L.tileLayer(
+                    response.url, 
+                    {tms: true, opacity: 1.00}
+                );
+                map.addLayer(historicMapLayer);
+                jQuery('#toggle-map-button').show();
+                
+                // Set the map title as the map attribution prefix.
+                map.attributionControl.setPrefix(response.title);
+            });
         }
-        
-        // Get the map data and set the historic map layer.
-        var getData = {'text': jQuery('#map-coverage').val()};
-        jQuery.get('mall-map/index/historic-map-data', getData, function (response) {
-            historicMapLayer = L.tileLayer(
-                response.url, 
-                {tms: true, opacity: 1.00}
-            );
-            map.addLayer(historicMapLayer);
-            jQuery('#toggle-map-button').show();
-            
-            // Set the map title as the map attribution prefix.
-            map.attributionControl.setPrefix(response.title);
-        });
-        
         doFilters();
     });
     
