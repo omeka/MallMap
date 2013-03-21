@@ -1,11 +1,14 @@
 jQuery(document).ready(function () {
-    var map = L.map('map').
-        setView([38.89083, -77.02849], 15).
-        addLayer(L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'));
-    map.attributionControl.setPrefix('');
+    var map;
     var historicMapLayer;
     var geoJsonLayer;
     var jqXhr;
+    
+    // Set the base layer.
+    map = L.map('map').
+        setView([38.89083, -77.02849], 15).
+        addLayer(L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'));
+    map.attributionControl.setPrefix('');
     
     /*
      * Handle the filter form.

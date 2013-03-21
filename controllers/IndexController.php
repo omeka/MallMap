@@ -32,9 +32,9 @@ class MallMap_IndexController extends Omeka_Controller_AbstractActionController
                 '1860-1889', 
                 '1890-1919', 
                 '1920-1949', 
-                '1950-1979', 
+                //'1950-1979', 
                 '1980-1999', 
-                '2000-present', 
+                //'2000-present', 
             ), 
         ), 
         // "Item Type Metadata":Type
@@ -72,41 +72,35 @@ class MallMap_IndexController extends Omeka_Controller_AbstractActionController
     
     private $_historicMapData = array(
         'Pre-1800s' => array(
-            'url' => 'http://localhost/omeka/plugins/MallMap/1791/{z}/{x}/{y}.jpg', 
+            'url' => '/mallhistory/plugins/MallMap/maps/1791/{z}/{x}/{y}.jpg', 
             'title' => 'Map by Faehtz, E.F.M.', 
         ), 
         '1800-1829' => array(
-            'url' => 'http://localhost/omeka/plugins/MallMap/1828/{z}/{x}/{y}.jpg', 
+            'url' => '/mallhistory/plugins/MallMap/maps/1828/{z}/{x}/{y}.jpg', 
             'title' => 'Map by Elliot, William', 
         ), 
         '1830-1859' => array(
-            'url' => 'http://localhost/omeka/plugins/MallMap/1858/{z}/{x}/{y}.jpg', 
+            'url' => '/mallhistory/plugins/MallMap/maps/1858/{z}/{x}/{y}.jpg', 
             'title' => 'Map by Boschke, A.', 
         ), 
         '1860-1889' => array(
-            'url' => 'http://localhost/omeka/plugins/MallMap/1887/{z}/{x}/{y}.jpg', 
+            'url' => '/mallhistory/plugins/MallMap/maps/1887/{z}/{x}/{y}.jpg', 
             'title' => 'Map by Silversparre, Axel', 
         ), 
         '1890-1919' => array(
-            'url' => 'http://localhost/omeka/plugins/MallMap/1917/{z}/{x}/{y}.jpg', 
+            'url' => '/mallhistory/plugins/MallMap/maps/1917/{z}/{x}/{y}.jpg', 
             'title' => 'Map by U.S. Public Buildings Commission', 
         ), 
         '1920-1949' => array(
-            'url' => 'http://localhost/omeka/plugins/MallMap/1942/{z}/{x}/{y}.jpg', 
+            'url' => '/mallhistory/plugins/MallMap/maps/1942/{z}/{x}/{y}.jpg', 
             'title' => 'Map by General Drafting Company', 
         ), 
-        '1950-1979' => array(
-            'url' => null, 
-            'title' => null,
-        ), 
+        //'1950-1979' => array('url' => null, 'title' => null), 
         '1980-1999' => array(
-            'url' => 'http://localhost/omeka/plugins/MallMap/1996/{z}/{x}/{y}.jpg', 
+            'url' => '/mallhistory/plugins/MallMap/maps/1996/{z}/{x}/{y}.jpg', 
             'title' => 'Map by Joseph Passonneau and Partners', 
         ), 
-        '2000-present' => array(
-            'url' => null, 
-            'title' => null, 
-        ), 
+        //'2000-present' => array('url' => null, 'title' => null), 
     );
     
     public function indexAction()
