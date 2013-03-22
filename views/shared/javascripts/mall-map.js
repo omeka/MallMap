@@ -108,7 +108,7 @@ jQuery(document).ready(function () {
     });
     
     /*
-     * Handle a form change.
+     * Filter markers. This must be called on every a form change.
      */
     function doFilters() {
         // Prevent concurrent filter requests.
@@ -116,40 +116,54 @@ jQuery(document).ready(function () {
             jqXhr.abort()
         }
         
+        // Remove the current markers.
+        if (geoJsonLayer) {
+            map.removeLayer(geoJsonLayer);
+        }
+        
         var mapCoverage = jQuery('#map-coverage');
         var itemType = jQuery('#item-type');
         var placeTypes = jQuery('input[name=place-type]:checked');
         var eventTypes = jQuery('input[name=event-type]:checked');
         
-        // Prepare data object for request.
+        // Prepare GET data object for request.
         var getData = {et: {}};
         getData['et'][mapCoverageElementId] = [];
         getData['et'][placeTypeElementId] = [];
         getData['et'][eventTypeElementId] = [];
         
-        // Handle each filter, adding to the data object.
+        var getDataChanged = false;
+        
+        // Handle each filter, adding to the GET data object.
         if ('0' != mapCoverage.val()) {
             getData['et'][mapCoverageElementId].push(mapCoverage.val());
+            getDataChanged = true;
         }
         if ('0' != itemType.val()) {
             getData['it'] = itemType.val();
+            getDataChanged = true;
         }
-        if (placeTypes) {
+        if (placeTypes.length) {
             placeTypes.each(function () {
                 getData['et'][placeTypeElementId].push(this.value);
             });
+            getDataChanged = true;
         }
-        if (eventTypes) {
+        if (eventTypes.length) {
             eventTypes.each(function () {
                 getData['et'][eventTypeElementId].push(this.value);
             });
+            getDataChanged = true;
         }
         
-        // Make the request, handle the geoJson response, and add markers.
+        // Filter markers only if the GET data has changed. Otherwise the 
+        // request will return all markers.
+        if (!getDataChanged) {
+            return;
+        }
+        
+        // Make the request, handle the GeoJSON response, and add markers.
         jqXhr = jQuery.get('mall-map/index/filter', getData, function (response) {
-            if (geoJsonLayer) {
-                map.removeLayer(geoJsonLayer);
-            }
             geoJsonLayer = L.geoJson(response, {
                 onEachFeature: function (feature, layer) {
                     layer.bindPopup(
