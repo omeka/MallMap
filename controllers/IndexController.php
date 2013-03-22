@@ -169,6 +169,7 @@ class MallMap_IndexController extends Omeka_Controller_AbstractActionController
             $sql .= (0 == $key) ? "\nWHERE" : "\nAND";
             $sql .= " ($where)";
         }
+        $sql .= "\nGROUP BY items.id";
         
         // Build geoJSON: http://www.geojson.org/geojson-spec.html
         $data = array('type' => 'FeatureCollection', 'features' => array());
