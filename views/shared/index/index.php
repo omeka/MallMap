@@ -37,11 +37,13 @@
             <?php endforeach; ?>
         </select>
         <div id="place-type-div" style="display: none;">
+            <p>Place Types</p>
             <?php foreach ($this->form_data['place_types']['texts'] as $place_type): ?>
             <label><input type="checkbox" name="place-type" value="<?php echo htmlspecialchars($place_type); ?>" /> <?php echo $place_type; ?></label><br />
             <?php endforeach; ?>
         </div>
         <div id="event-type-div" style="display: none;">
+            <p>Event Types</p>
             <?php foreach ($this->form_data['event_types']['texts'] as $event_type): ?>
             <label><input type="checkbox" name="event-type" value="<?php echo htmlspecialchars($event_type); ?>" /> <?php echo $event_type; ?></label><br />
             <?php endforeach; ?>

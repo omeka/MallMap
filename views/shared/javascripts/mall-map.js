@@ -108,7 +108,7 @@ jQuery(document).ready(function () {
     });
     
     /*
-     * Filter markers. This must be called on every a form change.
+     * Filter markers. This must be called on every form change.
      */
     function doFilters() {
         // Prevent concurrent filter requests.
@@ -126,44 +126,39 @@ jQuery(document).ready(function () {
         var placeTypes = jQuery('input[name=place-type]:checked');
         var eventTypes = jQuery('input[name=event-type]:checked');
         
-        // Prepare GET data object for request.
-        var getData = {et: {}};
-        getData['et'][mapCoverageElementId] = [];
-        getData['et'][placeTypeElementId] = [];
-        getData['et'][eventTypeElementId] = [];
-        
-        var getDataChanged = false;
+        // Prepare POST data object for request.
+        var postData = {
+            placeTypes: [], 
+            eventTypes: [], 
+        };
         
         // Handle each filter, adding to the GET data object.
         if ('0' != mapCoverage.val()) {
-            getData['et'][mapCoverageElementId].push(mapCoverage.val());
-            getDataChanged = true;
+            postData['mapCoverage'] = mapCoverage.val();
         }
         if ('0' != itemType.val()) {
-            getData['it'] = itemType.val();
-            getDataChanged = true;
+            postData['itemType'] = itemType.val();
         }
         if (placeTypes.length) {
             placeTypes.each(function () {
-                getData['et'][placeTypeElementId].push(this.value);
+                postData.placeTypes.push(this.value);
             });
-            getDataChanged = true;
         }
         if (eventTypes.length) {
             eventTypes.each(function () {
-                getData['et'][eventTypeElementId].push(this.value);
+                postData.eventTypes.push(this.value);
             });
-            getDataChanged = true;
         }
         
         // Filter markers only if the GET data has changed. Otherwise the 
         // request will return all markers.
-        if (!getDataChanged) {
+        if (!postData.mapCoverage && !postData.itemType && 
+            !postData.placeTypes.length && !postData.eventTypes.length) {
             return;
         }
         
-        // Make the request, handle the GeoJSON response, and add markers.
-        jqXhr = jQuery.get('mall-map/index/filter', getData, function (response) {
+        // Make the POST request, handle the GeoJSON response, and add markers.
+        jqXhr = jQuery.post('mall-map/index/filter', postData, function (response) {
             geoJsonLayer = L.geoJson(response, {
                 onEachFeature: function (feature, layer) {
                     layer.bindPopup(

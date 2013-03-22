@@ -127,28 +127,37 @@ class MallMap_IndexController extends Omeka_Controller_AbstractActionController
         $wheres = array();
         
         $joins[] = "$db->Item AS items ON items.id = locations.item_id";
-        
-        // Filter items by item type.
-        if ($request->getParam('it')) {
-            $wheres[] = $db->quoteInto("items.item_type_id = ?", $request->getParam('it'), Zend_Db::INT_TYPE);
+        // Filter item type.
+        if ($request->getParam('itemType')) {
+            $wheres[] = $db->quoteInto("items.item_type_id = ?", $request->getParam('itemType'), Zend_Db::INT_TYPE);
         }
-        
-        // Filter items by element texts.
-        if ($request->getParam('et')) {
-            $i = 1;
-            foreach ($request->getParam('et') as $elementId => $texts) {
-                foreach ($texts as $text) {
-                    $alias = "et$i";
-                    $joins[] = $db->quoteInto(
-                        "$db->ElementText AS $alias ON $alias.record_id = items.id " . 
-                        "AND $alias.record_type = 'Item' " . 
-                        "AND $alias.element_id = ?", 
-                        $elementId
-                    );
-                    $wheres[] = $db->quoteInto("$alias.text = ?", $text);
-                    $i++;
-                }
+        // Filter map coverage.
+        if ($request->getParam('mapCoverage')) {
+            $alias = "map_coverage";
+            $joins[] = "$db->ElementText AS $alias ON $alias.record_id = items.id AND $alias.record_type = 'Item' " 
+                     . $db->quoteInto("AND $alias.element_id = ?", $this->_formData['map_coverages']['element_id']);
+            $wheres[] = $db->quoteInto("$alias.text = ?", $request->getParam('mapCoverage'));
+        }
+        // Filter place types (inclusive).
+        if ($request->getParam('placeTypes')) {
+            $alias = "place_types";
+            $joins[] = "$db->ElementText AS $alias ON $alias.record_id = items.id AND $alias.record_type = 'Item' " 
+                     . $db->quoteInto("AND $alias.element_id = ?", $this->_formData['place_types']['element_id']);
+            $placeTypes = array();
+            foreach ($request->getParam('placeTypes') as $text) {
+                $placeTypes[] = $db->quoteInto("$alias.text = ?", $text);
             }
+            $wheres[] = implode(" OR ", $placeTypes);
+        // Filter event types (inclusive).
+        } else if ($request->getParam('eventTypes')) {
+            $alias = "event_types";
+            $joins[] = "$db->ElementText AS $alias ON $alias.record_id = items.id AND $alias.record_type = 'Item' " 
+                     . $db->quoteInto("AND $alias.element_id = ?", $this->_formData['event_types']['element_id']);
+            $eventTypes = array();
+            foreach ($request->getParam('eventTypes') as $text) {
+                $eventTypes[] = $db->quoteInto("$alias.text = ?", $text);
+            }
+            $wheres[] = implode(" OR ", $eventTypes);
         }
         
         // Build the SQL.
@@ -158,36 +167,22 @@ class MallMap_IndexController extends Omeka_Controller_AbstractActionController
         }
         foreach ($wheres as $key => $where) {
             $sql .= (0 == $key) ? "\nWHERE" : "\nAND";
-            $sql .= " $where";
-        }
-        
-        // Once all item IDs have been retrieved, fetch all the item data that 
-        // is needed for the geoJSON response.
-        $items = array();
-        foreach ($db->query($sql)->fetchAll() as $row) {
-            $item = get_record_by_id('item', $row['id']);
-            $items[] = array(
-                'id' => $row['id'], 
-                'latitude' => $row['latitude'], 
-                'longitude' => $row['longitude'], 
-                'title' => metadata($item, array('Dublin Core', 'Title')), 
-                'thumbnail' => item_image('thumbnail', array(), 0, $item), 
-            );
+            $sql .= " ($where)";
         }
         
         // Build geoJSON: http://www.geojson.org/geojson-spec.html
         $data = array('type' => 'FeatureCollection', 'features' => array());
-        foreach ($items as $item) {
+        foreach ($db->query($sql)->fetchAll() as $row) {
+            $item = get_record_by_id('item', $row['id']);
             $data['features'][] = array(
                 'type' => 'Feature', 
                 'geometry' => array(
                     'type' => 'Point', 
-                    'coordinates' => array($item['longitude'], $item['latitude']), 
+                    'coordinates' => array($row['longitude'], $row['latitude']), 
                 ), 
                 'properties' => array(
-                    'title' => $item['title'], 
-                    'description' => $item['description'], 
-                    'thumbnail' => $item['thumbnail'], 
+                    'title' => metadata($item, array('Dublin Core', 'Title')), 
+                    'thumbnail' => item_image('thumbnail', array(), 0, $item), 
                     'url' => url(array('module' => 'default', 
                                        'controller' => 'items', 
                                        'action' => 'show', 
