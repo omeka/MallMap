@@ -35,7 +35,7 @@ a#filter-button, a#toggle-map-button {
     position: fixed;
     bottom: 20px;
     left: 20px;
-    z-index: 100;
+    z-index: 99;
 }
 
 #filters {
