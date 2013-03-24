@@ -50,6 +50,7 @@ class MallMap_IndexController extends Omeka_Controller_AbstractActionController
                 'Landscapes', 
                 'Concert Venues', 
                 'Government Offices', 
+                'Marker', 
             ), 
         ), 
         // "Item Type Metadata":"Event Type"
