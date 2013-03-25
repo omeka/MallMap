@@ -11,11 +11,6 @@
     <?php echo head_css(); ?>
     <script src="http://cdn.leafletjs.com/leaflet-0.5/leaflet.js"></script>
     <?php echo head_js(); ?>
-    <script type="text/javascript">
-        var mapCoverageElementId = <?php echo $this->form_data['map_coverages']['element_id']; ?>;
-        var placeTypeElementId = <?php echo $this->form_data['place_types']['element_id']; ?>;
-        var eventTypeElementId = <?php echo $this->form_data['event_types']['element_id']; ?>;
-    </script>
 </head>
 <body>
     <a href="#" id="filter-button">Filters</a>
