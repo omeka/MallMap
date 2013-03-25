@@ -47,7 +47,7 @@ class MallMap_IndexController extends Omeka_Controller_AbstractActionController
                 'Ghost Sites', 
                 'Museums', 
                 'Art Galleries', 
-                'Landscapes', 
+                'Gardens and Landscapes', 
                 'Concert Venues', 
                 'Government Offices', 
                 'Marker', 
