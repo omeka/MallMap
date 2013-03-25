@@ -25,26 +25,26 @@
         <label for="map-coverage">Map Era</label>
         <select id="map-coverage" name="map-coverage">
             <option value="0">Select below...</option>
-            <?php foreach ($this->form_data['map_coverages']['texts'] as $map_coverage): ?>
+            <?php foreach ($this->map_coverages as $map_coverage): ?>
             <option value="<?php echo $map_coverage; ?>"><?php echo $map_coverage; ?></option>
             <?php endforeach; ?>
         </select>
         <label for="item-type">Item Type</label>
         <select id="item-type" name="item-type">
             <option value="0">Select below...</option>
-            <?php foreach ($this->form_data['item_types'] as $item_type): ?>
-            <option value="<?php echo $item_type['id']; ?>"><?php echo $item_type['name']; ?></option>
+            <?php foreach ($this->item_types as $item_type_id => $item_type): ?>
+            <option value="<?php echo $item_type_id; ?>"><?php echo $item_type; ?></option>
             <?php endforeach; ?>
         </select>
         <div id="place-type-div" style="display: none;">
             <p>Place Types</p>
-            <?php foreach ($this->form_data['place_types']['texts'] as $place_type): ?>
+            <?php foreach ($this->place_types as $place_type): ?>
             <label><input type="checkbox" name="place-type" value="<?php echo htmlspecialchars($place_type); ?>" /> <?php echo $place_type; ?></label><br />
             <?php endforeach; ?>
         </div>
         <div id="event-type-div" style="display: none;">
             <p>Event Types</p>
-            <?php foreach ($this->form_data['event_types']['texts'] as $event_type): ?>
+            <?php foreach ($this->event_types as $event_type): ?>
             <label><input type="checkbox" name="event-type" value="<?php echo htmlspecialchars($event_type); ?>" /> <?php echo $event_type; ?></label><br />
             <?php endforeach; ?>
         </div>

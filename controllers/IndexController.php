@@ -13,62 +13,23 @@
  */
 class MallMap_IndexController extends Omeka_Controller_AbstractActionController
 {
-    private $_formData = array(
-        'item_types' => array(
-            array('id' => 14, 'name' => 'Place'), 
-            array('id' => 8, 'name' => 'Event'), 
-            array('id' => 1, 'name' => 'Document'), 
-            array('id' => 6, 'name' => 'Image'), // Still Image
-            array('id' => 3, 'name' => 'Video'), // Moving Image
-            array('id' => 5, 'name' => 'Audio'), // Sound
-        ), 
-        // "Dublin Core":Coverage
-        'map_coverages' => array(
-            'element_id' => 38, 
-            'texts' => array(
-                'Pre-1800s', 
-                '1800-1829', 
-                '1830-1859', 
-                '1860-1889', 
-                '1890-1919', 
-                '1920-1949', 
-                //'1950-1979', 
-                '1980-1999', 
-                //'2000-present', 
-            ), 
-        ), 
-        // "Item Type Metadata":Type
-        'place_types' => array(
-            'element_id' => 87, 
-            'texts' => array(
-                'Statues and Sculpture', 
-                'Monuments', 
-                'Memorials', 
-                'Ghost Sites', 
-                'Museums', 
-                'Art Galleries', 
-                'Gardens and Landscapes', 
-                'Concert Venues', 
-                'Government Offices', 
-                'Marker', 
-            ), 
-        ), 
-        // "Item Type Metadata":"Event Type"
-        'event_types' => array(
-            'element_id' => 29, 
-            'texts' => array(
-                'Marches and Rallies', 
-                'Encampment', 
-                'Concert', 
-                'Openings and Dedications', 
-                'Cultural Gathering', 
-                'Remembrance', 
-                'Inauguration', 
-                'Environmental Disaster', 
-                'D.C. History', 
-                'Planning and Design', 
-            ), 
-        ), 
+    const ITEM_TYPE_ID_PLACE        = 14;
+    const ITEM_TYPE_ID_EVENT        = 8;
+    const ITEM_TYPE_ID_DOCUMENT     = 1;
+    const ITEM_TYPE_ID_STILL_IMAGE  = 6;
+    const ITEM_TYPE_ID_MOVING_IMAGE = 3;
+    const ITEM_TYPE_ID_SOUND        = 5;
+    const ELEMENT_ID_MAP_COVERAGE   = 38;
+    const ELEMENT_ID_PLACE_TYPE     = 87;
+    const ELEMENT_ID_EVENT_TYPE     = 29;
+    
+    private $_itemTypes = array(
+        self::ITEM_TYPE_ID_PLACE        => 'Place', 
+        self::ITEM_TYPE_ID_EVENT        => 'Event', 
+        self::ITEM_TYPE_ID_DOCUMENT     => 'Document', 
+        self::ITEM_TYPE_ID_STILL_IMAGE  => 'Image', // Still Image
+        self::ITEM_TYPE_ID_MOVING_IMAGE => 'Video', // Moving Image
+        self::ITEM_TYPE_ID_SOUND        => 'Audio', // Sound
     );
     
     private $_historicMapData = array(
@@ -106,7 +67,12 @@ class MallMap_IndexController extends Omeka_Controller_AbstractActionController
     
     public function indexAction()
     {
-        $this->view->form_data = $this->_formData;
+        $simpleVocabTerm = $this->_helper->db->getTable('SimpleVocabTerm');
+        
+        $this->view->item_types = $this->_itemTypes;
+        $this->view->map_coverages = $simpleVocabTerm->findElementTexts(self::ELEMENT_ID_MAP_COVERAGE);
+        $this->view->place_types = $simpleVocabTerm->findElementTexts(self::ELEMENT_ID_PLACE_TYPE);
+        $this->view->event_types = $simpleVocabTerm->findElementTexts(self::ELEMENT_ID_EVENT_TYPE);
     }
     
     /**
@@ -136,14 +102,14 @@ class MallMap_IndexController extends Omeka_Controller_AbstractActionController
         if ($request->getParam('mapCoverage')) {
             $alias = "map_coverage";
             $joins[] = "$db->ElementText AS $alias ON $alias.record_id = items.id AND $alias.record_type = 'Item' " 
-                     . $db->quoteInto("AND $alias.element_id = ?", $this->_formData['map_coverages']['element_id']);
+                     . $db->quoteInto("AND $alias.element_id = ?", self::ELEMENT_ID_MAP_COVERAGE);
             $wheres[] = $db->quoteInto("$alias.text = ?", $request->getParam('mapCoverage'));
         }
         // Filter place types (inclusive).
         if ($request->getParam('placeTypes')) {
             $alias = "place_types";
             $joins[] = "$db->ElementText AS $alias ON $alias.record_id = items.id AND $alias.record_type = 'Item' " 
-                     . $db->quoteInto("AND $alias.element_id = ?", $this->_formData['place_types']['element_id']);
+                     . $db->quoteInto("AND $alias.element_id = ?", self::ELEMENT_ID_PLACE_TYPE);
             $placeTypes = array();
             foreach ($request->getParam('placeTypes') as $text) {
                 $placeTypes[] = $db->quoteInto("$alias.text = ?", $text);
@@ -153,7 +119,7 @@ class MallMap_IndexController extends Omeka_Controller_AbstractActionController
         } else if ($request->getParam('eventTypes')) {
             $alias = "event_types";
             $joins[] = "$db->ElementText AS $alias ON $alias.record_id = items.id AND $alias.record_type = 'Item' " 
-                     . $db->quoteInto("AND $alias.element_id = ?", $this->_formData['event_types']['element_id']);
+                     . $db->quoteInto("AND $alias.element_id = ?", self::ELEMENT_ID_EVENT_TYPE);
             $eventTypes = array();
             foreach ($request->getParam('eventTypes') as $text) {
                 $eventTypes[] = $db->quoteInto("$alias.text = ?", $text);
