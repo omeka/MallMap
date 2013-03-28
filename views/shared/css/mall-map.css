@@ -26,20 +26,30 @@ a#filter-button, a#toggle-map-button {
     background-color: #EB5252;
     border-radius: 3px;
     padding: 10px;
+    -webkit-box-shadow: 0 0 5px #222;
+    -moz-box-shadow: 0 0 5px #222;
+    box-shadow: 0 0 5px #222;
 }
 
 #filter-button {
     position: fixed;
     top: 20px;
     right: 20px;
-    z-index: 100;
+    z-index: 1010;
+    -webkit-box-shadow: 0 0 5px #222;
+    -moz-box-shadow: 0 0 5px #222;
+    box-shadow: 0 0 5px #222;
+}
+
+a#filter-button.on, a#toggle-map-button.on {
+    background-color: #38B0DF;
 }
 
 #toggle-map-button {
     position: fixed;
     bottom: 20px;
     left: 20px;
-    z-index: 99;
+    z-index: 1001;
 }
 
 #filters {
@@ -49,9 +59,11 @@ a#filter-button, a#toggle-map-button {
     bottom: 0;
     background-color: rgba(255,255,255,.85);
     width: 100%;
-    z-index: 99;
-    padding: 100px 2% 20px;
+    z-index: 1001;
+    padding: 20px 2% 20px;
     overflow: auto;
+    border-top: 80px solid #000;
+    border-top: 80px solid rgba(0,0,0,.85);
 }
 
 h1 { margin-top: 0; }
