@@ -16,6 +16,10 @@ html, body, #map {
     height: 100%;
 }
 
+select {
+    font-size: 1em;
+}
+
 a#filter-button, a#toggle-map-button { 
     text-decoration: none;
     color: #fff;
