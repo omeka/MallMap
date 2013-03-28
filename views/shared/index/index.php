@@ -14,7 +14,7 @@
 </head>
 <body>
     <a href="#" id="filter-button">Filters</a>
-    <a href="#" id="toggle-map-button" style="display: none;">Toggle Map</a>
+    <a href="#" id="toggle-map-button" class="on" style="display: none;">Map On</a>
     <div id="filters">
         <h1>Select Filters</h1>
         <label for="map-coverage">Map Era</label>
