@@ -81,3 +81,39 @@ label {
 input[type=checkbox] {
     margin: 0 5px 0 0;
 }
+
+#filters div label {
+    background-color: rgb(255, 207, 207);
+    border-radius: 3px;
+    cursor: pointer;
+    vertical-align: middle;
+    line-height: 30px;
+    width: 100%;
+    color: rgb(160, 70, 70);
+    position: relative;
+}
+#filters div label:before {
+    content: "";
+    width: 30px;
+    height: 30px;
+    display: block;
+    float: left;
+    background-color: rgb(214, 117, 117);
+    margin-right: .5em;
+    border-radius: 3px 0 0 3px;
+}
+
+#filters div label.on {
+    background-color: rgb(212, 240, 212);
+    color: green;
+}
+
+#filters div label.on:before {
+    background-color: green;
+}
+
+#filters div input[type=checkbox] {
+    position: absolute;
+    top: 9px;
+    left: 9px;
+}

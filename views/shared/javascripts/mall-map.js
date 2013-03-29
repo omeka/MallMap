@@ -112,6 +112,19 @@ jQuery(document).ready(function () {
     });
     
     /*
+     * Toggle map filters
+     */
+     
+    jQuery('#filters div label').click(function() {
+        var clicks = jQuery(this).find('input[type=checkbox]').is(':checked');
+        if (clicks) {
+            jQuery(this).addClass('on');
+        } else {
+            jQuery(this).removeClass('on');
+        }
+    });
+    
+    /*
      * Filter markers. This must be called on every form change.
      */
     function doFilters() {
