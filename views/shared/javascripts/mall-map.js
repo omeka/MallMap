@@ -84,6 +84,24 @@ jQuery(document).ready(function () {
      * Filter place type.
      */
     jQuery('input[name=place-type]').change(function () {
+        // Handle all place types checkbox.
+        var placeTypeAll = jQuery('input[name=place-type-all]');
+        if (jQuery('input[name=place-type]:checked').length) {
+            placeTypeAll.prop('checked', false).parent().removeClass('on');
+        } else {
+            placeTypeAll.prop('checked', true).parent().addClass('on');
+        }
+        doFilters();
+    });
+    
+    /*
+     * Handle the all place types checkbox.
+     */
+    jQuery('input[name=place-type-all]').change(function () {
+        // Uncheck all place types.
+        jQuery('input[name=place-type]:checked').each(function () {
+            jQuery(this).prop('checked', false).parent().removeClass('on');
+        });
         doFilters();
     });
     
@@ -91,6 +109,24 @@ jQuery(document).ready(function () {
      * Filter event type.
      */
     jQuery('input[name=event-type]').change(function () {
+        // Handle all event types checkbox.
+        var eventTypeAll = jQuery('input[name=event-type-all]');
+        if (jQuery('input[name=event-type]:checked').length) {
+            eventTypeAll.prop('checked', false).parent().removeClass('on');
+        } else {
+            eventTypeAll.prop('checked', true).parent().addClass('on');
+        }
+        doFilters();
+    });
+    
+    /*
+     * Handle the all event types checkbox.
+     */
+    jQuery('input[name=event-type-all]').change(function () {
+        // Uncheck all event types.
+        jQuery('input[name=event-type]:checked').each(function () {
+            jQuery(this).prop('checked', false).parent().removeClass('on');
+        });
         doFilters();
     });
     
@@ -149,7 +185,7 @@ jQuery(document).ready(function () {
             eventTypes: [], 
         };
         
-        // Handle each filter, adding to the GET data object.
+        // Handle each filter, adding to the POST data object.
         if ('0' != mapCoverage.val()) {
             postData['mapCoverage'] = mapCoverage.val();
         }
@@ -167,7 +203,7 @@ jQuery(document).ready(function () {
             });
         }
         
-        // Filter markers only if the GET data has changed. Otherwise the 
+        // Filter markers only if the POST data has changed. Otherwise the 
         // request will return all markers.
         if (!postData.mapCoverage && !postData.itemType && 
             !postData.placeTypes.length && !postData.eventTypes.length) {

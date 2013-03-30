@@ -33,12 +33,14 @@
         </select>
         <div id="place-type-div" style="display: none;">
             <p>Place Types</p>
+            <label class="on"><input type="checkbox" name="place-type-all" value="0" checked="checked"/> All Place Types</label><br />
             <?php foreach ($this->place_types as $place_type): ?>
             <label><input type="checkbox" name="place-type" value="<?php echo htmlspecialchars($place_type); ?>" /> <?php echo $place_type; ?></label><br />
             <?php endforeach; ?>
         </div>
         <div id="event-type-div" style="display: none;">
             <p>Event Types</p>
+            <label class="on"><input type="checkbox" name="event-type-all" value="0" checked="checked"/> All Event Types</label><br />
             <?php foreach ($this->event_types as $event_type): ?>
             <label><input type="checkbox" name="event-type" value="<?php echo htmlspecialchars($event_type); ?>" /> <?php echo $event_type; ?></label><br />
             <?php endforeach; ?>
