@@ -90,10 +90,9 @@ class MallMap_IndexController extends Omeka_Controller_AbstractActionController
         
         $db = $this->_helper->db->getDb();
         $request = $this->getRequest();
-        $joins = array();
-        $wheres = array();
+        $joins = array("$db->Item AS items ON items.id = locations.item_id");
+        $wheres = array("items.public = 1");
         
-        $joins[] = "$db->Item AS items ON items.id = locations.item_id";
         // Filter item type.
         if ($request->getParam('itemType')) {
             $wheres[] = $db->quoteInto("items.item_type_id = ?", $request->getParam('itemType'), Zend_Db::INT_TYPE);
