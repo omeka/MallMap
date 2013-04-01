@@ -7,22 +7,32 @@
  */
 
 /**
- * The Mall Map controller.
+ * The Mall Map controller
  * 
  * @package Omeka\Plugins\Mall
  */
 class MallMap_IndexController extends Omeka_Controller_AbstractActionController
 {
-    const ITEM_TYPE_ID_PLACE        = 14;
-    const ITEM_TYPE_ID_EVENT        = 8;
+    /**
+     * Filterable item type IDs
+     */
     const ITEM_TYPE_ID_DOCUMENT     = 1;
-    const ITEM_TYPE_ID_STILL_IMAGE  = 6;
     const ITEM_TYPE_ID_MOVING_IMAGE = 3;
     const ITEM_TYPE_ID_SOUND        = 5;
+    const ITEM_TYPE_ID_STILL_IMAGE  = 6;
+    const ITEM_TYPE_ID_EVENT        = 8;
+    const ITEM_TYPE_ID_PLACE        = 14;
+    
+    /**
+     * Filterable element IDs
+     */
+    const ELEMENT_ID_EVENT_TYPE     = 29;
     const ELEMENT_ID_MAP_COVERAGE   = 38;
     const ELEMENT_ID_PLACE_TYPE     = 87;
-    const ELEMENT_ID_EVENT_TYPE     = 29;
     
+    /**
+     * @var array Filterable item types in display order
+     */
     private $_itemTypes = array(
         self::ITEM_TYPE_ID_PLACE        => 'Place', 
         self::ITEM_TYPE_ID_EVENT        => 'Event', 
@@ -65,6 +75,9 @@ class MallMap_IndexController extends Omeka_Controller_AbstractActionController
         //'2000-present' => array('url' => null, 'title' => null), 
     );
     
+    /**
+     * Display the map.
+     */
     public function indexAction()
     {
         $simpleVocabTerm = $this->_helper->db->getTable('SimpleVocabTerm');
@@ -76,7 +89,7 @@ class MallMap_IndexController extends Omeka_Controller_AbstractActionController
     }
     
     /**
-     * Filter items that have been geolocated by the geolocation plugin.
+     * Filter items that have been geolocated by the Geolocation plugin.
      * 
      * Since this is mobile-first, optimized SQL queries are preferable to using 
      * the Omeka API.
