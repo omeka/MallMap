@@ -26,9 +26,9 @@ class MallMap_IndexController extends Omeka_Controller_AbstractActionController
     /**
      * Filterable element IDs
      */
-    const ELEMENT_ID_EVENT_TYPE     = 29;
-    const ELEMENT_ID_MAP_COVERAGE   = 38;
-    const ELEMENT_ID_PLACE_TYPE     = 87;
+    const ELEMENT_ID_EVENT_TYPE   = 29;
+    const ELEMENT_ID_MAP_COVERAGE = 38;
+    const ELEMENT_ID_PLACE_TYPE   = 87;
     
     /**
      * @var array Filterable item types in display order
@@ -42,6 +42,9 @@ class MallMap_IndexController extends Omeka_Controller_AbstractActionController
         self::ITEM_TYPE_ID_SOUND        => 'Audio', // Sound
     );
     
+    /**
+     * @var array Data used when adding the historic map layer.
+     */
     private $_historicMapData = array(
         'Pre-1800s' => array(
             'url' => '/mallhistory/plugins/MallMap/maps/1791/{z}/{x}/{y}.jpg', 
