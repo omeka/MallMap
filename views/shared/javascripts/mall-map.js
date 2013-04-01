@@ -10,6 +10,12 @@ jQuery(document).ready(function () {
         addLayer(L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'));
     map.attributionControl.setPrefix('');
     
+    // Retain previous form state.
+    retainFormState();
+    
+    // Add all markers by default, or retain previous marker state.
+    doFilters();
+    
     /*
      * Handle the filter form.
      */
@@ -44,19 +50,7 @@ jQuery(document).ready(function () {
         if ('0' == jQuery('#map-coverage').val()) {
             jQuery('#toggle-map-button').hide();
         } else {
-            // Get the map data and set the historic map layer.
-            var getData = {'text': jQuery('#map-coverage').val()};
-            jQuery.get('mall-map/index/historic-map-data', getData, function (response) {
-                historicMapLayer = L.tileLayer(
-                    response.url, 
-                    {tms: true, opacity: 1.00}
-                );
-                map.addLayer(historicMapLayer);
-                jQuery('#toggle-map-button').show();
-                
-                // Set the map title as the map attribution prefix.
-                map.attributionControl.setPrefix(response.title);
-            });
+            setHistoricMapLayer();
         }
         doFilters();
     });
@@ -207,13 +201,6 @@ jQuery(document).ready(function () {
             });
         }
         
-        // Filter markers only if the POST data has changed. Otherwise the 
-        // request will return all markers.
-        if (!postData.mapCoverage && !postData.itemType && 
-            !postData.placeTypes.length && !postData.eventTypes.length) {
-            return;
-        }
-        
         // Make the POST request, handle the GeoJSON response, and add markers.
         jqXhr = jQuery.post('mall-map/index/filter', postData, function (response) {
             geoJsonLayer = L.geoJson(response, {
@@ -226,6 +213,57 @@ jQuery(document).ready(function () {
             });
             geoJsonLayer.addTo(map);
         });
+    }
+    
+    /*
+     * Set the historic map layer.
+     */
+    function setHistoricMapLayer()
+    {
+        // Get the historic map data
+        var getData = {'text': jQuery('#map-coverage').val()};
+        jQuery.get('mall-map/index/historic-map-data', getData, function (response) {
+            historicMapLayer = L.tileLayer(
+                response.url, 
+                {tms: true, opacity: 1.00}
+            );
+            map.addLayer(historicMapLayer);
+            jQuery('#toggle-map-button').show();
+            
+            // Set the map title as the map attribution prefix.
+            map.attributionControl.setPrefix(response.title);
+        });
+    }
+    
+    /*
+     * Retain previous form state. This is needed when going back to the map 
+     * from an item show page.
+     */
+    function retainFormState()
+    {
+        if ('Place' == jQuery('#item-type').find(':selected').text()) {
+            var placeTypes = jQuery('input[name=place-type]:checked');
+            if (placeTypes.length) {
+                jQuery('input[name=place-type-all]').parent().removeClass('on');
+                placeTypes.each(function () {
+                    jQuery(this).parent().addClass('on')
+                });
+            }
+            jQuery('#place-type-div').show({duration: 'fast'});
+        }
+        if ('Event' == jQuery('#item-type').find(':selected').text()) {
+            var eventTypes = jQuery('input[name=event-type]:checked');
+            if (eventTypes.length) {
+                jQuery('input[name=event-type-all]').parent().removeClass('on');
+                eventTypes.each(function () {
+                    jQuery(this).parent().addClass('on')
+                });
+            }
+            jQuery('#event-type-div').show({duration: 'fast'});
+        }
+        if ('0' != jQuery('#map-coverage').val()) {
+            setHistoricMapLayer();
+        }
     }
     
     map.on('click', function (e) {
