@@ -17,12 +17,14 @@ jQuery(document).ready(function () {
         e.preventDefault();
         var clicks = jQuery(this).data('clicks');
         if (clicks) {
-            jQuery(this).removeClass('on').html('Filters');
+            jQuery(this).removeClass('on');
+            jQuery(this).find('.screen-reader-text').html('Filters');
             jQuery('#filters').animate({
                 left: '+=100%'
             }, 200, 'linear');
         } else {
-            jQuery(this).addClass('on').html('Back to Map');
+            jQuery(this).addClass('on');
+            jQuery(this).find('.screen-reader-text').html('Back to Map');
             jQuery('#filters').animate({
                 left: '-=100%'
             }, 200, 'linear');
@@ -35,7 +37,7 @@ jQuery(document).ready(function () {
      */
     jQuery('#map-coverage').change(function () {
         if (historicMapLayer) {
-            jQuery('#toggle-map-button').data('clicks', false).addClass('on').html('Map On');
+            jQuery('#toggle-map-button').data('clicks', false);
             map.removeLayer(historicMapLayer);
             map.attributionControl.setPrefix('');
         }
@@ -136,11 +138,13 @@ jQuery(document).ready(function () {
     jQuery('#toggle-map-button').click(function () {
         var clicks = jQuery(this).data('clicks');
         if (clicks) {
-            jQuery(this).addClass('on').html('Map On');
+            jQuery(this).addClass('on');
+            jQuery(this).find('.screen-reader-text').html('Map On');
             map.addLayer(historicMapLayer);
         } else {
             if (historicMapLayer) {
-                jQuery(this).removeClass('on').html('Map Off');
+                jQuery(this).removeClass('on');
+                jQuery(this).find('.screen-reader-text').html('Map Off');
                 map.removeLayer(historicMapLayer);
             }
         }
