@@ -204,7 +204,8 @@ jQuery(document).ready(function () {
         
         // Make the POST request, handle the GeoJSON response, and add markers.
         jqXhr = jQuery.post('mall-map/index/filter', postData, function (response) {
-            jQuery('#marker-count').text(response.features.length + " item(s)");
+            var item = (1 == response.features.length) ? 'item' : 'items';
+            jQuery('#marker-count').text(response.features.length + " " + item);
             geoJsonLayer = L.geoJson(response, {
                 onEachFeature: function (feature, layer) {
                     layer.bindPopup(
