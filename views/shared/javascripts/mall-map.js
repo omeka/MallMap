@@ -3,21 +3,16 @@ jQuery(document).ready(function () {
     var historicMapLayer;
     var geoJsonLayer;
     var jqXhr;
-    var zoomControl;
     
     // Set the base layer.
-    map = L.map('map', { zoomControl: false }).
+    map = L.map('map', {zoomControl: false}).
         setView([38.89083, -77.02849], 15).
-        addLayer(L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'));
+        addLayer(L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png')).
+        addControl(L.control.zoom({position: 'bottomright'}));
     map.attributionControl.setPrefix('');
     
     // Retain previous form state, if needed.
     retainFormState();
-    
-    // Move zoom to bottom left from default position.
-    
-    zoomControl = L.control.zoom({position: 'bottomright'});
-    zoomControl.addTo(map);
     
     // Add all markers by default, or retain previous marker state.
     doFilters();
