@@ -177,6 +177,8 @@ class MallMap_IndexController extends Omeka_Controller_AbstractActionController
                                  'id'), 
                 ), 
             );
+            // Prevent memory leaks.
+            release_object($item);
         }
         
         $this->_helper->json($data);
