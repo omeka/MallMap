@@ -13,7 +13,9 @@
     <?php echo head_js(); ?>
 </head>
 <body>
+    <span id="marker-count"></span>
     <a href="#" id="filter-button"><span class="screen-reader-text">Filters</span></a>
+    <a href="#" id="all-button">All</a>
     <a href="#" id="center-button"><span class="screen-reader-text">Make me center</span></a>
     <a href="#" id="toggle-map-button" class="on" style="display: none;"><span class="screen-reader-text">Map On</span></a>
     <div id="filters">

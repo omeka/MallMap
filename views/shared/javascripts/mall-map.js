@@ -10,7 +10,7 @@ jQuery(document).ready(function () {
         addLayer(L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'));
     map.attributionControl.setPrefix('');
     
-    // Retain previous form state.
+    // Retain previous form state, if needed.
     retainFormState();
     
     // Add all markers by default, or retain previous marker state.
@@ -25,17 +25,20 @@ jQuery(document).ready(function () {
         if (clicks) {
             jQuery(this).removeClass('on');
             jQuery(this).find('.screen-reader-text').html('Filters');
-            jQuery('#filters').animate({
-                left: '+=100%'
-            }, 200, 'linear');
+            jQuery('#filters').animate({left: '+=100%'}, 200, 'linear');
         } else {
             jQuery(this).addClass('on');
             jQuery(this).find('.screen-reader-text').html('Back to Map');
-            jQuery('#filters').animate({
-                left: '-=100%'
-            }, 200, 'linear');
+            jQuery('#filters').animate({left: '-=100%'}, 200, 'linear');
         }
         jQuery(this).data('clicks', !clicks);
+    });
+    
+    /*
+     * Revert form to default and display all markers.
+     */
+    jQuery('#all-button').click(function() {
+        revertFormState();
     });
     
     /*
@@ -43,14 +46,12 @@ jQuery(document).ready(function () {
      */
     jQuery('#map-coverage').change(function () {
         if (historicMapLayer) {
-            jQuery('#toggle-map-button').data('clicks', false);
-            map.removeLayer(historicMapLayer);
-            map.attributionControl.setPrefix('');
+            removeHistoricMapLayer();
         }
         if ('0' == jQuery('#map-coverage').val()) {
             jQuery('#toggle-map-button').hide();
         } else {
-            setHistoricMapLayer();
+            addHistoricMapLayer();
         }
         doFilters();
     });
@@ -95,9 +96,8 @@ jQuery(document).ready(function () {
      */
     jQuery('input[name=place-type-all]').change(function () {
         // Uncheck all place types.
-        jQuery('input[name=place-type]:checked').each(function () {
-            jQuery(this).prop('checked', false).parent().removeClass('on');
-        });
+        jQuery('input[name=place-type]:checked').prop('checked', false).
+            parent().removeClass('on');
         doFilters();
     });
     
@@ -120,9 +120,8 @@ jQuery(document).ready(function () {
      */
     jQuery('input[name=event-type-all]').change(function () {
         // Uncheck all event types.
-        jQuery('input[name=event-type]:checked').each(function () {
-            jQuery(this).prop('checked', false).parent().removeClass('on');
-        });
+        jQuery('input[name=event-type]:checked').prop('checked', false).
+            parent().removeClass('on');
         doFilters();
     });
     
@@ -148,7 +147,6 @@ jQuery(document).ready(function () {
     /*
      * Toggle map filters
      */
-     
     jQuery('#filters div label').click(function() {
         var clicks = jQuery(this).find('input[type=checkbox]').is(':checked');
         if (clicks) {
@@ -159,7 +157,9 @@ jQuery(document).ready(function () {
     });
     
     /*
-     * Filter markers. This must be called on every form change.
+     * Filter markers.
+     * 
+     * This must be called on every form change.
      */
     function doFilters() {
         // Prevent concurrent filter requests.
@@ -203,6 +203,7 @@ jQuery(document).ready(function () {
         
         // Make the POST request, handle the GeoJSON response, and add markers.
         jqXhr = jQuery.post('mall-map/index/filter', postData, function (response) {
+            jQuery('#marker-count').text(response.features.length);
             geoJsonLayer = L.geoJson(response, {
                 onEachFeature: function (feature, layer) {
                     layer.bindPopup(
@@ -216,9 +217,9 @@ jQuery(document).ready(function () {
     }
     
     /*
-     * Set the historic map layer.
+     * Add the historic map layer.
      */
-    function setHistoricMapLayer()
+    function addHistoricMapLayer()
     {
         // Get the historic map data
         var getData = {'text': jQuery('#map-coverage').val()};
@@ -236,18 +237,58 @@ jQuery(document).ready(function () {
     }
     
     /*
-     * Retain previous form state. This is needed when going back to the map 
-     * from an item show page.
+     * Remove the historic map layer.
+     */
+    function removeHistoricMapLayer()
+    {
+        jQuery('#toggle-map-button').data('clicks', false).hide();
+        map.removeLayer(historicMapLayer);
+        map.attributionControl.setPrefix('');
+    }
+    
+    /*
+     * Revert to default (original) form state.
+     */
+    function revertFormState()
+    {
+        if (historicMapLayer) {
+            removeHistoricMapLayer();
+        }
+        
+        jQuery('#map-coverage').val('0');
+        jQuery('#item-type').val('0');
+        
+        jQuery('#place-type-div').hide({duration: 'fast'});
+        jQuery('input[name=place-type-all]').prop('checked', true).
+            parent().addClass('on');
+        jQuery('input[name=place-type]:checked').prop('checked', false).
+            parent().removeClass('on');
+        
+        jQuery('#event-type-div').hide({duration: 'fast'});
+        jQuery('input[name=event-type-all]').prop('checked', true).
+            parent().addClass('on');
+        jQuery('input[name=event-type]:checked').prop('checked', false).
+            parent().removeClass('on');
+        
+        doFilters();
+    }
+    
+    /*
+     * Retain previous form state.
+     * 
+     * Acts on the assumption that all browsers will preserve the form state 
+     * when navigating back to the map from another page.
      */
     function retainFormState()
     {
+        if ('0' != jQuery('#map-coverage').val()) {
+            addHistoricMapLayer();
+        }
         if ('Place' == jQuery('#item-type').find(':selected').text()) {
             var placeTypes = jQuery('input[name=place-type]:checked');
             if (placeTypes.length) {
                 jQuery('input[name=place-type-all]').parent().removeClass('on');
-                placeTypes.each(function () {
-                    jQuery(this).parent().addClass('on')
-                });
+                placeTypes.parent().addClass('on');
             }
             jQuery('#place-type-div').show({duration: 'fast'});
         }
@@ -255,14 +296,9 @@ jQuery(document).ready(function () {
             var eventTypes = jQuery('input[name=event-type]:checked');
             if (eventTypes.length) {
                 jQuery('input[name=event-type-all]').parent().removeClass('on');
-                eventTypes.each(function () {
-                    jQuery(this).parent().addClass('on')
-                });
+                eventTypes.parent().addClass('on');
             }
             jQuery('#event-type-div').show({duration: 'fast'});
-        }
-        if ('0' != jQuery('#map-coverage').val()) {
-            setHistoricMapLayer();
         }
     }
     
