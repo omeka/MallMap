@@ -85,10 +85,14 @@ class MallMap_IndexController extends Omeka_Controller_AbstractActionController
     {
         $simpleVocabTerm = $this->_helper->db->getTable('SimpleVocabTerm');
         
+        $mapCoverages = $simpleVocabTerm->findByElementId(self::ELEMENT_ID_MAP_COVERAGE);
+        $placeTypes = $simpleVocabTerm->findByElementId(self::ELEMENT_ID_PLACE_TYPE);
+        $eventTypes = $simpleVocabTerm->findByElementId(self::ELEMENT_ID_EVENT_TYPE);
+        
         $this->view->item_types = $this->_itemTypes;
-        $this->view->map_coverages = $simpleVocabTerm->findElementTexts(self::ELEMENT_ID_MAP_COVERAGE);
-        $this->view->place_types = $simpleVocabTerm->findElementTexts(self::ELEMENT_ID_PLACE_TYPE);
-        $this->view->event_types = $simpleVocabTerm->findElementTexts(self::ELEMENT_ID_EVENT_TYPE);
+        $this->view->map_coverages = explode("\n", $mapCoverages->terms);
+        $this->view->place_types = explode("\n", $placeTypes->terms);
+        $this->view->event_types = explode("\n", $eventTypes->terms);
     }
     
     /**
