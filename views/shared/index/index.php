@@ -22,14 +22,14 @@
         <h1>Select Filters</h1>
         <label for="map-coverage">Map Era</label>
         <select id="map-coverage" name="map-coverage">
-            <option value="0">Select below...</option>
+            <option value="0">All Map Eras</option>
             <?php foreach ($this->map_coverages as $map_coverage): ?>
             <option value="<?php echo $map_coverage; ?>"><?php echo $map_coverage; ?></option>
             <?php endforeach; ?>
         </select>
         <label for="item-type">Item Type</label>
         <select id="item-type" name="item-type">
-            <option value="0">Select below...</option>
+            <option value="0">All Item Types</option>
             <?php foreach ($this->item_types as $item_type_id => $item_type): ?>
             <option value="<?php echo $item_type_id; ?>"><?php echo $item_type; ?></option>
             <?php endforeach; ?>
