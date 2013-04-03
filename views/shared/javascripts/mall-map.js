@@ -1,15 +1,53 @@
 jQuery(document).ready(function () {
+    
+    var MAP_URL_TEMPLATE = 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+    var MAP_CENTER = [38.8891, -77.02949];
+    var MAP_ZOOM = 15;
+    var MAP_MIN_ZOOM = 14;
+    var MAP_MAX_ZOOM = 18;
+    var MAP_MAX_BOUNDS = [[38.79164, -77.17232], [38.99583, -76.90917]];
+    var MAP_LOCATE_BOUNDS = [[38.87814, -77.05656], [38.90025, -77.00678]];
+    
     var map;
     var historicMapLayer;
     var geoJsonLayer;
     var jqXhr;
+    var locationMarker;
     
-    // Set the base layer.
-    map = L.map('map', {zoomControl: false}).
-        setView([38.89083, -77.02849], 15).
-        addLayer(L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png')).
-        addControl(L.control.zoom({position: 'bottomright'}));
+    // Set the base map layer.
+    map = L.map('map', {
+        center: MAP_CENTER, 
+        zoom: MAP_ZOOM, 
+        minZoom: MAP_MIN_ZOOM, 
+        maxZoom: MAP_MAX_ZOOM, 
+        maxBounds: MAP_MAX_BOUNDS, 
+        zoomControl: false, 
+    });
+    map.addLayer(L.tileLayer(MAP_URL_TEMPLATE));
+    map.addControl(L.control.zoom({position: 'bottomright'}));
     map.attributionControl.setPrefix('');
+    
+    // Locate the user.
+    map.locate({watch: true});
+    map.on('locationfound', function (e) {
+        if (L.latLngBounds(MAP_LOCATE_BOUNDS).contains(e.latlng)) {
+            if (locationMarker) {
+                map.removeLayer(locationMarker);
+            }
+            map.panTo(e.latlng).setZoom(MAP_MAX_ZOOM);
+            locationMarker = L.marker(e.latlng);
+            locationMarker.addTo(map).
+                bindPopup("You are within " + e.accuracy / 2 + " meters from this point");
+        } else {
+            
+            var miles = Math.ceil((e.latlng.distanceTo(map.options.center) * 0.000621371) * 100) / 100;
+            console.log('Location out of bounds. You are ' + miles + ' miles away.');
+        }
+    });
+    map.on('locationerror', function () {
+        map.stopLocate();
+        console.log('Could not find your location.');
+    });
     
     // Retain previous form state, if needed.
     retainFormState();
