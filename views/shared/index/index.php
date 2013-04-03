@@ -1,5 +1,6 @@
 <?php queue_css_file('mall-map'); ?>
 <?php queue_js_file('mall-map'); ?>
+<?php queue_js_file('modernizr.custom.63332'); ?>
 <!doctype html>
 <html lang="en">
 <head>
