@@ -56,8 +56,10 @@ $(document).ready(function () {
         if (L.latLngBounds(LOCATE_BOUNDS).contains(e.latlng)) {
             if (locationMarker) {
                 map.removeLayer(locationMarker);
+            } else {
+                // Pan and zoom to location only on first locate.
+                map.panTo(e.latlng).setZoom(MAP_MAX_ZOOM);
             }
-            map.panTo(e.latlng).setZoom(MAP_MAX_ZOOM);
             locationMarker = L.marker(e.latlng);
             locationMarker.addTo(map).
                 bindPopup("You are within " + e.accuracy / 2 + " meters from this point");
