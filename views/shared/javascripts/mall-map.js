@@ -6,7 +6,7 @@ jQuery(document).ready(function () {
     var MAP_MIN_ZOOM = 14;
     var MAP_MAX_ZOOM = 18;
     var MAP_MAX_BOUNDS = [[38.79164, -77.17232], [38.99583, -76.90917]];
-    var MAP_LOCATE_BOUNDS = [[38.87814, -77.05656], [38.90025, -77.00678]];
+    var LOCATE_BOUNDS = [[38.87814, -77.05656], [38.90025, -77.00678]];
     
     var map;
     var historicMapLayer;
@@ -29,8 +29,19 @@ jQuery(document).ready(function () {
     
     // Locate the user.
     map.locate({watch: true});
+    
+    // Retain previous form state, if needed.
+    retainFormState();
+    
+    // Add all markers by default, or retain previous marker state.
+    doFilters();
+    
+    /*
+     * Handle location found.
+     */
     map.on('locationfound', function (e) {
-        if (L.latLngBounds(MAP_LOCATE_BOUNDS).contains(e.latlng)) {
+        // User within location bounds. Set the location marker.
+        if (L.latLngBounds(LOCATE_BOUNDS).contains(e.latlng)) {
             if (locationMarker) {
                 map.removeLayer(locationMarker);
             }
@@ -38,22 +49,21 @@ jQuery(document).ready(function () {
             locationMarker = L.marker(e.latlng);
             locationMarker.addTo(map).
                 bindPopup("You are within " + e.accuracy / 2 + " meters from this point");
+        // User outside location bounds.
         } else {
-            
+            map.stopLocate();
             var miles = Math.ceil((e.latlng.distanceTo(map.options.center) * 0.000621371) * 100) / 100;
             console.log('Location out of bounds. You are ' + miles + ' miles away.');
         }
     });
+    
+    /*
+     * Handle location error.
+     */
     map.on('locationerror', function () {
         map.stopLocate();
         console.log('Could not find your location.');
     });
-    
-    // Retain previous form state, if needed.
-    retainFormState();
-    
-    // Add all markers by default, or retain previous marker state.
-    doFilters();
     
     /*
      * Handle the filter form.
