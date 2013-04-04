@@ -118,42 +118,41 @@ class MallMap_IndexController extends Omeka_Controller_AbstractActionController
     {
         // Process only AJAX requests.
         if (!$this->_request->isXmlHttpRequest()) {
-            throw new Omeka_Controller_Exception_404;
+            throw new Omeka_Controller_Exception_403;
         }
         
         $db = $this->_helper->db->getDb();
-        $request = $this->getRequest();
         $joins = array("$db->Item AS items ON items.id = locations.item_id");
         $wheres = array("items.public = 1");
         
         // Filter item type.
-        if ($request->getParam('itemType')) {
-            $wheres[] = $db->quoteInto("items.item_type_id = ?", $request->getParam('itemType'), Zend_Db::INT_TYPE);
+        if ($this->_request->getParam('itemType')) {
+            $wheres[] = $db->quoteInto("items.item_type_id = ?", $this->_request->getParam('itemType'), Zend_Db::INT_TYPE);
         }
         // Filter map coverage.
-        if ($request->getParam('mapCoverage')) {
+        if ($this->_request->getParam('mapCoverage')) {
             $alias = "map_coverage";
             $joins[] = "$db->ElementText AS $alias ON $alias.record_id = items.id AND $alias.record_type = 'Item' " 
                      . $db->quoteInto("AND $alias.element_id = ?", self::ELEMENT_ID_MAP_COVERAGE);
-            $wheres[] = $db->quoteInto("$alias.text = ?", $request->getParam('mapCoverage'));
+            $wheres[] = $db->quoteInto("$alias.text = ?", $this->_request->getParam('mapCoverage'));
         }
         // Filter place types (inclusive).
-        if ($request->getParam('placeTypes')) {
+        if ($this->_request->getParam('placeTypes')) {
             $alias = "place_types";
             $joins[] = "$db->ElementText AS $alias ON $alias.record_id = items.id AND $alias.record_type = 'Item' " 
                      . $db->quoteInto("AND $alias.element_id = ?", self::ELEMENT_ID_PLACE_TYPE);
             $placeTypes = array();
-            foreach ($request->getParam('placeTypes') as $text) {
+            foreach ($this->_request->getParam('placeTypes') as $text) {
                 $placeTypes[] = $db->quoteInto("$alias.text = ?", $text);
             }
             $wheres[] = implode(" OR ", $placeTypes);
         // Filter event types (inclusive).
-        } else if ($request->getParam('eventTypes')) {
+        } else if ($this->_request->getParam('eventTypes')) {
             $alias = "event_types";
             $joins[] = "$db->ElementText AS $alias ON $alias.record_id = items.id AND $alias.record_type = 'Item' " 
                      . $db->quoteInto("AND $alias.element_id = ?", self::ELEMENT_ID_EVENT_TYPE);
             $eventTypes = array();
-            foreach ($request->getParam('eventTypes') as $text) {
+            foreach ($this->_request->getParam('eventTypes') as $text) {
                 $eventTypes[] = $db->quoteInto("$alias.text = ?", $text);
             }
             $wheres[] = implode(" OR ", $eventTypes);
@@ -204,9 +203,12 @@ class MallMap_IndexController extends Omeka_Controller_AbstractActionController
     {
         // Process only AJAX requests.
         if (!$this->_request->isXmlHttpRequest()) {
+            throw new Omeka_Controller_Exception_403;
+        }
+        if (!isset($this->_historicMapData[$this->_request->getParam('text')])) {
             throw new Omeka_Controller_Exception_404;
         }
-        $data = $this->_historicMapData[$this->getRequest()->getParam('text')];
+        $data = $this->_historicMapData[$this->_request->getParam('text')];
         $this->_helper->json($data);
     }
 
