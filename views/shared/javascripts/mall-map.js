@@ -84,17 +84,20 @@ $(document).ready(function () {
      */
     $('#filter-button').click(function(e) {
         e.preventDefault();
-        var clicks = $(this).data('clicks');
+        var filterButton = $(this);
+        var clicks = filterButton.data('clicks');
         if (clicks) {
-            $(this).removeClass('on');
-            $(this).find('.screen-reader-text').html('Filters');
+            filterButton.removeClass('on').
+                find('.screen-reader-text').
+                html('Filters');
             $('#filters').animate({left: '+=100%'}, 200, 'linear');
         } else {
-            $(this).addClass('on');
-            $(this).find('.screen-reader-text').html('Back to Map');
+            filterButton.addClass('on').
+                find('.screen-reader-text').
+                html('Back to Map');
             $('#filters').animate({left: '-=100%'}, 200, 'linear');
         }
-        $(this).data('clicks', !clicks);
+        filterButton.data('clicks', !clicks);
     });
     
     /*
@@ -123,14 +126,15 @@ $(document).ready(function () {
      * Filter item type.
      */
     $('#item-type').change(function () {
-        if ('Place' == $(this).find(':selected').text()) {
+        var itemType = $(this);
+        if ('Place' == itemType.find(':selected').text()) {
             $('#place-type-div').show({duration: 'fast'});
         } else {
             // Reset and hide the place type select.
             $('input[name=place-type]').removeAttr('checked');
             $('#place-type-div').hide({duration: 'fast'});
         }
-        if ('Event' == $(this).find(':selected').text()) {
+        if ('Event' == itemType.find(':selected').text()) {
             $('#event-type-div').show({duration: 'fast'});
         } else {
             // Reset and hide the event type checkboxes.
@@ -192,11 +196,11 @@ $(document).ready(function () {
      * Toggle map filters
      */
     $('#filters div label').click(function() {
-        var clicks = $(this).find('input[type=checkbox]').is(':checked');
-        if (clicks) {
-            $(this).addClass('on');
+        var checkboxLabel = $(this);
+        if (checkboxLabel.find('input[type=checkbox]').is(':checked')) {
+            checkboxLabel.addClass('on');
         } else {
-            $(this).removeClass('on');
+            checkboxLabel.removeClass('on');
         }
     });
     
