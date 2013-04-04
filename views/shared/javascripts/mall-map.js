@@ -1,4 +1,4 @@
-jQuery(document).ready(function () {
+$(document).ready(function () {
     
     var MAP_URL_TEMPLATE = 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
     var MAP_CENTER = [38.8891, -77.02949];
@@ -68,37 +68,37 @@ jQuery(document).ready(function () {
     /*
      * Handle the filter form.
      */
-    jQuery('#filter-button').click(function(e) {
+    $('#filter-button').click(function(e) {
         e.preventDefault();
-        var clicks = jQuery(this).data('clicks');
+        var clicks = $(this).data('clicks');
         if (clicks) {
-            jQuery(this).removeClass('on');
-            jQuery(this).find('.screen-reader-text').html('Filters');
-            jQuery('#filters').animate({left: '+=100%'}, 200, 'linear');
+            $(this).removeClass('on');
+            $(this).find('.screen-reader-text').html('Filters');
+            $('#filters').animate({left: '+=100%'}, 200, 'linear');
         } else {
-            jQuery(this).addClass('on');
-            jQuery(this).find('.screen-reader-text').html('Back to Map');
-            jQuery('#filters').animate({left: '-=100%'}, 200, 'linear');
+            $(this).addClass('on');
+            $(this).find('.screen-reader-text').html('Back to Map');
+            $('#filters').animate({left: '-=100%'}, 200, 'linear');
         }
-        jQuery(this).data('clicks', !clicks);
+        $(this).data('clicks', !clicks);
     });
     
     /*
      * Revert form to default and display all markers.
      */
-    jQuery('#all-button').click(function() {
+    $('#all-button').click(function() {
         revertFormState();
     });
     
     /*
      * Filter historic map layer.
      */
-    jQuery('#map-coverage').change(function () {
+    $('#map-coverage').change(function () {
         if (historicMapLayer) {
             removeHistoricMapLayer();
         }
-        if ('0' == jQuery('#map-coverage').val()) {
-            jQuery('#toggle-map-button').hide();
+        if ('0' == $('#map-coverage').val()) {
+            $('#toggle-map-button').hide();
         } else {
             addHistoricMapLayer();
         }
@@ -108,20 +108,20 @@ jQuery(document).ready(function () {
     /*
      * Filter item type.
      */
-    jQuery('#item-type').change(function () {
-        if ('Place' == jQuery(this).find(':selected').text()) {
-            jQuery('#place-type-div').show({duration: 'fast'});
+    $('#item-type').change(function () {
+        if ('Place' == $(this).find(':selected').text()) {
+            $('#place-type-div').show({duration: 'fast'});
         } else {
             // Reset and hide the place type select.
-            jQuery('input[name=place-type]').removeAttr('checked');
-            jQuery('#place-type-div').hide({duration: 'fast'});
+            $('input[name=place-type]').removeAttr('checked');
+            $('#place-type-div').hide({duration: 'fast'});
         }
-        if ('Event' == jQuery(this).find(':selected').text()) {
-            jQuery('#event-type-div').show({duration: 'fast'});
+        if ('Event' == $(this).find(':selected').text()) {
+            $('#event-type-div').show({duration: 'fast'});
         } else {
             // Reset and hide the event type checkboxes.
-            jQuery('input[name=event-type]').removeAttr('checked');
-            jQuery('#event-type-div').hide({duration: 'fast'});
+            $('input[name=event-type]').removeAttr('checked');
+            $('#event-type-div').hide({duration: 'fast'});
         }
         doFilters();
     });
@@ -129,10 +129,10 @@ jQuery(document).ready(function () {
     /*
      * Filter place type.
      */
-    jQuery('input[name=place-type]').change(function () {
+    $('input[name=place-type]').change(function () {
         // Handle all place types checkbox.
-        var placeTypeAll = jQuery('input[name=place-type-all]');
-        if (jQuery('input[name=place-type]:checked').length) {
+        var placeTypeAll = $('input[name=place-type-all]');
+        if ($('input[name=place-type]:checked').length) {
             placeTypeAll.prop('checked', false).parent().removeClass('on');
         } else {
             placeTypeAll.prop('checked', true).parent().addClass('on');
@@ -143,9 +143,9 @@ jQuery(document).ready(function () {
     /*
      * Handle the all place types checkbox.
      */
-    jQuery('input[name=place-type-all]').change(function () {
+    $('input[name=place-type-all]').change(function () {
         // Uncheck all place types.
-        jQuery('input[name=place-type]:checked').prop('checked', false).
+        $('input[name=place-type]:checked').prop('checked', false).
             parent().removeClass('on');
         doFilters();
     });
@@ -153,10 +153,10 @@ jQuery(document).ready(function () {
     /*
      * Filter event type.
      */
-    jQuery('input[name=event-type]').change(function () {
+    $('input[name=event-type]').change(function () {
         // Handle all event types checkbox.
-        var eventTypeAll = jQuery('input[name=event-type-all]');
-        if (jQuery('input[name=event-type]:checked').length) {
+        var eventTypeAll = $('input[name=event-type-all]');
+        if ($('input[name=event-type]:checked').length) {
             eventTypeAll.prop('checked', false).parent().removeClass('on');
         } else {
             eventTypeAll.prop('checked', true).parent().addClass('on');
@@ -167,9 +167,9 @@ jQuery(document).ready(function () {
     /*
      * Handle the all event types checkbox.
      */
-    jQuery('input[name=event-type-all]').change(function () {
+    $('input[name=event-type-all]').change(function () {
         // Uncheck all event types.
-        jQuery('input[name=event-type]:checked').prop('checked', false).
+        $('input[name=event-type]:checked').prop('checked', false).
             parent().removeClass('on');
         doFilters();
     });
@@ -177,31 +177,31 @@ jQuery(document).ready(function () {
     /*
      * Toggle historic map layer on and off.
      */
-    jQuery('#toggle-map-button').click(function () {
-        var clicks = jQuery(this).data('clicks');
+    $('#toggle-map-button').click(function () {
+        var clicks = $(this).data('clicks');
         if (clicks) {
-            jQuery(this).addClass('on');
-            jQuery(this).find('.screen-reader-text').html('Map On');
+            $(this).addClass('on');
+            $(this).find('.screen-reader-text').html('Map On');
             map.addLayer(historicMapLayer);
         } else {
             if (historicMapLayer) {
-                jQuery(this).removeClass('on');
-                jQuery(this).find('.screen-reader-text').html('Map Off');
+                $(this).removeClass('on');
+                $(this).find('.screen-reader-text').html('Map Off');
                 map.removeLayer(historicMapLayer);
             }
         }
-        jQuery(this).data('clicks', !clicks);
+        $(this).data('clicks', !clicks);
     });
     
     /*
      * Toggle map filters
      */
-    jQuery('#filters div label').click(function() {
-        var clicks = jQuery(this).find('input[type=checkbox]').is(':checked');
+    $('#filters div label').click(function() {
+        var clicks = $(this).find('input[type=checkbox]').is(':checked');
         if (clicks) {
-            jQuery(this).addClass('on');
+            $(this).addClass('on');
         } else {
-            jQuery(this).removeClass('on');
+            $(this).removeClass('on');
         }
     });
     
@@ -221,10 +221,10 @@ jQuery(document).ready(function () {
             map.removeLayer(geoJsonLayer);
         }
         
-        var mapCoverage = jQuery('#map-coverage');
-        var itemType = jQuery('#item-type');
-        var placeTypes = jQuery('input[name=place-type]:checked');
-        var eventTypes = jQuery('input[name=event-type]:checked');
+        var mapCoverage = $('#map-coverage');
+        var itemType = $('#item-type');
+        var placeTypes = $('input[name=place-type]:checked');
+        var eventTypes = $('input[name=event-type]:checked');
         
         // Prepare POST data object for request.
         var postData = {
@@ -251,9 +251,9 @@ jQuery(document).ready(function () {
         }
         
         // Make the POST request, handle the GeoJSON response, and add markers.
-        jqXhr = jQuery.post('mall-map/index/filter', postData, function (response) {
+        jqXhr = $.post('mall-map/index/filter', postData, function (response) {
             var item = (1 == response.features.length) ? 'item' : 'items';
-            jQuery('#marker-count').text(response.features.length + " " + item);
+            $('#marker-count').text(response.features.length + " " + item);
             geoJsonLayer = L.geoJson(response, {
                 onEachFeature: function (feature, layer) {
                     layer.bindPopup(
@@ -272,14 +272,14 @@ jQuery(document).ready(function () {
     function addHistoricMapLayer()
     {
         // Get the historic map data
-        var getData = {'text': jQuery('#map-coverage').val()};
-        jQuery.get('mall-map/index/historic-map-data', getData, function (response) {
+        var getData = {'text': $('#map-coverage').val()};
+        $.get('mall-map/index/historic-map-data', getData, function (response) {
             historicMapLayer = L.tileLayer(
                 response.url, 
                 {tms: true, opacity: 1.00}
             );
             map.addLayer(historicMapLayer);
-            jQuery('#toggle-map-button').show();
+            $('#toggle-map-button').show();
             
             // Set the map title as the map attribution prefix.
             map.attributionControl.setPrefix(response.title);
@@ -291,7 +291,7 @@ jQuery(document).ready(function () {
      */
     function removeHistoricMapLayer()
     {
-        jQuery('#toggle-map-button').data('clicks', false).hide();
+        $('#toggle-map-button').data('clicks', false).hide();
         map.removeLayer(historicMapLayer);
         map.attributionControl.setPrefix('');
     }
@@ -305,19 +305,19 @@ jQuery(document).ready(function () {
             removeHistoricMapLayer();
         }
         
-        jQuery('#map-coverage').val('0');
-        jQuery('#item-type').val('0');
+        $('#map-coverage').val('0');
+        $('#item-type').val('0');
         
-        jQuery('#place-type-div').hide({duration: 'fast'});
-        jQuery('input[name=place-type-all]').prop('checked', true).
+        $('#place-type-div').hide({duration: 'fast'});
+        $('input[name=place-type-all]').prop('checked', true).
             parent().addClass('on');
-        jQuery('input[name=place-type]:checked').prop('checked', false).
+        $('input[name=place-type]:checked').prop('checked', false).
             parent().removeClass('on');
         
-        jQuery('#event-type-div').hide({duration: 'fast'});
-        jQuery('input[name=event-type-all]').prop('checked', true).
+        $('#event-type-div').hide({duration: 'fast'});
+        $('input[name=event-type-all]').prop('checked', true).
             parent().addClass('on');
-        jQuery('input[name=event-type]:checked').prop('checked', false).
+        $('input[name=event-type]:checked').prop('checked', false).
             parent().removeClass('on');
         
         doFilters();
@@ -331,24 +331,24 @@ jQuery(document).ready(function () {
      */
     function retainFormState()
     {
-        if ('0' != jQuery('#map-coverage').val()) {
+        if ('0' != $('#map-coverage').val()) {
             addHistoricMapLayer();
         }
-        if ('Place' == jQuery('#item-type').find(':selected').text()) {
-            var placeTypes = jQuery('input[name=place-type]:checked');
+        if ('Place' == $('#item-type').find(':selected').text()) {
+            var placeTypes = $('input[name=place-type]:checked');
             if (placeTypes.length) {
-                jQuery('input[name=place-type-all]').parent().removeClass('on');
+                $('input[name=place-type-all]').parent().removeClass('on');
                 placeTypes.parent().addClass('on');
             }
-            jQuery('#place-type-div').show({duration: 'fast'});
+            $('#place-type-div').show({duration: 'fast'});
         }
-        if ('Event' == jQuery('#item-type').find(':selected').text()) {
-            var eventTypes = jQuery('input[name=event-type]:checked');
+        if ('Event' == $('#item-type').find(':selected').text()) {
+            var eventTypes = $('input[name=event-type]:checked');
             if (eventTypes.length) {
-                jQuery('input[name=event-type-all]').parent().removeClass('on');
+                $('input[name=event-type-all]').parent().removeClass('on');
                 eventTypes.parent().addClass('on');
             }
-            jQuery('#event-type-div').show({duration: 'fast'});
+            $('#event-type-div').show({duration: 'fast'});
         }
     }
     

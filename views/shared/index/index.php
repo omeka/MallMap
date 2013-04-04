@@ -1,17 +1,9 @@
-<?php queue_css_file('mall-map'); ?>
-<?php queue_js_file('mall-map'); ?>
-<?php queue_js_file('modernizr.custom.63332'); ?>
 <!doctype html>
 <html lang="en">
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.5/leaflet.css" />
-    <!--[if lte IE 8]>
-        <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.5/leaflet.ie.css" />
-    <![endif]-->
-    <?php echo head_css(); ?>
-    <script src="http://cdn.leafletjs.com/leaflet-0.5/leaflet.js"></script>
-    <?php echo head_js(); ?>
+    <?php echo $this->headLink(); ?>
+    <?php echo $this->headScript(); ?>
 </head>
 <body>
     <span id="marker-count"></span>
