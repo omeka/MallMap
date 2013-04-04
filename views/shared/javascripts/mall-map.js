@@ -37,6 +37,18 @@ $(document).ready(function () {
     doFilters();
     
     /*
+     * Handle the historic map opacity slider.
+     */
+    jQuery('#historic-map-slider').slider({
+        max: 1.0, min: 0.0, step: 0.1, 
+        slide: function (e, ui) {
+            if (historicMapLayer) {
+                historicMapLayer.setOpacity(1.0 - ui.value);
+            }
+        }
+    });
+    
+    /*
      * Handle location found.
      */
     map.on('locationfound', function (e) {
@@ -98,7 +110,7 @@ $(document).ready(function () {
             removeHistoricMapLayer();
         }
         if ('0' == $('#map-coverage').val()) {
-            $('#toggle-map-button').hide();
+            $('#historic-map-slider').hide();
         } else {
             addHistoricMapLayer();
         }
@@ -172,25 +184,6 @@ $(document).ready(function () {
         $('input[name=event-type]:checked').prop('checked', false).
             parent().removeClass('on');
         doFilters();
-    });
-    
-    /*
-     * Toggle historic map layer on and off.
-     */
-    $('#toggle-map-button').click(function () {
-        var clicks = $(this).data('clicks');
-        if (clicks) {
-            $(this).addClass('on');
-            $(this).find('.screen-reader-text').html('Map On');
-            map.addLayer(historicMapLayer);
-        } else {
-            if (historicMapLayer) {
-                $(this).removeClass('on');
-                $(this).find('.screen-reader-text').html('Map Off');
-                map.removeLayer(historicMapLayer);
-            }
-        }
-        $(this).data('clicks', !clicks);
     });
     
     /*
@@ -279,7 +272,7 @@ $(document).ready(function () {
                 {tms: true, opacity: 1.00}
             );
             map.addLayer(historicMapLayer);
-            $('#toggle-map-button').show();
+            $('#historic-map-slider').show();
             
             // Set the map title as the map attribution prefix.
             map.attributionControl.setPrefix(response.title);
@@ -291,7 +284,7 @@ $(document).ready(function () {
      */
     function removeHistoricMapLayer()
     {
-        $('#toggle-map-button').data('clicks', false).hide();
+        $('#historic-map-slider').hide();
         map.removeLayer(historicMapLayer);
         map.attributionControl.setPrefix('');
     }

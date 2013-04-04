@@ -62,8 +62,7 @@ select {
 
 #all-button { right: 60px; }
 
-a#filter-button:before, a#toggle-map-button:before,
-#filters div label.on:before {
+a#filter-button:before, #filters div label.on:before {
     font-family: 'entypo';
     speak: none;
     font-weight: normal;
@@ -73,7 +72,7 @@ a#filter-button:before, a#toggle-map-button:before,
     -webkit-font-smoothing: antialiased;
 }
 
-a#filter-button, a#toggle-map-button { 
+a#filter-button { 
     text-decoration: none;
     color: #fff;
     background-color: #EB5252;
@@ -108,15 +107,6 @@ a.on {
     color: #fff;
     background-color: #38B0DF !important;
 }
-
-#toggle-map-button {
-    position: fixed;
-    bottom: 10px;
-    left: 10px;
-    z-index: 1001;
-}
-
-a#toggle-map-button:before { content: "\e000"; }
 
 #filters {
     position: fixed;
@@ -184,5 +174,14 @@ label {
 #filters div input[type=checkbox] {
     margin: 0 2em 0 -2em;
     display: none;
+}
+
+#historic-map-slider {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    display: block;
+    z-index: 1001;
+    width: 45%;
 }
 

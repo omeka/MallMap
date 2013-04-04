@@ -100,7 +100,7 @@ class MallMap_IndexController extends Omeka_Controller_AbstractActionController
             ->appendFile('//ajax.googleapis.com/ajax/libs/jqueryui/1.10.2/jquery-ui.min.js')
             ->appendFile('//cdn.leafletjs.com/leaflet-0.5/leaflet.js')
             ->appendFile(src('mall-map', 'javascripts', 'js'))
-            ->appendFile(src('modernizr.custom.63332', 'javascripts', 'js'))    ;
+            ->appendFile(src('modernizr.custom.63332', 'javascripts', 'js'));
         $this->view->headLink()
             ->appendStylesheet('//code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css', 'all')
             ->appendStylesheet('//cdn.leafletjs.com/leaflet-0.5/leaflet.css', 'all')
