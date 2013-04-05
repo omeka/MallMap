@@ -39,7 +39,7 @@ $(document).ready(function () {
     /*
      * Handle the historic map opacity slider.
      */
-    jQuery('#historic-map-slider').slider({
+    $('#historic-map-slider').slider({
         max: 1.0, min: 0.0, step: 0.1, 
         slide: function (e, ui) {
             if (historicMapLayer) {

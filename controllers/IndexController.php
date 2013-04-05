@@ -99,6 +99,8 @@ class MallMap_IndexController extends Omeka_Controller_AbstractActionController
             ->appendFile('//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js')
             ->appendFile('//ajax.googleapis.com/ajax/libs/jqueryui/1.10.2/jquery-ui.min.js')
             ->appendFile('//cdn.leafletjs.com/leaflet-0.5/leaflet.js')
+            // Touch Punch enables touch events in jQuery UI: http://touchpunch.furf.com/
+            ->appendFile(src('jquery.ui.touch-punch.min', 'javascripts', 'js'))
             ->appendFile(src('mall-map', 'javascripts', 'js'))
             ->appendFile(src('modernizr.custom.63332', 'javascripts', 'js'));
         $this->view->headLink()
