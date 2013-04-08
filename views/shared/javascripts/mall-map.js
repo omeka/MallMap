@@ -49,6 +49,13 @@ $(document).ready(function () {
     });
     
     /*
+     * Handle center button.
+     */
+    $('#center-button').click(function () {
+        map.locate({watch: true});
+    });
+    
+    /*
      * Handle location found.
      */
     map.on('locationfound', function (e) {
