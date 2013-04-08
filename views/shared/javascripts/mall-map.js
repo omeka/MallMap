@@ -52,6 +52,10 @@ $(document).ready(function () {
      * Handle center button.
      */
     $('#center-button').click(function () {
+        if (locationMarker) {
+            map.removeLayer(locationMarker)
+            locationMarker = null;
+        }
         map.locate({watch: true});
     });
     
