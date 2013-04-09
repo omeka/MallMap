@@ -37,6 +37,11 @@ $(document).ready(function () {
     doFilters();
     
     /*
+     * Set up the dialog window.
+     */
+    $('#dialog').dialog({autoOpen: false});
+    
+    /*
      * Handle the historic map opacity slider.
      */
     $('#historic-map-slider').slider({
@@ -78,7 +83,10 @@ $(document).ready(function () {
         } else {
             map.stopLocate();
             var miles = Math.ceil((e.latlng.distanceTo(map.options.center) * 0.000621371) * 100) / 100;
-            console.log('Location out of bounds. You are ' + miles + ' miles away.');
+            $('#dialog').
+                text('Location out of bounds. You are ' + miles + ' miles away.').
+                dialog('option', 'title', 'Out of Bounds').
+                dialog('open');
         }
     });
     

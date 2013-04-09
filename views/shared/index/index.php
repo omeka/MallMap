@@ -11,6 +11,7 @@
     <a href="#" id="all-button" class="on">Show All</a>
     <a href="#" id="center-button"><span class="screen-reader-text">Make me center</span></a>
     <div id="historic-map-slider" style="display: none;"></div>
+    <div id="dialog"></div>
     <div id="filters">
         <h1>Select Filters</h1>
         <label for="map-coverage">Map Era</label>
