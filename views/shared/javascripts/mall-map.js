@@ -36,29 +36,17 @@ $(document).ready(function () {
     // Add all markers by default, or retain previous marker state.
     doFilters();
     
-    /*
-     * Set up the dialog window.
-     */
-    $('#dialog').dialog({autoOpen: false});
-    
-    /*
-     * Handle center button.
-     */
-    $('#center-button').click(function () {
-        if (locationMarker) {
-            map.removeLayer(locationMarker)
-            locationMarker = null;
-        }
-        map.locate({watch: true});
+    // Log the clicked coordinates.
+    map.on('click', function (e) {
+        console.log("Map clicked at zoom " + map.getZoom() + '; ' + e.latlng);
     });
     
-    /*
-     * Handle location found.
-     */
+    // Handle location found.
     map.on('locationfound', function (e) {
         // User within location bounds. Set the location marker.
         if (L.latLngBounds(LOCATE_BOUNDS).contains(e.latlng)) {
             if (locationMarker) {
+                // Remove the existing location marker before adding to map.
                 map.removeLayer(locationMarker);
             } else {
                 // Pan to location only on first locate.
@@ -70,25 +58,27 @@ $(document).ready(function () {
         // User outside location bounds.
         } else {
             map.stopLocate();
+            $('#locate-button').addClass('disabled');
             var miles = Math.ceil((e.latlng.distanceTo(map.options.center) * 0.000621371) * 100) / 100;
-            $('#dialog').
-                text('Location out of bounds. You are ' + miles + ' miles away.').
+            $('#dialog').text('Location out of bounds. You are ' + miles + ' miles away.').
                 dialog('option', 'title', 'Out of Bounds').
                 dialog('open');
         }
     });
     
-    /*
-     * Handle location error.
-     */
+    // Handle location error.
     map.on('locationerror', function () {
         map.stopLocate();
-        console.log('Could not find your location.');
+        $('#locate-button').addClass('disabled');
+        $('#dialog').text('Could not find your location.').
+            dialog('option', 'title', 'Location Not Found').
+            dialog('open');
     });
     
-    /*
-     * Handle the filter form.
-     */
+    // Set up the dialog window.
+    $('#dialog').dialog({autoOpen: false});
+    
+    // Handle the filter form.
     $('#filter-button').click(function(e) {
         e.preventDefault();
         var filterButton = $(this);
@@ -107,16 +97,55 @@ $(document).ready(function () {
         filterButton.data('clicks', !clicks);
     });
     
-    /*
-     * Revert form to default and display all markers.
-     */
-    $('#all-button').click(function() {
+    // Revert form to default and display all markers.
+    $('#all-button').click(function(e) {
+        e.preventDefault();
         revertFormState();
     });
     
-    /*
-     * Filter historic map layer.
-     */
+    // Handle locate button.
+    $('#locate-button').click(function (e) {
+        e.preventDefault();
+        if ($(this).hasClass('disabled')) {
+            return;
+        }
+        if (locationMarker) {
+            map.removeLayer(locationMarker)
+            locationMarker = null;
+        }
+        map.stopLocate();
+        map.locate({watch: true});
+    });
+    
+    // Toggle historic map layer on and off.
+    $('#toggle-map-button').click(function () {
+        var toggleMapButton = $(this);
+        var clicks = toggleMapButton.data('clicks');
+        if (clicks) {
+            toggleMapButton.addClass('on');
+            toggleMapButton.find('.screen-reader-text').html('Map On');
+            map.addLayer(historicMapLayer);
+        } else {
+            if (historicMapLayer) {
+                toggleMapButton.removeClass('on');
+                toggleMapButton.find('.screen-reader-text').html('Map Off');
+                map.removeLayer(historicMapLayer);
+            }
+        }
+        toggleMapButton.data('clicks', !clicks);
+    });
+    
+    // Toggle map filters
+    $('#filters div label').click(function() {
+        var checkboxLabel = $(this);
+        if (checkboxLabel.find('input[type=checkbox]').is(':checked')) {
+            checkboxLabel.addClass('on');
+        } else {
+            checkboxLabel.removeClass('on');
+        }
+    });
+    
+    // Filter historic map layer.
     $('#map-coverage').change(function () {
         if (historicMapLayer) {
             removeHistoricMapLayer();
@@ -129,9 +158,7 @@ $(document).ready(function () {
         doFilters();
     });
     
-    /*
-     * Filter item type.
-     */
+    // Filter item type.
     $('#item-type').change(function () {
         var itemType = $(this);
         if ('Place' == itemType.find(':selected').text()) {
@@ -151,9 +178,7 @@ $(document).ready(function () {
         doFilters();
     });
     
-    /*
-     * Filter place type.
-     */
+    // Filter place type.
     $('input[name=place-type]').change(function () {
         // Handle all place types checkbox.
         var placeTypeAll = $('input[name=place-type-all]');
@@ -165,9 +190,7 @@ $(document).ready(function () {
         doFilters();
     });
     
-    /*
-     * Handle the all place types checkbox.
-     */
+    // Handle the all place types checkbox.
     $('input[name=place-type-all]').change(function () {
         // Uncheck all place types.
         $('input[name=place-type]:checked').prop('checked', false).
@@ -175,9 +198,7 @@ $(document).ready(function () {
         doFilters();
     });
     
-    /*
-     * Filter event type.
-     */
+    // Filter event type.
     $('input[name=event-type]').change(function () {
         // Handle all event types checkbox.
         var eventTypeAll = $('input[name=event-type-all]');
@@ -189,45 +210,12 @@ $(document).ready(function () {
         doFilters();
     });
     
-    /*
-     * Handle the all event types checkbox.
-     */
+    // Handle the all event types checkbox.
     $('input[name=event-type-all]').change(function () {
         // Uncheck all event types.
         $('input[name=event-type]:checked').prop('checked', false).
             parent().removeClass('on');
         doFilters();
-    });
-    
-     /*
-     * Toggle historic map layer on and off.
-     */
-    $('#toggle-map-button').click(function () {
-        var clicks = $(this).data('clicks');
-        if (clicks) {
-            $(this).addClass('on');
-            $(this).find('.screen-reader-text').html('Map On');
-            map.addLayer(historicMapLayer);
-        } else {
-            if (historicMapLayer) {
-                $(this).removeClass('on');
-                $(this).find('.screen-reader-text').html('Map Off');
-                map.removeLayer(historicMapLayer);
-            }
-        }
-        $(this).data('clicks', !clicks);
-    });
-    
-    /*
-     * Toggle map filters
-     */
-    $('#filters div label').click(function() {
-        var checkboxLabel = $(this);
-        if (checkboxLabel.find('input[type=checkbox]').is(':checked')) {
-            checkboxLabel.addClass('on');
-        } else {
-            checkboxLabel.removeClass('on');
-        }
     });
     
     /*
@@ -379,7 +367,11 @@ $(document).ready(function () {
         }
     }
     
-    map.on('click', function (e) {
-        console.log("Map clicked at zoom " + map.getZoom() + '; ' + e.latlng);
-    });
+    var debugTimestamp; 
+    function start() {
+        debugTimestamp = new Date().getTime();
+    }
+    function stop() {
+        console.log((new Date().getTime() / 1000) - (debugTimestamp / 1000));
+    }
 });

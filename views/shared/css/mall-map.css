@@ -72,7 +72,7 @@ label {
 #all-button { right: 60px; }
 
 
-a#center-button:before, a#filter-button:before, 
+a#locate-button:before, a#filter-button:before, 
 #filters div label.on:before, a#toggle-map-button {
     font-family: 'entypo';
     speak: none;
@@ -92,9 +92,9 @@ a#center-button:before, a#filter-button:before,
 
 a#toggle-map-button:before { content: "\e000"; }
 
-a#center-button:before { content: "\e001" }
+a#locate-button:before { content: "\e001" }
 
-a#center-button {
+a#locate-button {
     position: fixed;
     bottom: 11px;
     right: 40px;
@@ -115,7 +115,7 @@ a#center-button {
     box-sizing: border-box;
 }
 
-.touch a#center-button {
+.touch a#locate-button {
     right: 55px;
 }
 
@@ -209,4 +209,8 @@ a.on {
 #filters div input[type=checkbox] {
     margin: 0 2em 0 -2em;
     display: none;
+}
+
+.disabled {
+    background-color: gray !important;
 }
