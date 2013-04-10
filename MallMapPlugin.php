@@ -18,12 +18,14 @@ class MallMapPlugin extends Omeka_Plugin_AbstractPlugin
     );
     
     protected $_filters = array(
-        'admin_navigation_main', 
         'public_navigation_main', 
     );
     
     public function hookDefineRoutes($args)
     {
+        if (is_admin_theme()) {
+            return;
+        }
         $args['router']->addRoute('mall_map', 
             new Zend_Controller_Router_Route('map', 
                 array(
@@ -35,17 +37,7 @@ class MallMapPlugin extends Omeka_Plugin_AbstractPlugin
         );
     }
     
-    public function filterAdminNavigationMain($nav)
-    {
-        return $this->_navigationMain($nav);
-    }
-    
     public function filterPublicNavigationMain($nav)
-    {
-        return $this->_navigationMain($nav);
-    }
-    
-    protected function _navigationMain($nav)
     {
         $nav[] = array('label' => 'Map', 'uri' => url('map'));
         return $nav;

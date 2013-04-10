@@ -118,7 +118,8 @@ $(document).ready(function () {
     });
     
     // Toggle historic map layer on and off.
-    $('#toggle-map-button').click(function () {
+    $('#toggle-map-button').click(function (e) {
+        e.preventDefault();
         var toggleMapButton = $(this);
         var clicks = toggleMapButton.data('clicks');
         if (clicks) {
