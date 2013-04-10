@@ -277,7 +277,9 @@ $(document).ready(function () {
                     layer.bindPopup(
                         '<a href="' + feature.properties.url + '">' + feature.properties.title + '</a><br/>' + 
                         feature.properties.thumbnail
-                    );
+                    ).on('click', function () {
+                        map.panTo([feature.geometry.coordinates[1], feature.geometry.coordinates[0]]);
+                    });
                 }
             });
             geoJsonLayer.addTo(map);
