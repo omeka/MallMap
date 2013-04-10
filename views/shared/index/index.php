@@ -10,7 +10,7 @@
     <a href="#" id="filter-button"><span class="screen-reader-text">Filters</span></a>
     <a href="#" id="all-button" class="on">Show All</a>
     <a href="#" id="center-button"><span class="screen-reader-text">Make me center</span></a>
-    <div id="historic-map-slider" style="display: none;"></div>
+    <a href="#" id="toggle-map-button" class="on" style="display: none;"><span class="screen-reader-text">Map On</span></a>
     <div id="dialog"></div>
     <div id="filters">
         <h1>Select Filters</h1>

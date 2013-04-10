@@ -42,18 +42,6 @@ $(document).ready(function () {
     $('#dialog').dialog({autoOpen: false});
     
     /*
-     * Handle the historic map opacity slider.
-     */
-    $('#historic-map-slider').slider({
-        max: 1.0, min: 0.0, step: 0.1, 
-        slide: function (e, ui) {
-            if (historicMapLayer) {
-                historicMapLayer.setOpacity(1.0 - ui.value);
-            }
-        }
-    });
-    
-    /*
      * Handle center button.
      */
     $('#center-button').click(function () {
@@ -134,7 +122,7 @@ $(document).ready(function () {
             removeHistoricMapLayer();
         }
         if ('0' == $('#map-coverage').val()) {
-            $('#historic-map-slider').hide();
+            $('#toggle-map-button').hide();
         } else {
             addHistoricMapLayer();
         }
@@ -209,6 +197,25 @@ $(document).ready(function () {
         $('input[name=event-type]:checked').prop('checked', false).
             parent().removeClass('on');
         doFilters();
+    });
+    
+     /*
+     * Toggle historic map layer on and off.
+     */
+    $('#toggle-map-button').click(function () {
+        var clicks = $(this).data('clicks');
+        if (clicks) {
+            $(this).addClass('on');
+            $(this).find('.screen-reader-text').html('Map On');
+            map.addLayer(historicMapLayer);
+        } else {
+            if (historicMapLayer) {
+                $(this).removeClass('on');
+                $(this).find('.screen-reader-text').html('Map Off');
+                map.removeLayer(historicMapLayer);
+            }
+        }
+        $(this).data('clicks', !clicks);
     });
     
     /*
@@ -299,7 +306,7 @@ $(document).ready(function () {
                 {tms: true, opacity: 1.00}
             );
             map.addLayer(historicMapLayer);
-            $('#historic-map-slider').show();
+            $('#toggle-map-button').show();
             
             // Set the map title as the map attribution prefix.
             map.attributionControl.setPrefix(response.title);
@@ -311,7 +318,7 @@ $(document).ready(function () {
      */
     function removeHistoricMapLayer()
     {
-        $('#historic-map-slider').hide();
+        $('#toggle-map-button').data('clicks', false).hide();
         map.removeLayer(historicMapLayer);
         map.attributionControl.setPrefix('');
     }

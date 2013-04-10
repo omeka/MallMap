@@ -73,7 +73,7 @@ label {
 
 
 a#center-button:before, a#filter-button:before, 
-#filters div label.on:before {
+#filters div label.on:before, a#toggle-map-button {
     font-family: 'entypo';
     speak: none;
     font-weight: normal;
@@ -82,6 +82,15 @@ a#center-button:before, a#filter-button:before,
     line-height: 1;
     -webkit-font-smoothing: antialiased;
 }
+
+#toggle-map-button {
+    position: fixed;
+    bottom: 10px;
+    left: 10px;
+    z-index: 1001;
+}
+
+a#toggle-map-button:before { content: "\e000"; }
 
 a#center-button:before { content: "\e001" }
 
@@ -110,7 +119,7 @@ a#center-button {
     right: 55px;
 }
 
-a#filter-button { 
+a#filter-button, a#toggle-map-button { 
     text-decoration: none;
     color: #fff;
     background-color: #EB5252;
@@ -201,13 +210,3 @@ a.on {
     margin: 0 2em 0 -2em;
     display: none;
 }
-
-#historic-map-slider {
-    position: fixed;
-    bottom: 20px;
-    left: 20px;
-    display: block;
-    z-index: 1001;
-    width: 45%;
-}
-
