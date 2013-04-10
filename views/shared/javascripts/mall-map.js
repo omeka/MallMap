@@ -73,8 +73,8 @@ $(document).ready(function () {
             if (locationMarker) {
                 map.removeLayer(locationMarker);
             } else {
-                // Pan and zoom to location only on first locate.
-                map.panTo(e.latlng).setZoom(MAP_MAX_ZOOM);
+                // Pan to location only on first locate.
+                map.panTo(e.latlng);
             }
             locationMarker = L.marker(e.latlng);
             locationMarker.addTo(map).
