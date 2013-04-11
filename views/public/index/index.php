@@ -9,7 +9,7 @@
     <span id="marker-count"></span>
     <a href="#" id="filter-button"><span class="screen-reader-text">Filters</span></a>
     <a href="#" id="all-button" class="on">Show All</a>
-    <a href="#" id="locate-button"><span class="screen-reader-text">Make me center</span></a>
+    <a href="#" id="locate-button" class="disabled"><span class="screen-reader-text">Make me center</span></a>
     <a href="#" id="toggle-map-button" class="on" style="display: none;"><span class="screen-reader-text">Map On</span></a>
     <div id="dialog"></div>
     <div id="filters">

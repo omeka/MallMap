@@ -52,6 +52,7 @@ $(document).ready(function () {
                 // Pan to location only on first locate.
                 map.panTo(e.latlng);
             }
+            $('#locate-button').removeClass('disabled');
             locationMarker = L.marker(e.latlng);
             locationMarker.addTo(map).
                 bindPopup("You are within " + e.accuracy / 2 + " meters from this point");
