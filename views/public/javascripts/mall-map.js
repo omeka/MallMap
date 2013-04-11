@@ -77,7 +77,12 @@ $(document).ready(function () {
     });
     
     // Set up the dialog window.
-    $('#dialog').dialog({autoOpen: false});
+    $('#dialog').dialog({
+        autoOpen: false, 
+        modal: true, 
+        draggable: false, 
+        resizable: false
+    });
     
     // Handle the filter form.
     $('#filter-button').click(function(e) {
