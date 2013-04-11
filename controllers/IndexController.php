@@ -48,32 +48,32 @@ class MallMap_IndexController extends Omeka_Controller_AbstractActionController
     private $_historicMapData = array(
         'Pre-1800s' => array(
             'url' => '/mallhistory/plugins/MallMap/maps/1791/{z}/{x}/{y}.jpg', 
-            'title' => 'Map by Faehtz, E.F.M.', 
+            'title' => 'Map by Faehtz, E.F.M. (1791)', 
         ), 
         '1800-1829' => array(
             'url' => '/mallhistory/plugins/MallMap/maps/1828/{z}/{x}/{y}.jpg', 
-            'title' => 'Map by Elliot, William', 
+            'title' => 'Map by Elliot, William (1828)', 
         ), 
         '1830-1859' => array(
             'url' => '/mallhistory/plugins/MallMap/maps/1858/{z}/{x}/{y}.jpg', 
-            'title' => 'Map by Boschke, A.', 
+            'title' => 'Map by Boschke, A. (1858)', 
         ), 
         '1860-1889' => array(
             'url' => '/mallhistory/plugins/MallMap/maps/1887/{z}/{x}/{y}.jpg', 
-            'title' => 'Map by Silversparre, Axel', 
+            'title' => 'Map by Silversparre, Axel (1887)', 
         ), 
         '1890-1919' => array(
             'url' => '/mallhistory/plugins/MallMap/maps/1917/{z}/{x}/{y}.jpg', 
-            'title' => 'Map by U.S. Public Buildings Commission', 
+            'title' => 'Map by U.S. Public Buildings Commission (1917)', 
         ), 
         '1920-1949' => array(
             'url' => '/mallhistory/plugins/MallMap/maps/1942/{z}/{x}/{y}.jpg', 
-            'title' => 'Map by General Drafting Company', 
+            'title' => 'Map by General Drafting Company (1942)', 
         ), 
         //'1950-1979' => array('url' => null, 'title' => null), 
         '1980-1999' => array(
             'url' => '/mallhistory/plugins/MallMap/maps/1996/{z}/{x}/{y}.jpg', 
-            'title' => 'Map by Joseph Passonneau and Partners', 
+            'title' => 'Map by Joseph Passonneau and Partners (1996)', 
         ), 
         //'2000-present' => array('url' => null, 'title' => null), 
     );
