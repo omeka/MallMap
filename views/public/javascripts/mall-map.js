@@ -10,7 +10,7 @@ $(document).ready(function () {
     
     var map;
     var historicMapLayer;
-    var geoJsonLayer;
+    var markers;
     var jqXhr;
     var locationMarker;
     
@@ -236,8 +236,8 @@ $(document).ready(function () {
         }
         
         // Remove the current markers.
-        if (geoJsonLayer) {
-            map.removeLayer(geoJsonLayer);
+        if (markers) {
+            map.removeLayer(markers);
         }
         
         var mapCoverage = $('#map-coverage');
@@ -273,7 +273,7 @@ $(document).ready(function () {
         jqXhr = $.post('mall-map/index/filter', postData, function (response) {
             var item = (1 == response.features.length) ? 'item' : 'items';
             $('#marker-count').text(response.features.length + " " + item);
-            geoJsonLayer = L.geoJson(response, {
+            var geoJsonLayer = L.geoJson(response, {
                 onEachFeature: function (feature, layer) {
                     layer.bindPopup(
                         '<a href="' + feature.properties.url + '">' + feature.properties.title + '</a><br/>' + 
@@ -283,7 +283,9 @@ $(document).ready(function () {
                     });
                 }
             });
-            geoJsonLayer.addTo(map);
+            markers = new L.MarkerClusterGroup({showCoverageOnHover: false});
+            markers.addLayer(geoJsonLayer);
+            map.addLayer(markers);
         });
     }
     
