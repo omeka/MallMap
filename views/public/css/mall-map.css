@@ -214,8 +214,3 @@ a.on {
 .disabled {
     background-color: gray !important;
 }
-
-/* Needed for the jQuery UI dialog modal to work. */
-.ui-dialog, .ui-widget-overlay {
-    z-index: 1010 !important;
-}

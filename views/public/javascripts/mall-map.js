@@ -79,7 +79,6 @@ $(document).ready(function () {
     // Set up the dialog window.
     $('#dialog').dialog({
         autoOpen: false, 
-        modal: true, 
         draggable: false, 
         resizable: false
     });
