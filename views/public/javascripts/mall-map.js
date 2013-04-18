@@ -283,7 +283,10 @@ $(document).ready(function () {
                     });
                 }
             });
-            markers = new L.MarkerClusterGroup({showCoverageOnHover: false});
+            markers = new L.MarkerClusterGroup({
+                showCoverageOnHover: false, 
+                maxClusterRadius: 40
+            });
             markers.addLayer(geoJsonLayer);
             map.addLayer(markers);
         });
