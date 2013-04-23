@@ -13,6 +13,10 @@ $(document).ready(function () {
     var markers;
     var jqXhr;
     var locationMarker;
+    var locationIcon = L.icon({
+        iconUrl: 'plugins/MallMap/views/public/images/location.png',
+        iconSize: [50, 50]
+    });
     
     // Set the base map layer.
     map = L.map('map', {
@@ -53,7 +57,7 @@ $(document).ready(function () {
                 map.panTo(e.latlng);
             }
             $('#locate-button').removeClass('disabled');
-            locationMarker = L.marker(e.latlng);
+            locationMarker = L.marker(e.latlng, {icon: locationIcon});
             locationMarker.addTo(map).
                 bindPopup("You are within " + e.accuracy / 2 + " meters from this point");
         // User outside location bounds.
