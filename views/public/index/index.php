@@ -11,6 +11,10 @@
     <a href="#" id="all-button" class="on">Show All</a>
     <a href="#" id="locate-button" class="disabled"><span class="screen-reader-text">Make me center</span></a>
     <a href="#" id="toggle-map-button" class="on" style="display: none;"><span class="screen-reader-text">Map On</span></a>
+    <div id="info-panel" style="display: none;">
+        <a href="#" class="back-button"><span class="screen-reader-text">Back to Map</span></a>
+        <div id="info-panel-content"></div>
+    </div>
     <div id="dialog"></div>
     <div id="filters">
         <h1>Select Filters</h1>

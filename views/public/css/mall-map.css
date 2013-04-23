@@ -73,7 +73,8 @@ label {
 
 
 a#locate-button:before, a#filter-button:before, 
-#filters div label.on:before, a#toggle-map-button {
+#filters div label.on:before, a#toggle-map-button,
+.back-button:before {
     font-family: 'entypo';
     speak: none;
     font-weight: normal;
@@ -90,9 +91,9 @@ a#locate-button:before, a#filter-button:before,
     z-index: 1001;
 }
 
-a#toggle-map-button:before { content: "\e000"; }
+a#toggle-map-button:before { content: "\e005"; }
 
-a#locate-button:before { content: "\e001" }
+a#locate-button:before { content: "\e000" }
 
 a#locate-button {
     position: fixed;
@@ -119,7 +120,7 @@ a#locate-button {
     right: 55px;
 }
 
-a#filter-button, a#toggle-map-button { 
+a#filter-button, a#toggle-map-button, a.back-button { 
     text-decoration: none;
     color: #fff;
     background-color: #EB5252;
@@ -136,9 +137,9 @@ a#filter-button, a#toggle-map-button {
     box-sizing: border-box;
 }
 
-a#filter-button:before { content: "\e002"; }
+a#filter-button:before { content: "\e009"; }
 
-a#filter-button.on:before { content: "\e004"; }
+a#filter-button.on:before, a.back-button:before { content: "\e008"; }
 
 #filter-button {
     position: fixed;
@@ -202,7 +203,7 @@ a.on {
 }
 
 #filters div label.on:before {
-    content: "\e003";
+    content: "\e006";
     background-color: #008000;    
 }
 
@@ -213,4 +214,28 @@ a.on {
 
 .disabled {
     background-color: gray !important;
+}
+#info-panel {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    height: 100%;
+    z-index: 1020;
+    background-color: #fff;
+    overflow-y: scroll;
+    padding: 20px;
+    box-shadow: 0 0 30px #333;
+    width: 100%;
+}
+
+#info-panel h1 {
+    font-size: 24px;
+}
+
+#info-panel p {
+    line-height: 24px;
+}
+
+a.back-button {
+    float: right;
 }

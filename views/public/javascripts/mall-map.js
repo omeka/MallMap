@@ -228,6 +228,11 @@ $(document).ready(function () {
         doFilters();
     });
     
+    $('a.back-button').click(function (e) {
+        e.preventDefault();
+        $('#info-panel').hide();
+    });
+    
     /*
      * Filter markers.
      * 
@@ -279,11 +284,28 @@ $(document).ready(function () {
             $('#marker-count').text(response.features.length + " " + item);
             var geoJsonLayer = L.geoJson(response, {
                 onEachFeature: function (feature, layer) {
-                    layer.bindPopup(
-                        '<a href="' + feature.properties.url + '">' + feature.properties.title + '</a><br/>' + 
-                        feature.properties.thumbnail
-                    ).on('click', function () {
+                    layer.on('click', function (e) {
                         map.panTo([feature.geometry.coordinates[1], feature.geometry.coordinates[0]]);
+                        // Request the item data and populate and open the marker popup.
+                        var marker = this;
+                        $.post('mall-map/index/get-item', {id: feature.properties.id}, function (response) {
+                            marker.bindPopup(
+                                '<h1>' + response.title + '</h1>' + 
+                                response.thumbnail + '<br/>' + 
+                                '<a href="#" class="open-info-panel">view more info</a>'
+                            ).openPopup();
+                            $('.open-info-panel').click(function (e) {
+                                e.preventDefault();
+                                $('#info-panel').show();
+                            });
+                            // Populate the item info panel.
+                            var content = $('#info-panel-content');
+                            content.empty();
+                            content.append('<h1>' + response.title + '</h1>');
+                            content.append('<p>' + response.description + '</p>');
+                            content.append(response.fullsize);
+                            content.append('<p><a href="' + response.url + '">view more info</a></p>');
+                        });
                     });
                 }
             });

@@ -176,7 +176,6 @@ class MallMap_IndexController extends Omeka_Controller_AbstractActionController
         // Build geoJSON: http://www.geojson.org/geojson-spec.html
         $data = array('type' => 'FeatureCollection', 'features' => array());
         foreach ($db->query($sql)->fetchAll() as $row) {
-            $item = get_record_by_id('item', $row['id']);
             $data['features'][] = array(
                 'type' => 'Feature', 
                 'geometry' => array(
@@ -184,19 +183,10 @@ class MallMap_IndexController extends Omeka_Controller_AbstractActionController
                     'coordinates' => array($row['longitude'], $row['latitude']), 
                 ), 
                 'properties' => array(
-                    'title' => metadata($item, array('Dublin Core', 'Title')), 
-                    'thumbnail' => item_image('thumbnail', array(), 0, $item), 
-                    'url' => url(array('module' => 'default', 
-                                       'controller' => 'items', 
-                                       'action' => 'show', 
-                                       'id' => $item['id']), 
-                                 'id'), 
+                    'id' => $row['id'], 
                 ), 
             );
-            // Prevent memory leaks.
-            release_object($item);
         }
-        
         $this->_helper->json($data);
     }
     
@@ -215,5 +205,29 @@ class MallMap_IndexController extends Omeka_Controller_AbstractActionController
         $data = $this->_historicMapData[$this->_request->getParam('text')];
         $this->_helper->json($data);
     }
-
+    
+    /**
+     * Get data about the selected item.
+     */
+    public function getItemAction()
+    {
+        // Process only AJAX requests.
+        if (!$this->_request->isXmlHttpRequest()) {
+            throw new Omeka_Controller_Exception_403;
+        }
+        $item = get_record_by_id('item', $this->_request->getParam('id'));
+        $data = array(
+            'id' => $item->id, 
+            'title' => metadata($item, array('Dublin Core', 'Title')), 
+            'description' => metadata($item, array('Dublin Core', 'Description')), 
+            'thumbnail' => item_image('thumbnail', array(), 0, $item), 
+            'fullsize' => item_image('fullsize', array('style' => 'max-width: 100%; height: auto;'), 0, $item), 
+            'url' => url(array('module' => 'default', 
+                               'controller' => 'items', 
+                               'action' => 'show', 
+                               'id' => $item['id']), 
+                         'id'), 
+        );
+        $this->_helper->json($data);
+    }
 }
