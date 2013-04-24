@@ -7,16 +7,13 @@ $(document).ready(function () {
     var MAP_MAX_ZOOM = 18;
     var MAP_MAX_BOUNDS = [[38.79164, -77.17232], [38.99583, -76.90917]];
     var LOCATE_BOUNDS = [[38.87814, -77.05656], [38.90025, -77.00678]];
+    var MAX_LOCATE_METERS = 8000;
     
     var map;
     var historicMapLayer;
     var markers;
     var jqXhr;
     var locationMarker;
-    var locationIcon = L.icon({
-        iconUrl: 'plugins/MallMap/views/public/images/location.png',
-        iconSize: [50, 50]
-    });
     
     // Set the base map layer.
     map = L.map('map', {
@@ -57,17 +54,26 @@ $(document).ready(function () {
                 map.panTo(e.latlng);
             }
             $('#locate-button').removeClass('disabled');
-            locationMarker = L.marker(e.latlng, {icon: locationIcon});
+            locationMarker = L.marker(e.latlng, {
+                icon: L.icon({
+                    iconUrl: 'plugins/MallMap/views/public/images/location.png',
+                    iconSize: [50, 50]
+                })
+            });
             locationMarker.addTo(map).
                 bindPopup("You are within " + e.accuracy / 2 + " meters from this point");
         // User outside location bounds.
         } else {
             map.stopLocate();
             $('#locate-button').addClass('disabled');
-            var miles = Math.ceil((e.latlng.distanceTo(map.options.center) * 0.000621371) * 100) / 100;
-            $('#dialog').text('Location out of bounds. You are ' + miles + ' miles away.').
-                dialog('option', 'title', 'Out of Bounds').
-                dialog('open');
+            var locateMeters = e.latlng.distanceTo(map.options.center);
+            // Show out of bounds message only if within a certain distance.
+            if (MAX_LOCATE_METERS > locateMeters) {
+                var locateMiles = Math.ceil((locateMeters * 0.000621371) * 100) / 100;
+                $('#dialog').text('You are ' + locateMiles + ' miles from the National Mall.').
+                    dialog('option', 'title', 'Not Quite on the Mall').
+                    dialog('open');
+            }
         }
     });
     
@@ -76,7 +82,7 @@ $(document).ready(function () {
         map.stopLocate();
         $('#locate-button').addClass('disabled');
         $('#dialog').text('Could not find your location.').
-            dialog('option', 'title', 'Location Not Found').
+            dialog('option', 'title', 'Location Unknown').
             dialog('open');
     });
     
@@ -228,6 +234,7 @@ $(document).ready(function () {
         doFilters();
     });
     
+    // Handle the info panel back button.
     $('a.back-button').click(function (e) {
         e.preventDefault();
         $('#info-panel').hide();
@@ -304,7 +311,7 @@ $(document).ready(function () {
                             content.append('<h1>' + response.title + '</h1>');
                             content.append('<p>' + response.description + '</p>');
                             content.append(response.fullsize);
-                            content.append('<p><a href="' + response.url + '">view more info</a></p>');
+                            content.append('<p><a href="' + response.url + '" class="button">view more info</a></p>');
                         });
                     });
                 }
