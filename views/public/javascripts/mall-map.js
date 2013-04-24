@@ -81,9 +81,6 @@ $(document).ready(function () {
     map.on('locationerror', function () {
         map.stopLocate();
         $('#locate-button').addClass('disabled');
-        $('#dialog').text('Could not find your location.').
-            dialog('option', 'title', 'Location Unknown').
-            dialog('open');
     });
     
     // Set up the dialog window.
