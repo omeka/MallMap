@@ -4,6 +4,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <?php echo $this->headLink(); ?>
     <?php echo $this->headScript(); ?>
+    <script type="text/javascript">
+        var hackRemember = L.DomUtil.TRANSITION;
+        L.DomUtil.TRANSITION = false;
+    </script>
+    <?php echo js_tag('leaflet.markercluster'); ?>
+    <script type="text/javascript">
+        L.DomUtil.TRANSITION = hackRemember;
+    </script>
 </head>
 <body>
     <span id="marker-count"></span>
