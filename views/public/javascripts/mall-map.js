@@ -234,7 +234,8 @@ $(document).ready(function () {
     // Handle the info panel back button.
     $('a.back-button').click(function (e) {
         e.preventDefault();
-        $('#info-panel').hide();
+        $('#info-panel').animate({left: '+=100%'}, 200, 'linear');
+        $('#toggle-map-button + .back-button').hide();
     });
     
     /*
@@ -301,6 +302,8 @@ $(document).ready(function () {
                             $('.open-info-panel').click(function (e) {
                                 e.preventDefault();
                                 $('#info-panel').show();
+                                $('#info-panel').animate({left: '-=100%'}, 200, 'linear');
+                                $('#toggle-map-button + .back-button').show();
                             });
                             // Populate the item info panel.
                             var content = $('#info-panel-content');
