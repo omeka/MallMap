@@ -309,6 +309,9 @@ $(document).ready(function () {
                             var content = $('#info-panel-content');
                             content.empty();
                             content.append('<h1>' + response.title + '</h1>');
+                            for (var i = 0; i < response.date.length; i++) {
+                                content.append('<p>' + response.date[i] + '</p>');
+                            }
                             content.append('<p>' + response.description + '</p>');
                             content.append(response.fullsize);
                             content.append('<p><a href="' + response.url + '" class="button">view more info</a></p>');

@@ -219,6 +219,7 @@ class MallMap_IndexController extends Omeka_Controller_AbstractActionController
             'id' => $item->id, 
             'title' => metadata($item, array('Dublin Core', 'Title')), 
             'description' => metadata($item, array('Dublin Core', 'Description')), 
+            'date' => metadata($item, array('Dublin Core', 'Date'), array('all' => true)), 
             'thumbnail' => item_image('thumbnail', array(), 0, $item), 
             'fullsize' => item_image('fullsize', array('style' => 'max-width: 100%; height: auto;'), 0, $item), 
             'url' => url(array('module' => 'default', 
