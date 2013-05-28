@@ -294,11 +294,12 @@ $(document).ready(function () {
                         // Request the item data and populate and open the marker popup.
                         var marker = this;
                         $.post('mall-map/index/get-item', {id: feature.properties.id}, function (response) {
-                            marker.bindPopup(
-                                '<h1>' + response.title + '</h1>' + 
-                                response.thumbnail + '<br/>' + 
-                                '<a href="#" class="open-info-panel">view more info</a>'
-                            ).openPopup();
+                            var popupContent = '<h3>' + response.title + '</h3>';
+                            if (response.thumbnail) {
+                                popupContent += '<a href="#" class="open-info-panel">' + response.thumbnail + '</a><br/>';
+                            }
+                            popupContent += '<a href="#" class="open-info-panel">view more info</a>';
+                            marker.bindPopup(popupContent, {maxWidth: 200, offset: L.point(0, 10)}).openPopup();
                             $('.open-info-panel').click(function (e) {
                                 e.preventDefault();
                                 $('#info-panel').show();
