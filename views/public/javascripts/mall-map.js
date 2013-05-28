@@ -321,7 +321,8 @@ $(document).ready(function () {
             });
             markers = new L.MarkerClusterGroup({
                 showCoverageOnHover: false, 
-                maxClusterRadius: 40
+                maxClusterRadius: 40,
+                spiderfyDistanceMultiplier: 2
             });
             markers.addLayer(geoJsonLayer);
             map.addLayer(markers);
