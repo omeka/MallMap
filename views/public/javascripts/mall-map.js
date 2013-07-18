@@ -298,7 +298,7 @@ $(document).ready(function () {
                             if (response.thumbnail) {
                                 popupContent += '<a href="#" class="open-info-panel">' + response.thumbnail + '</a><br/>';
                             }
-                            popupContent += '<a href="#" class="open-info-panel">view more info</a>';
+                            popupContent += '<a href="#" class="open-info-panel button">view more info</a>';
                             marker.bindPopup(popupContent, {maxWidth: 200, offset: L.point(0, 10)}).openPopup();
                             $('.open-info-panel').click(function (e) {
                                 e.preventDefault();
