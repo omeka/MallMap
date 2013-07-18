@@ -4,6 +4,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <?php echo $this->headLink(); ?>
     <?php echo $this->headScript(); ?>
+    <link href='http://fonts.googleapis.com/css?family=Raleway:300,600' rel='stylesheet' type='text/css'>
     <script type="text/javascript">
         var hackRemember = L.DomUtil.TRANSITION;
         L.DomUtil.TRANSITION = false;
@@ -14,9 +15,11 @@
     </script>
 </head>
 <body>
-    <span id="marker-count"></span>
-    <a href="#" id="filter-button"><span class="screen-reader-text">Filters</span></a>
-    <a href="#" id="all-button" class="on">Show All</a>
+    <header>
+        <span id="marker-count"></span>
+        <a href="#" id="filter-button"><span class="screen-reader-text">Filters</span></a>
+        <a href="#" id="all-button" class="on">Show All</a>
+    </header>
     <a href="#" id="locate-button" class="disabled"><span class="screen-reader-text">Make me center</span></a>
     <a href="#" id="toggle-map-button" class="on" style="display: none;"><span class="screen-reader-text">Map On</span></a>
     <a href="#" class="back-button"><span class="screen-reader-text">Back to Map</span></a>
