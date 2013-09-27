@@ -203,7 +203,7 @@ a.on {
 
 #filters {
     position: fixed;
-    left: 100%;
+    left: 0;
     top: 0;
     bottom: 0;
     background: url('../images/bg.jpg') no-repeat top right;
@@ -215,6 +215,7 @@ a.on {
     -webkit-overflow-scrolling: touch;
     border-top: 90px solid #fff;
     border-top: 90px solid rgba(0, 0, 0, 0.13);
+    display: none;
 }
 
 #filters div label {
@@ -265,11 +266,12 @@ a.on {
 }
 
 #info-panel {
+    display: none;
     position: fixed;
     background: url('../images/bg.jpg') no-repeat top right;
     background-size: cover;
     top: 0;
-    left: 100%;
+    left: 0;
     height: 100%;
     z-index: 1020;
     overflow-y: auto;

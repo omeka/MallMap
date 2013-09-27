@@ -99,12 +99,12 @@ $(document).ready(function () {
             filterButton.removeClass('on').
                 find('.screen-reader-text').
                 html('Filters');
-            $('#filters').animate({left: '+=100%'}, 200, 'linear');
+            $('#filters').fadeToggle(200, 'linear');
         } else {
             filterButton.addClass('on').
                 find('.screen-reader-text').
                 html('Back to Map');
-            $('#filters').animate({left: '-=100%'}, 200, 'linear');
+            $('#filters').fadeToggle(200, 'linear');
         }
         filterButton.data('clicks', !clicks);
     });
@@ -234,7 +234,7 @@ $(document).ready(function () {
     // Handle the info panel back button.
     $('a.back-button').click(function (e) {
         e.preventDefault();
-        $('#info-panel').animate({left: '+=100%'}, 200, 'linear');
+        $('#info-panel').fadeToggle(200, 'linear');
         $('#toggle-map-button + .back-button').hide();
     });
     
@@ -299,11 +299,10 @@ $(document).ready(function () {
                                 popupContent += '<a href="#" class="open-info-panel">' + response.thumbnail + '</a><br/>';
                             }
                             popupContent += '<a href="#" class="open-info-panel button">view more info</a>';
-                            marker.bindPopup(popupContent, {maxWidth: 200, offset: L.point(0, 10)}).openPopup();
+                            marker.bindPopup(popupContent, {maxWidth: 200, offset: L.point(0, -40)}).openPopup();
                             $('.open-info-panel').click(function (e) {
                                 e.preventDefault();
-                                $('#info-panel').show();
-                                $('#info-panel').animate({left: '-=100%'}, 200, 'linear');
+                                $('#info-panel').fadeToggle(200, 'linear');
                                 $('#toggle-map-button + .back-button').show();
                             });
                             // Populate the item info panel.
