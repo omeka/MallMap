@@ -104,10 +104,9 @@ header {
 
 #all-button { right: 60px; }
 
-
 a#locate-button:before, a#filter-button:before, 
 #filters div label.on:before, a#toggle-map-button,
-.back-button:before {
+.back-button:before, a#home-button:before {
     font-family: 'entypo';
     speak: none;
     font-weight: normal;
@@ -145,10 +144,12 @@ a#toggle-map-button:before { content: "\e005"; }
 
 a#locate-button:before { content: "\e000" }
 
-a#locate-button {
+a#home-button:before { content: "\e00a"; }
+
+a#locate-button,
+a#home-button {
     position: fixed;
     bottom: 11px;
-    right: 40px;
     z-index: 1000;
     text-decoration: none;
     color: #fff;
@@ -164,6 +165,16 @@ a#locate-button {
     box-sizing: border-box;
     border: 1px solid #78B6EB;
     border-radius: 3px;
+}
+
+a#locate-button {
+    right: 40px;  
+}
+
+#home-button {
+    bottom: 11px;
+    left: 10px;
+    right: inherit;
 }
 
 .touch a#locate-button {
