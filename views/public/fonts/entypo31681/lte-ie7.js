@@ -15,10 +15,11 @@ window.onload = function() {
 			'icon-checkmark' : '&#xe006;',
 			'icon-cross' : '&#xe007;',
 			'icon-reply' : '&#xe008;',
-			'icon-tools' : '&#xe009;'
+			'icon-tools' : '&#xe009;',
+			'icon-house' : '&#xe00a;'
 		},
 		els = document.getElementsByTagName('*'),
-		i, attr, html, c, el;
+		i, attr, c, el;
 	for (i = 0; ; i += 1) {
 		el = els[i];
 		if(!el) {
