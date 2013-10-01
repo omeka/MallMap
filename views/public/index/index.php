@@ -19,8 +19,8 @@
         <span id="marker-count"></span>
         <a href="#" id="filter-button"><span class="screen-reader-text">Filters</span></a>
         <a href="#" id="all-button" class="on">Show All</a>
-        <?php echo link_to_home_page('<span class="screen-reader-text">Home</span>', array('id' => 'home-button')); ?>
     </header>
+    <?php echo link_to_home_page('<span class="screen-reader-text">Home</span>', array('id' => 'home-button')); ?>
     <a href="#" id="locate-button" class="disabled"><span class="screen-reader-text">Make me center</span></a>
     <a href="#" id="toggle-map-button" class="on" style="display: none;"><span class="screen-reader-text">Map On</span></a>
     <a href="#" class="back-button"><span class="screen-reader-text">Back to Map</span></a>
