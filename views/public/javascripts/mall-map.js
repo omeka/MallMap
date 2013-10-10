@@ -25,7 +25,7 @@ $(document).ready(function () {
         zoomControl: false, 
     });
     map.addLayer(L.tileLayer(MAP_URL_TEMPLATE));
-    map.addControl(L.control.zoom({position: 'bottomright'}));
+    map.addControl(L.control.zoom({position: 'topleft'}));
     map.attributionControl.setPrefix('');
     
     // Locate the user.
