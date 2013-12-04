@@ -98,13 +98,13 @@ class MallMap_IndexController extends Omeka_Controller_AbstractActionController
         $this->view->headScript()
             ->appendFile('//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js')
             ->appendFile('//ajax.googleapis.com/ajax/libs/jqueryui/1.10.2/jquery-ui.min.js')
-            ->appendFile('//cdn.leafletjs.com/leaflet-0.5/leaflet.js')
+            ->appendFile('//cdn.leafletjs.com/leaflet-0.7/leaflet.js')
             ->appendFile(src('mall-map', 'javascripts', 'js'))
             ->appendFile(src('modernizr.custom.63332', 'javascripts', 'js'));
         $this->view->headLink()
             ->appendStylesheet('//code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css', 'all')
-            ->appendStylesheet('//cdn.leafletjs.com/leaflet-0.5/leaflet.css', 'all')
-            ->appendStylesheet('//cdn.leafletjs.com/leaflet-0.5/leaflet.ie.css', 'all', 'lte IE 8')
+            ->appendStylesheet('//cdn.leafletjs.com/leaflet-0.7/leaflet.css', 'all')
+            ->appendStylesheet('//cdn.leafletjs.com/leaflet-0.7/leaflet.ie.css', 'all', 'lte IE 8')
             ->appendStylesheet(src('MarkerCluster', 'css', 'css'))
             ->appendStylesheet(src('MarkerCluster.Default', 'css', 'css'))
             ->appendStylesheet(src('MarkerCluster.Default.ie', 'css', 'css'), 'all', 'lte IE 8')
@@ -220,7 +220,7 @@ class MallMap_IndexController extends Omeka_Controller_AbstractActionController
             'title' => metadata($item, array('Dublin Core', 'Title')), 
             'description' => metadata($item, array('Dublin Core', 'Description')), 
             'date' => metadata($item, array('Dublin Core', 'Date'), array('all' => true)), 
-            'thumbnail' => item_image('thumbnail', array(), 0, $item), 
+            'thumbnail' => item_image('square_thumbnail', array(), 0, $item), 
             'fullsize' => item_image('fullsize', array('style' => 'max-width: 100%; height: auto;'), 0, $item), 
             'url' => url(array('module' => 'default', 
                                'controller' => 'items', 

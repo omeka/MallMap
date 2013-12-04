@@ -1,5 +1,10 @@
 $(document).ready(function () {
-    
+
+    // Set map height to be window height minus header height.
+    var windowheight = $(window).height();
+    $('#map').css('height', windowheight - 54);
+
+
     var MAP_URL_TEMPLATE = 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
     var MAP_CENTER = [38.8891, -77.02949];
     var MAP_ZOOM = 15;
@@ -22,7 +27,7 @@ $(document).ready(function () {
         minZoom: MAP_MIN_ZOOM, 
         maxZoom: MAP_MAX_ZOOM, 
         maxBounds: MAP_MAX_BOUNDS, 
-        zoomControl: false, 
+        zoomControl: false
     });
     map.addLayer(L.tileLayer(MAP_URL_TEMPLATE));
     map.addControl(L.control.zoom({position: 'topleft'}));
@@ -36,12 +41,7 @@ $(document).ready(function () {
     
     // Add all markers by default, or retain previous marker state.
     doFilters();
-    
-    // Log the clicked coordinates.
-    map.on('click', function (e) {
-        console.log("Map clicked at zoom " + map.getZoom() + '; ' + e.latlng);
-    });
-    
+        
     // Handle location found.
     map.on('locationfound', function (e) {
         // User within location bounds. Set the location marker.
@@ -290,7 +290,6 @@ $(document).ready(function () {
             var geoJsonLayer = L.geoJson(response, {
                 onEachFeature: function (feature, layer) {
                     layer.on('click', function (e) {
-                        map.panTo([feature.geometry.coordinates[1], feature.geometry.coordinates[0]]);
                         // Request the item data and populate and open the marker popup.
                         var marker = this;
                         $.post('mall-map/index/get-item', {id: feature.properties.id}, function (response) {
@@ -300,6 +299,11 @@ $(document).ready(function () {
                             }
                             popupContent += '<a href="#" class="open-info-panel button">view more info</a>';
                             marker.bindPopup(popupContent, {maxWidth: 200, offset: L.point(0, -40)}).openPopup();
+                            
+                            window.setTimeout(function () {
+                                //map.panTo([feature.geometry.coordinates[1],feature.geometry.coordinates[0]]); 
+                                layer.getPopup().update();
+                            }, 100);
                             $('.open-info-panel').click(function (e) {
                                 e.preventDefault();
                                 $('#info-panel').fadeToggle(200, 'linear');
