@@ -303,12 +303,13 @@ $(document).ready(function () {
                             window.setTimeout(function () {
                                 //map.panTo([feature.geometry.coordinates[1],feature.geometry.coordinates[0]]); 
                                 layer.getPopup().update();
+                                $('.open-info-panel').click(function (e) {
+                                    e.preventDefault();
+                                    $('#info-panel').fadeToggle(200, 'linear');
+                                    $('#toggle-map-button + .back-button').show();
+                                });
                             }, 100);
-                            $('.open-info-panel').click(function (e) {
-                                e.preventDefault();
-                                $('#info-panel').fadeToggle(200, 'linear');
-                                $('#toggle-map-button + .back-button').show();
-                            });
+                            
                             // Populate the item info panel.
                             var content = $('#info-panel-content');
                             content.empty();
