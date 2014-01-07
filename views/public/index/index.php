@@ -42,6 +42,13 @@
                 <?php endforeach; ?>
             </div>
         </div>
+        <div id="first-time">
+            <div class="overlay"></div>
+            <div class="tooltip">
+                <p><?php echo get_option('mall_map_filter_tooltip'); ?></p>
+                <button class="button"><?php echo get_option('mall_map_tooltip_button'); ?></button>
+            </div>
+        </div>
         <div id="info-panel" style="display: none;">
             <a href="#" class="back-button">Back to Map</a>
             <div id="info-panel-content"></div>
