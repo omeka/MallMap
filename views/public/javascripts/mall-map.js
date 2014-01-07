@@ -32,29 +32,31 @@ $(document).ready(function () {
     map.addLayer(L.tileLayer(MAP_URL_TEMPLATE));
     map.addControl(L.control.zoom({position: 'topleft'}));
     map.attributionControl.setPrefix('');
-    
-    // Locate the user.
-    map.locate({watch: true});
+
+    // Check for user's first time visiting. Wait to locate the user after displaying tooltip on the first visit.
+    if(!($.cookie('myCookie'))) {
+        $('#first-time').show();
+        $.cookie('myCookie','visited', { path: '/', expires: 10000 });
+    } else {
+        map.locate({watch: true});
+    }
+
+    $("#first-time button").on('click', function() {
+        $('#first-time').hide();
+        map.locate({watch: true});
+    });
     
     // Retain previous form state, if needed.
     retainFormState();
     
     // Add all markers by default, or retain previous marker state.
     doFilters();
-
-    if(!($.cookie('myCookie'))) {
-        $('#first-time').show();
-        $.cookie('myCookie','visited', { path: '/', expires: 10000 });
-    }
-
-    $("#first-time button").on('click', function() {
-        $('#first-time').hide();
-    });
     
     // Handle location found.
     map.on('locationfound', function (e) {
         // User within location bounds. Set the location marker.
         if (L.latLngBounds(LOCATE_BOUNDS).contains(e.latlng)) {
+            launchTooltip();
             if (locationMarker) {
                 // Remove the existing location marker before adding to map.
                 map.removeLayer(locationMarker);
@@ -83,6 +85,7 @@ $(document).ready(function () {
                     dialog('option', 'title', 'Not Quite on the Mall').
                     dialog('open');
             }
+            
         }
     });
     
