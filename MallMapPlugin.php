@@ -43,7 +43,10 @@ class MallMapPlugin extends Omeka_Plugin_AbstractPlugin
     public function hookConfig()
     {
         set_option('mall_map_filter_tooltip', $_POST['mall_map_filter_tooltip']);
+<<<<<<< HEAD
         set_option('mall_map_tooltip_button', $_POST['mall_map_tooltip_button']);
+=======
+>>>>>>> Start setting up first-time visitor tooltip feature.
     }
     
     public function hookDefineRoutes($args)

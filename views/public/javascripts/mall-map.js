@@ -46,10 +46,7 @@ $(document).ready(function () {
         $('#first-time').show();
         $.cookie('myCookie','visited', { path: '/', expires: 10000 });
     }
-    else {
-        console.log("Already visited.");
-    }
-    
+
     $("#first-time button").on('click', function() {
         $('#first-time').hide();
     });
