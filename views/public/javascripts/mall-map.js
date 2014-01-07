@@ -41,7 +41,19 @@ $(document).ready(function () {
     
     // Add all markers by default, or retain previous marker state.
     doFilters();
-        
+
+    if(!($.cookie('myCookie'))) {
+        $('#first-time').show();
+        $.cookie('myCookie','visited', { path: '/', expires: 10000 });
+    }
+    else {
+        console.log("Already visited.");
+    }
+    
+    $("#first-time button").on('click', function() {
+        $('#first-time').hide();
+    });
+    
     // Handle location found.
     map.on('locationfound', function (e) {
         // User within location bounds. Set the location marker.
@@ -308,7 +320,7 @@ $(document).ready(function () {
                                     $('#info-panel').fadeToggle(200, 'linear');
                                     $('#toggle-map-button + .back-button').show();
                                 });
-                            }, 100);
+                            }, 500);
                             
                             // Populate the item info panel.
                             var content = $('#info-panel-content');
