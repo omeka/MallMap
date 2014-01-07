@@ -42,7 +42,6 @@ body {
 
 #map {
     width: 100%;
-    height: 80%;
 }
 
 h1 { 
@@ -91,7 +90,6 @@ label {
 
 div[role="main"] {
     width: 100%;
-    height: 80%;
     position: relative;
     overflow: hidden;
 }
@@ -133,7 +131,15 @@ div[role="main"] {
 
 a#toggle-map-button:before { content: "\e00f"; }
 
-a#locate-button:before { content: "\e012" }
+a#locate-button:before { 
+    content: "\e012";
+    background-color: rgba(255, 255, 255, 0.8);
+    width: 100%;
+    height: 100%;
+    display: block;
+    padding: 7px;
+    border-radius: 7px;
+}
 
 a#locate-button {
     position: absolute;
@@ -141,7 +147,6 @@ a#locate-button {
     z-index: 1000;
     text-decoration: none;
     color: #fff;
-    padding: 7px;
     background-color: #2B89D9;
     -webkit-box-shadow: 0 0 20px rgba(0,0,0,.15);
     -moz-box-shadow: 0 0 20px rgba(0,0,0,.15);
@@ -153,6 +158,7 @@ a#locate-button {
     box-sizing: border-box;
     border: 1px solid #78B6EB;
     border-radius: 3px;
+    overflow: auto;
 }
 
 a#locate-button {
@@ -160,7 +166,12 @@ a#locate-button {
 }
 
 .touch a#locate-button {
-    right: 55px;
+    border-radius: 10px;
+    border: 4px solid rgba(0,0,0,.3) !important;
+}
+
+.touch a#locate-button.disabled:before {
+    background-color: rgba(255,255,255.8);
 }
 
 #filter-button:before { content: "\e013"; }
@@ -260,9 +271,11 @@ a#locate-button {
 }
 
 .disabled {
-    background-color: rgba(255, 255, 255, 0.8) !important;
-    color: #c7c7c7 !important;
-    border: 1px solid #B9B9B9 !important;
+    background-color: rgba(0, 0, 0, 0) !important;
+    color: #C7C7C7 !important;
+    border: 1px solid rgba(0, 0, 0, 0.3) !important;
+    border-radius: 10px !important;
+    box-sizing: content-box !important;
 }
 
 #info-panel {
