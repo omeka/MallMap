@@ -399,3 +399,12 @@ a#locate-button {
     border-radius: 0;
     margin-bottom: 1.5em;
 }
+
+@media screen and (max-width: 640px) {
+
+    #first-time .tooltip {
+        max-width: 90%;
+        right: 5%;
+    }
+
+}
