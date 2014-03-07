@@ -70,7 +70,10 @@ class MallMap_IndexController extends Omeka_Controller_AbstractActionController
             'url' => '/mallhistory/plugins/MallMap/maps/1942/{z}/{x}/{y}.jpg', 
             'title' => 'Map by General Drafting Company (1942)', 
         ), 
-        //'1950-1979' => array('url' => null, 'title' => null), 
+        '1950-1979' => array(
+            'url' => '/mallhistory/plugins/MallMap/maps/1978/{z}/{x}/{y}.jpg',
+            'title' => 'Map by Alexandria Drafting Company (1978)',
+        ), 
         '1980-1999' => array(
             'url' => '/mallhistory/plugins/MallMap/maps/1996/{z}/{x}/{y}.jpg', 
             'title' => 'Map by Joseph Passonneau and Partners (1996)', 
