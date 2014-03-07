@@ -203,6 +203,10 @@ $(document).ready(function () {
         doFilters();
     });
     
+    $('#map-coverage,#item-type').on('touchstart touchend', function(event) {
+        event.stopPropagation();
+    });
+    
     // Filter place type.
     $('input[name=place-type]').change(function () {
         // Handle all place types checkbox.
