@@ -5,13 +5,13 @@ $(document).ready(function () {
     $('#map').css('height', windowheight - 54);
 
 
-    var MAP_URL_TEMPLATE = 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
-    var MAP_CENTER = [38.8891, -77.02949];
+    var MAP_URL_TEMPLATE = 'https://stamen-tiles-{s}.a.ssl.fastly.net/terrain/{z}/{x}/{y}{r}.png';
+    var MAP_CENTER = [41.9001702, 12.4698422];
     var MAP_ZOOM = 15;
     var MAP_MIN_ZOOM = 14;
     var MAP_MAX_ZOOM = 18;
-    var MAP_MAX_BOUNDS = [[38.79164, -77.17232], [38.99583, -76.90917]];
-    var LOCATE_BOUNDS = [[38.87814, -77.05656], [38.90025, -77.00678]];
+    var MAP_MAX_BOUNDS = [[41.908628, 12.451941], [41.88927, 12.490607]];
+    var LOCATE_BOUNDS = [[41.908628, 12.451941], [41.88927, 12.490607]];
     var MAX_LOCATE_METERS = 8000;
     
     var map;
