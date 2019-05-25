@@ -36,7 +36,7 @@ class MallMap_IndexController extends Omeka_Controller_AbstractActionController
     /**
      * @var array Filterable item types in display order
      */
-    private $_itemTypes = array(
+    public $_itemTypes = array(
         self::ITEM_TYPE_ID_PLACE        => 'Place',
         self::ITEM_TYPE_ID_EVENT        => 'Event',
         self::ITEM_TYPE_ID_DOCUMENT     => 'Document',
@@ -97,6 +97,22 @@ class MallMap_IndexController extends Omeka_Controller_AbstractActionController
         $placeTypes = $simpleVocabTerm->findByElementId(self::ELEMENT_ID_PLACE_TYPE);
         $eventTypes = $simpleVocabTerm->findByElementId(self::ELEMENT_ID_EVENT_TYPE);
 
+        // Get the database.
+    		$db = get_db();
+    		// Get the Tour table.
+    		$tour_table = $db->getTable('Tour');
+    		// Build the select query.
+    		$select = $tour_table->getSelect();
+    		// Fetch some items with our select.
+    		$results = $tour_table->fetchObjects($select);
+        $_tourTypes = array();
+        foreach ($results as $tour){
+          if($tour['public']==1){
+            $_tourTypes[$tour['id']] = $tour['title'];
+          }
+        }
+
+        $this->view->tour_types = $_tourTypes;
         $this->view->item_types = $this->_itemTypes;
         $this->view->map_coverages = explode("\n", $mapCoverages->terms);
         $this->view->place_types = explode("\n", $placeTypes->terms);

@@ -23,7 +23,7 @@
             <label for="item-type">All Tours (in progress)</label>
             <select id="item-type" name="item-type">
                 <option value="0">All Tours</option>
-                <?php foreach ($this->item_types as $item_type_id => $item_type): ?>
+                <?php foreach ($this->tour_types as $item_type_id => $item_type): ?>
                 <option value="<?php echo $item_type_id; ?>"><?php echo $item_type; ?></option>
                 <?php endforeach; ?>
             </select>
