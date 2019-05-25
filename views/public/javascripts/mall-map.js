@@ -1,32 +1,48 @@
-$(document).ready(function () {
+// jQuery(window).load(function() {
+// mallMapJs()
+// });
 
+$(document).ready(function () {
+mallMapJs()
+  });
+
+function mallMapJs(){
     // Set map height to be window height minus header height.
     var windowheight = $(window).height();
     $('#map').css('height', windowheight - 54);
-
+    //adding this so that the mall-map markers will load (most of the time; sometimes it breaks)
+    $.getScript("https://unpkg.com/leaflet.markercluster@1.3.0/dist/leaflet.markercluster.js");
+    var imported = document.createElement("script");
+    imported.src = "/cgmrdev/plugins/MallMap/views/public/javascripts/new_markercluster_src.js";
+    document.head.appendChild(imported);
 
     var MAP_URL_TEMPLATE = 'https://stamen-tiles-{s}.a.ssl.fastly.net/terrain/{z}/{x}/{y}{r}.png';
+    // MAP_CENTER controls the default starting place
+    // var MAP_CENTER = [38.8891, -77.02949];
     var MAP_CENTER = [41.9001702, 12.4698422];
-    var MAP_ZOOM = 15;
+    //  MAP_ZOOM controls the default zoom of the map
+    var MAP_ZOOM = 17;
+    // var MAP_ZOOM = 15;
     var MAP_MIN_ZOOM = 14;
     var MAP_MAX_ZOOM = 18;
+    // MAP_MAX_BOUNDS controls the boundaries of the map
     var MAP_MAX_BOUNDS = [[41.908628, 12.451941], [41.88927, 12.490607]];
     var LOCATE_BOUNDS = [[41.908628, 12.451941], [41.88927, 12.490607]];
     var MAX_LOCATE_METERS = 8000;
-    
+
     var map;
     var historicMapLayer;
     var markers;
     var jqXhr;
     var locationMarker;
-    
+
     // Set the base map layer.
     map = L.map('map', {
-        center: MAP_CENTER, 
-        zoom: MAP_ZOOM, 
-        minZoom: MAP_MIN_ZOOM, 
-        maxZoom: MAP_MAX_ZOOM, 
-        maxBounds: MAP_MAX_BOUNDS, 
+        center: MAP_CENTER,
+        zoom: MAP_ZOOM,
+        minZoom: MAP_MIN_ZOOM,
+        maxZoom: MAP_MAX_ZOOM,
+        maxBounds: MAP_MAX_BOUNDS,
         zoomControl: false
     });
     map.addLayer(L.tileLayer(MAP_URL_TEMPLATE));
@@ -45,13 +61,13 @@ $(document).ready(function () {
         $('#first-time').hide();
         map.locate({watch: true});
     });
-    
+
     // Retain previous form state, if needed.
     retainFormState();
-    
+
     // Add all markers by default, or retain previous marker state.
     doFilters();
-    
+
     // Handle location found.
     map.on('locationfound', function (e) {
         // User within location bounds. Set the location marker.
@@ -85,23 +101,23 @@ $(document).ready(function () {
                     dialog('option', 'title', 'Not Quite on the Mall').
                     dialog('open');
             }
-            
+
         }
     });
-    
+
     // Handle location error.
     map.on('locationerror', function () {
         map.stopLocate();
         $('#locate-button').addClass('disabled');
     });
-    
+
     // Set up the dialog window.
     $('#dialog').dialog({
-        autoOpen: false, 
-        draggable: false, 
+        autoOpen: false,
+        draggable: false,
         resizable: false
     });
-    
+
     // Handle the filter form.
     $('#filter-button').click(function(e) {
         e.preventDefault();
@@ -120,13 +136,13 @@ $(document).ready(function () {
         }
         filterButton.data('clicks', !clicks);
     });
-    
+
     // Revert form to default and display all markers.
     $('#all-button').click(function(e) {
         e.preventDefault();
         revertFormState();
     });
-    
+
     // Handle locate button.
     $('#locate-button').click(function (e) {
         e.preventDefault();
@@ -140,7 +156,7 @@ $(document).ready(function () {
         map.stopLocate();
         map.locate({watch: true});
     });
-    
+
     // Toggle historic map layer on and off.
     $('#toggle-map-button').click(function (e) {
         e.preventDefault();
@@ -159,7 +175,7 @@ $(document).ready(function () {
         }
         toggleMapButton.data('clicks', !clicks);
     });
-    
+
     // Toggle map filters
     $('#filters div label').click(function() {
         var checkboxLabel = $(this);
@@ -169,7 +185,7 @@ $(document).ready(function () {
             checkboxLabel.removeClass('on');
         }
     });
-    
+
     // Filter historic map layer.
     $('#map-coverage').change(function () {
         if (historicMapLayer) {
@@ -182,7 +198,7 @@ $(document).ready(function () {
         }
         doFilters();
     });
-    
+
     // Filter item type.
     $('#item-type').change(function () {
         var itemType = $(this);
@@ -202,11 +218,11 @@ $(document).ready(function () {
         }
         doFilters();
     });
-    
+
     $('#map-coverage,#item-type').on('touchstart touchend', function(event) {
         event.stopPropagation();
     });
-    
+
     // Filter place type.
     $('input[name=place-type]').change(function () {
         // Handle all place types checkbox.
@@ -218,7 +234,7 @@ $(document).ready(function () {
         }
         doFilters();
     });
-    
+
     // Handle the all place types checkbox.
     $('input[name=place-type-all]').change(function () {
         // Uncheck all place types.
@@ -226,7 +242,7 @@ $(document).ready(function () {
             parent().removeClass('on');
         doFilters();
     });
-    
+
     // Filter event type.
     $('input[name=event-type]').change(function () {
         // Handle all event types checkbox.
@@ -238,7 +254,7 @@ $(document).ready(function () {
         }
         doFilters();
     });
-    
+
     // Handle the all event types checkbox.
     $('input[name=event-type-all]').change(function () {
         // Uncheck all event types.
@@ -246,17 +262,17 @@ $(document).ready(function () {
             parent().removeClass('on');
         doFilters();
     });
-    
+
     // Handle the info panel back button.
     $('a.back-button').click(function (e) {
         e.preventDefault();
         $('#info-panel').fadeToggle(200, 'linear');
         $('#toggle-map-button + .back-button').hide();
     });
-    
+
     /*
      * Filter markers.
-     * 
+     *
      * This must be called on every form change.
      */
     function doFilters() {
@@ -264,23 +280,23 @@ $(document).ready(function () {
         if (jqXhr) {
             jqXhr.abort()
         }
-        
+
         // Remove the current markers.
         if (markers) {
             map.removeLayer(markers);
         }
-        
+
         var mapCoverage = $('#map-coverage');
         var itemType = $('#item-type');
         var placeTypes = $('input[name=place-type]:checked');
         var eventTypes = $('input[name=event-type]:checked');
-        
+
         // Prepare POST data object for request.
         var postData = {
-            placeTypes: [], 
-            eventTypes: [], 
+            placeTypes: [],
+            eventTypes: [],
         };
-        
+
         // Handle each filter, adding to the POST data object.
         if ('0' != mapCoverage.val()) {
             postData['mapCoverage'] = mapCoverage.val();
@@ -298,9 +314,10 @@ $(document).ready(function () {
                 postData.eventTypes.push(this.value);
             });
         }
-        
+
         // Make the POST request, handle the GeoJSON response, and add markers.
         jqXhr = $.post('mall-map/index/filter', postData, function (response) {
+          //response is an array of coordinate;
             var item = (1 == response.features.length) ? 'item' : 'items';
             $('#marker-count').text(response.features.length + " " + item);
             var geoJsonLayer = L.geoJson(response, {
@@ -315,9 +332,9 @@ $(document).ready(function () {
                             }
                             popupContent += '<a href="#" class="open-info-panel button">view more info</a>';
                             marker.bindPopup(popupContent, {maxWidth: 200, offset: L.point(0, -40)}).openPopup();
-                            
+
                             window.setTimeout(function () {
-                                //map.panTo([feature.geometry.coordinates[1],feature.geometry.coordinates[0]]); 
+                                //map.panTo([feature.geometry.coordinates[1],feature.geometry.coordinates[0]]);
                                 layer.getPopup().update();
                                 $('.open-info-panel').click(function (e) {
                                     e.preventDefault();
@@ -325,7 +342,7 @@ $(document).ready(function () {
                                     $('#toggle-map-button + .back-button').show();
                                 });
                             }, 500);
-                            
+
                             // Populate the item info panel.
                             var content = $('#info-panel-content');
                             content.empty();
@@ -340,16 +357,34 @@ $(document).ready(function () {
                     });
                 }
             });
-            markers = new L.MarkerClusterGroup({
-                showCoverageOnHover: false, 
-                maxClusterRadius: 40,
-                spiderfyDistanceMultiplier: 2
-            });
+            // $.getScript("https://unpkg.com/leaflet.markercluster@1.3.0/dist/leaflet.markercluster.js");
+            // console.log(L.markerClusterGroup);
+            // $.getScript("https://unpkg.com/leaflet.markercluster@1.3.0/dist/leaflet.markercluster.js");
+            // markers = new L.MarkerClusterGroup.prototype.initialize.call({
+
+            //adding this so that the mall-map markers will load (most of the time; sometimes it breaks)
+            for(var i = 0; i<100;i++){
+              try{
+                markers = new L.MarkerClusterGroup({
+                    showCoverageOnHover: false,
+                    maxClusterRadius: 40,
+                    spiderfyDistanceMultiplier: 2
+              });
+                break;
+              }
+              catch(err){
+                $.getScript("https://unpkg.com/leaflet.markercluster@1.3.0/dist/leaflet.markercluster.js");
+                // var imported = document.createElement("script");
+                // imported.src = "/cgmrdev/plugins/MallMap/views/public/javascripts/new_markercluster_src.js";
+                // document.head.appendChild(imported);
+                }
+            }
+            console.log(i.toString());
             markers.addLayer(geoJsonLayer);
             map.addLayer(markers);
         });
     }
-    
+
     /*
      * Add the historic map layer.
      */
@@ -359,17 +394,17 @@ $(document).ready(function () {
         var getData = {'text': $('#map-coverage').val()};
         $.get('mall-map/index/historic-map-data', getData, function (response) {
             historicMapLayer = L.tileLayer(
-                response.url, 
+                response.url,
                 {tms: true, opacity: 1.00}
             );
             map.addLayer(historicMapLayer);
             $('#toggle-map-button').show();
-            
+
             // Set the map title as the map attribution prefix.
             map.attributionControl.setPrefix(response.title);
         });
     }
-    
+
     /*
      * Remove the historic map layer.
      */
@@ -379,7 +414,7 @@ $(document).ready(function () {
         map.removeLayer(historicMapLayer);
         map.attributionControl.setPrefix('');
     }
-    
+
     /*
      * Revert to default (original) form state.
      */
@@ -388,29 +423,29 @@ $(document).ready(function () {
         if (historicMapLayer) {
             removeHistoricMapLayer();
         }
-        
+
         $('#map-coverage').val('0');
         $('#item-type').val('0');
-        
+
         $('#place-type-div').hide({duration: 'fast'});
         $('input[name=place-type-all]').prop('checked', true).
             parent().addClass('on');
         $('input[name=place-type]:checked').prop('checked', false).
             parent().removeClass('on');
-        
+
         $('#event-type-div').hide({duration: 'fast'});
         $('input[name=event-type-all]').prop('checked', true).
             parent().addClass('on');
         $('input[name=event-type]:checked').prop('checked', false).
             parent().removeClass('on');
-        
+
         doFilters();
     }
-    
+
     /*
      * Retain previous form state.
-     * 
-     * Acts on the assumption that all browsers will preserve the form state 
+     *
+     * Acts on the assumption that all browsers will preserve the form state
      * when navigating back to the map from another page.
      */
     function retainFormState()
@@ -435,12 +470,12 @@ $(document).ready(function () {
             $('#event-type-div').show({duration: 'fast'});
         }
     }
-    
-    var debugTimestamp; 
+
+    var debugTimestamp;
     function start() {
         debugTimestamp = new Date().getTime();
     }
     function stop() {
         console.log((new Date().getTime() / 1000) - (debugTimestamp / 1000));
     }
-});
+}

@@ -1,14 +1,14 @@
 <?php
 /**
  * Mall Map
- * 
+ *
  * @copyright Copyright 2007-2012 Roy Rosenzweig Center for History and New Media
  * @license http://www.gnu.org/licenses/gpl-3.0.txt GNU GPLv3
  */
 
 /**
  * The Mall Map controller
- * 
+ *
  * @package Omeka\Plugins\Mall
  */
 class MallMap_IndexController extends Omeka_Controller_AbstractActionController
@@ -21,82 +21,87 @@ class MallMap_IndexController extends Omeka_Controller_AbstractActionController
     const ITEM_TYPE_ID_SOUND        = 5;
     const ITEM_TYPE_ID_STILL_IMAGE  = 6;
     const ITEM_TYPE_ID_EVENT        = 8;
-    const ITEM_TYPE_ID_PLACE        = 14;
-    
+    // const ITEM_TYPE_ID_PLACE        = 14;
+    const ITEM_TYPE_ID_PLACE        = 18;
+
     /**
      * Filterable element IDs
      */
     const ELEMENT_ID_EVENT_TYPE   = 29;
     const ELEMENT_ID_MAP_COVERAGE = 38;
-    const ELEMENT_ID_PLACE_TYPE   = 87;
-    
+
+    // const ELEMENT_ID_PLACE_TYPE   = 87;
+    const ELEMENT_ID_PLACE_TYPE   = 51;
+
     /**
      * @var array Filterable item types in display order
      */
     private $_itemTypes = array(
-        self::ITEM_TYPE_ID_PLACE        => 'Place', 
-        self::ITEM_TYPE_ID_EVENT        => 'Event', 
-        self::ITEM_TYPE_ID_DOCUMENT     => 'Document', 
+        self::ITEM_TYPE_ID_PLACE        => 'Place',
+        self::ITEM_TYPE_ID_EVENT        => 'Event',
+        self::ITEM_TYPE_ID_DOCUMENT     => 'Document',
         self::ITEM_TYPE_ID_STILL_IMAGE  => 'Image', // Still Image
         self::ITEM_TYPE_ID_MOVING_IMAGE => 'Video', // Moving Image
         self::ITEM_TYPE_ID_SOUND        => 'Audio', // Sound
     );
-    
+
     /**
      * @var array Data used when adding the historic map layer.
      */
+     //Lets you specify the map tiles: located in the /omeka/plugins/MallMap/maps folder.
+     // However, we must tile the map since they have {z}/{x}/{y} - can use https://www.maptiler.com to do this.
     private $_historicMapData = array(
         'Pre-1800s' => array(
-            'url' => '/mallhistory/plugins/MallMap/maps/1791/{z}/{x}/{y}.jpg', 
-            'title' => 'Map by Faehtz, E.F.M. (1791)', 
-        ), 
+            'url' => '/mallhistory/plugins/MallMap/maps/1791/{z}/{x}/{y}.jpg',
+            'title' => 'Map by Faehtz, E.F.M. (1791)',
+        ),
         '1800-1829' => array(
-            'url' => '/mallhistory/plugins/MallMap/maps/1828/{z}/{x}/{y}.jpg', 
-            'title' => 'Map by Elliot, William (1828)', 
-        ), 
+            'url' => '/mallhistory/plugins/MallMap/maps/1828/{z}/{x}/{y}.jpg',
+            'title' => 'Map by Elliot, William (1828)',
+        ),
         '1830-1859' => array(
-            'url' => '/mallhistory/plugins/MallMap/maps/1858/{z}/{x}/{y}.jpg', 
-            'title' => 'Map by Boschke, A. (1858)', 
-        ), 
+            'url' => '/mallhistory/plugins/MallMap/maps/1858/{z}/{x}/{y}.jpg',
+            'title' => 'Map by Boschke, A. (1858)',
+        ),
         '1860-1889' => array(
-            'url' => '/mallhistory/plugins/MallMap/maps/1887/{z}/{x}/{y}.jpg', 
-            'title' => 'Map by Silversparre, Axel (1887)', 
-        ), 
+            'url' => '/mallhistory/plugins/MallMap/maps/1887/{z}/{x}/{y}.jpg',
+            'title' => 'Map by Silversparre, Axel (1887)',
+        ),
         '1890-1919' => array(
-            'url' => '/mallhistory/plugins/MallMap/maps/1917/{z}/{x}/{y}.jpg', 
-            'title' => 'Map by U.S. Public Buildings Commission (1917)', 
-        ), 
+            'url' => '/mallhistory/plugins/MallMap/maps/1917/{z}/{x}/{y}.jpg',
+            'title' => 'Map by U.S. Public Buildings Commission (1917)',
+        ),
         '1920-1949' => array(
-            'url' => '/mallhistory/plugins/MallMap/maps/1942/{z}/{x}/{y}.jpg', 
-            'title' => 'Map by General Drafting Company (1942)', 
-        ), 
+            'url' => '/mallhistory/plugins/MallMap/maps/1942/{z}/{x}/{y}.jpg',
+            'title' => 'Map by General Drafting Company (1942)',
+        ),
         '1950-1979' => array(
             'url' => '/mallhistory/plugins/MallMap/maps/1978/{z}/{x}/{y}.jpg',
             'title' => 'Map by Alexandria Drafting Company (1978)',
-        ), 
+        ),
         '1980-1999' => array(
-            'url' => '/mallhistory/plugins/MallMap/maps/1996/{z}/{x}/{y}.jpg', 
-            'title' => 'Map by Joseph Passonneau and Partners (1996)', 
-        ), 
-        //'2000-present' => array('url' => null, 'title' => null), 
+            'url' => '/mallhistory/plugins/MallMap/maps/1996/{z}/{x}/{y}.jpg',
+            'title' => 'Map by Joseph Passonneau and Partners (1996)',
+        ),
+        //'2000-present' => array('url' => null, 'title' => null),
     );
-    
+
     /**
      * Display the map.
      */
     public function indexAction()
     {
+        //calls down the data table of the Simple Vocab plugin
         $simpleVocabTerm = $this->_helper->db->getTable('SimpleVocabTerm');
-        
         $mapCoverages = $simpleVocabTerm->findByElementId(self::ELEMENT_ID_MAP_COVERAGE);
         $placeTypes = $simpleVocabTerm->findByElementId(self::ELEMENT_ID_PLACE_TYPE);
         $eventTypes = $simpleVocabTerm->findByElementId(self::ELEMENT_ID_EVENT_TYPE);
-        
+
         $this->view->item_types = $this->_itemTypes;
         $this->view->map_coverages = explode("\n", $mapCoverages->terms);
         $this->view->place_types = explode("\n", $placeTypes->terms);
         $this->view->event_types = explode("\n", $eventTypes->terms);
-        
+
         // Set the JS and CSS files.
         $this->view->headScript()
             ->appendFile('//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js')
@@ -114,11 +119,11 @@ class MallMap_IndexController extends Omeka_Controller_AbstractActionController
             ->appendStylesheet(src('MarkerCluster.Default.ie', 'css', 'css'), 'all', 'lte IE 8')
             ->appendStylesheet(src('mall-map', 'css', 'css'));
     }
-    
+
     /**
      * Filter items that have been geolocated by the Geolocation plugin.
-     * 
-     * Since this is mobile-first, optimized SQL queries are preferable to using 
+     *
+     * Since this is mobile-first, optimized SQL queries are preferable to using
      * the Omeka API.
      */
     public function filterAction()
@@ -127,11 +132,11 @@ class MallMap_IndexController extends Omeka_Controller_AbstractActionController
         if (!$this->_request->isXmlHttpRequest()) {
             throw new Omeka_Controller_Exception_403;
         }
-        
+
         $db = $this->_helper->db->getDb();
         $joins = array("$db->Item AS items ON items.id = locations.item_id");
         $wheres = array("items.public = 1");
-        
+
         // Filter item type.
         if ($this->_request->getParam('itemType')) {
             $wheres[] = $db->quoteInto("items.item_type_id = ?", $this->_request->getParam('itemType'), Zend_Db::INT_TYPE);
@@ -139,14 +144,14 @@ class MallMap_IndexController extends Omeka_Controller_AbstractActionController
         // Filter map coverage.
         if ($this->_request->getParam('mapCoverage')) {
             $alias = "map_coverage";
-            $joins[] = "$db->ElementText AS $alias ON $alias.record_id = items.id AND $alias.record_type = 'Item' " 
+            $joins[] = "$db->ElementText AS $alias ON $alias.record_id = items.id AND $alias.record_type = 'Item' "
                      . $db->quoteInto("AND $alias.element_id = ?", self::ELEMENT_ID_MAP_COVERAGE);
             $wheres[] = $db->quoteInto("$alias.text = ?", $this->_request->getParam('mapCoverage'));
         }
         // Filter place types (inclusive).
         if ($this->_request->getParam('placeTypes')) {
             $alias = "place_types";
-            $joins[] = "$db->ElementText AS $alias ON $alias.record_id = items.id AND $alias.record_type = 'Item' " 
+            $joins[] = "$db->ElementText AS $alias ON $alias.record_id = items.id AND $alias.record_type = 'Item' "
                      . $db->quoteInto("AND $alias.element_id = ?", self::ELEMENT_ID_PLACE_TYPE);
             $placeTypes = array();
             foreach ($this->_request->getParam('placeTypes') as $text) {
@@ -156,7 +161,7 @@ class MallMap_IndexController extends Omeka_Controller_AbstractActionController
         // Filter event types (inclusive).
         } else if ($this->_request->getParam('eventTypes')) {
             $alias = "event_types";
-            $joins[] = "$db->ElementText AS $alias ON $alias.record_id = items.id AND $alias.record_type = 'Item' " 
+            $joins[] = "$db->ElementText AS $alias ON $alias.record_id = items.id AND $alias.record_type = 'Item' "
                      . $db->quoteInto("AND $alias.element_id = ?", self::ELEMENT_ID_EVENT_TYPE);
             $eventTypes = array();
             foreach ($this->_request->getParam('eventTypes') as $text) {
@@ -164,7 +169,7 @@ class MallMap_IndexController extends Omeka_Controller_AbstractActionController
             }
             $wheres[] = implode(" OR ", $eventTypes);
         }
-        
+
         // Build the SQL.
         $sql = "SELECT items.id, locations.latitude, locations.longitude\nFROM $db->Location AS locations";
         foreach ($joins as $join) {
@@ -175,24 +180,24 @@ class MallMap_IndexController extends Omeka_Controller_AbstractActionController
             $sql .= " ($where)";
         }
         $sql .= "\nGROUP BY items.id";
-        
+
         // Build geoJSON: http://www.geojson.org/geojson-spec.html
         $data = array('type' => 'FeatureCollection', 'features' => array());
         foreach ($db->query($sql)->fetchAll() as $row) {
             $data['features'][] = array(
-                'type' => 'Feature', 
+                'type' => 'Feature',
                 'geometry' => array(
-                    'type' => 'Point', 
-                    'coordinates' => array($row['longitude'], $row['latitude']), 
-                ), 
+                    'type' => 'Point',
+                    'coordinates' => array($row['longitude'], $row['latitude']),
+                ),
                 'properties' => array(
-                    'id' => $row['id'], 
-                ), 
+                    'id' => $row['id'],
+                ),
             );
         }
         $this->_helper->json($data);
     }
-    
+
     /**
      * Get data about the selected historical map.
      */
@@ -208,7 +213,7 @@ class MallMap_IndexController extends Omeka_Controller_AbstractActionController
         $data = $this->_historicMapData[$this->_request->getParam('text')];
         $this->_helper->json($data);
     }
-    
+
     /**
      * Get data about the selected item.
      */
@@ -220,17 +225,17 @@ class MallMap_IndexController extends Omeka_Controller_AbstractActionController
         }
         $item = get_record_by_id('item', $this->_request->getParam('id'));
         $data = array(
-            'id' => $item->id, 
-            'title' => metadata($item, array('Dublin Core', 'Title')), 
-            'description' => metadata($item, array('Dublin Core', 'Description')), 
-            'date' => metadata($item, array('Dublin Core', 'Date'), array('all' => true)), 
-            'thumbnail' => item_image('square_thumbnail', array(), 0, $item), 
-            'fullsize' => item_image('fullsize', array('style' => 'max-width: 100%; height: auto;'), 0, $item), 
-            'url' => url(array('module' => 'default', 
-                               'controller' => 'items', 
-                               'action' => 'show', 
-                               'id' => $item['id']), 
-                         'id'), 
+            'id' => $item->id,
+            'title' => metadata($item, array('Dublin Core', 'Title')),
+            'description' => metadata($item, array('Dublin Core', 'Description')),
+            'date' => metadata($item, array('Dublin Core', 'Date'), array('all' => true)),
+            'thumbnail' => item_image('square_thumbnail', array(), 0, $item),
+            'fullsize' => item_image('fullsize', array('style' => 'max-width: 100%; height: auto;'), 0, $item),
+            'url' => url(array('module' => 'default',
+                               'controller' => 'items',
+                               'action' => 'show',
+                               'id' => $item['id']),
+                         'id'),
         );
         $this->_helper->json($data);
     }
