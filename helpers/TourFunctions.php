@@ -18,7 +18,7 @@ function availableItemsJSON() {
 		foreach($items as $key => $arr) {
 			$items[$key]['label'] = metadata( $arr, array( 'Dublin Core', 'Title' ) );
 		}
-	
+
 		return json_encode($items);
 }
 
@@ -161,7 +161,7 @@ function display_tour_thumb($tour,$i,$userDefined=null){
 
 	}else{
 		// use the fallback if their are no items in the tour
-		$html .= '<img src="'.public_url('plugins/TourBuilder/views/public/images/default_thumbnail.png').'"/>';
+		$html .= '<img src="'.public_url('plugins/MallMap/views/public/images/default_thumbnail.png').'"/>';
 	}
 
 	$html .= '</a></div>';

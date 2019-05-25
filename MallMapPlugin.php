@@ -206,7 +206,7 @@ class MallMapPlugin extends Omeka_Plugin_AbstractPlugin
 
   	public function filterAdminNavigationMain( $nav )
   	{
-  		$nav['Tours'] = array( 'label' => __('Rome Walking Tours'),
+  		$nav['Tours'] = array( 'label' => __('Tours'),
   			'action' => 'browse',
   			'controller' => 'tours' );
   		return $nav;
