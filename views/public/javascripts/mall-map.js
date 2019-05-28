@@ -200,7 +200,7 @@ function mallMapJs(){
     });
 
     // Filter item type.
-    $('#item-type').change(function () {
+    $('#tour-type').change(function () {
         var itemType = $(this);
         if ('Place' == itemType.find(':selected').text()) {
             $('#place-type-div').show({duration: 'fast'});
@@ -219,7 +219,7 @@ function mallMapJs(){
         doFilters();
     });
 
-    $('#map-coverage,#item-type').on('touchstart touchend', function(event) {
+    $('#map-coverage,#tour-type').on('touchstart touchend', function(event) {
         event.stopPropagation();
     });
 
@@ -288,8 +288,6 @@ function mallMapJs(){
 
         var mapCoverage = $('#map-coverage');
         var tourType = $('#tour-type');
-        console.log(tourType);
-        alert(tourType.val().toString());
         // var placeTypes = $('input[name=place-type]:checked');
         // var eventTypes = $('input[name=event-type]:checked');
 
@@ -427,7 +425,7 @@ function mallMapJs(){
         }
 
         $('#map-coverage').val('0');
-        $('#item-type').val('0');
+        $('#tour-type').val('0');
 
         $('#place-type-div').hide({duration: 'fast'});
         $('input[name=place-type-all]').prop('checked', true).
@@ -455,7 +453,7 @@ function mallMapJs(){
         if ('0' != $('#map-coverage').val()) {
             addHistoricMapLayer();
         }
-        if ('Place' == $('#item-type').find(':selected').text()) {
+        if ('Place' == $('#tour-type').find(':selected').text()) {
             var placeTypes = $('input[name=place-type]:checked');
             if (placeTypes.length) {
                 $('input[name=place-type-all]').parent().removeClass('on');
@@ -463,7 +461,7 @@ function mallMapJs(){
             }
             $('#place-type-div').show({duration: 'fast'});
         }
-        if ('Event' == $('#item-type').find(':selected').text()) {
+        if ('Event' == $('#tour-type').find(':selected').text()) {
             var eventTypes = $('input[name=event-type]:checked');
             if (eventTypes.length) {
                 $('input[name=event-type-all]').parent().removeClass('on');

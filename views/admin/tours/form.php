@@ -61,7 +61,39 @@
 			</div>
 
 			<h2>Tour Items</h2>
-			<p>Search for items with geolocations by title to add to tour.</p>
+			<p>Search for items with geolocations by title to add to tour.
+        <?php
+        $db = get_db();
+        $joins = array("$db->Item AS items ON items.id = locations.item_id");
+        // $joins = array("$db->Item AS items ON items.id = tour_items.item_id");
+        $wheres = array("items.public = 1");
+
+        $request_tour_id = 1; //$this->_request->getParam('tourType');
+        $tourItemTable = $db->getTable( 'TourItem' );
+        if($request_tour_id != 0){
+      		$tourItemsDat = $tourItemTable->fetchObjects( "SELECT item_id FROM omeka_tour_items WHERE tour_id = $request_tour_id");
+        } else {
+          $tourItemsDat = $tourItemTable->fetchObjects( "SELECT item_id FROM omeka_tour_items");
+        }
+        $tourItemsIDs = array();
+        foreach ($tourItemsDat as $dat){
+          $tourItemsIDs[] = (int) $dat["item_id"];
+        }
+        $tourItemsIDs = implode(", ", $tourItemsIDs);
+        // // Filter tours
+
+        if($request_tour_id != 0){
+          $wheres[] = $db->quoteInto("items.id IN ($tourItemsIDs)", Zend_Db::INT_TYPE);
+        }
+
+        echo "\n";
+        echo json_encode($tourItemsIDs);
+        echo json_encode($joins);
+        echo json_encode($wheres);
+
+         ?>
+
+      </p>
 			<div class="input-container">
 				<input type="search" id="tour-item-search" placeholder="Search by title..." onkeydown="if (event.keyCode == 13) return false"/>
 			</div>
