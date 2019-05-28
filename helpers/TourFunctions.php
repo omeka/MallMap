@@ -18,7 +18,24 @@ function availableItemsJSON() {
 		foreach($items as $key => $arr) {
 			$items[$key]['label'] = metadata( $arr, array( 'Dublin Core', 'Title' ) );
 		}
+		return json_encode($items);
+}
 
+function availableLocationItemsJSON() {
+		$db = get_db();
+		$prefix=$db->prefix;
+		$itemTable = $db->getTable( 'Item' );
+		$locationTable = $db->getTable( 'Location' );
+		$locationItemsDat = $locationTable->fetchObjects( "SELECT item_id FROM ".$prefix."locations");
+		$locationItemsIDs = array();
+		foreach ($locationItemsDat as $dat){
+			$locationItemsIDs[] = (int) $dat["item_id"];
+		}
+		$locationItemsIDs = implode(", ", $locationItemsIDs);
+		$items = $itemTable->fetchObjects( "SELECT * FROM omeka_items WHERE id IN ($locationItemsIDs) ORDER BY modified DESC" );
+		foreach($items as $key => $arr) {
+			$items[$key]['label'] = metadata( $arr, array( 'Dublin Core', 'Title' ) );
+		}
 		return json_encode($items);
 }
 

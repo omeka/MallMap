@@ -20,11 +20,11 @@
                 <option value="<?php echo $map_coverage; ?>"><?php echo $map_coverage; ?></option>
                 <?php endforeach; ?>
             </select>
-            <label for="item-type">All Tours (in progress)</label>
-            <select id="item-type" name="item-type">
+            <label for="tour-type">Tours (in progress)</label>
+            <select id="tour-type" name="tour-type">
                 <option value="0">All Tours</option>
-                <?php foreach ($this->tour_types as $item_type_id => $item_type): ?>
-                <option value="<?php echo $item_type_id; ?>"><?php echo $item_type; ?></option>
+                <?php foreach ($this->tour_types as $tour_type_id => $tour_type): ?>
+                <option value="<?php echo $tour_type_id; ?>"><?php echo $tour_type; ?></option>
                 <?php endforeach; ?>
             </select>
             <div id="place-type-div" style="display: none;">

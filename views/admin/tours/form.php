@@ -6,7 +6,7 @@
 
   <div id="tour-metadata">
 	<div class="seven columns alpha" id="form-data">
-	
+
 		<fieldset>
 			<div class="field">
 				<div class="two columns alpha">
@@ -17,8 +17,8 @@
 				  <p class="explanation"><?php echo __('A title for the tour.');?></p>
 				</div>
 			</div>
-			
-			
+
+
 			<div class="field">
 				<div class="two columns alpha">
 				  <?php echo $this->formLabel( 'credits', __('Credits') ); ?>
@@ -28,18 +28,18 @@
 				  <p class="explanation"><?php echo __('OPTIONAL: The name of the person(s) or organization responsible for the content of the tour.');?></p>
 				</div>
 			</div>
-			
+
 			<div class="field">
 				<div class="two columns alpha">
 				  <?php echo $this->formLabel( 'description', __('Description') ); ?>
-			
+
 				</div>
 				<div class="five columns omega inputs">
 				  <?php echo $this->formTextarea( 'description', $tour->description,array( 'rows' => 12, 'cols' => '40' ) ); ?>
 					<p class="explanation"><?php echo __('The main text of the tour.');?></p>
 				</div>
 			</div>
-			
+
 			<div class="field">
 				<div class="two columns alpha">
 				  <?php echo $this->formLabel( 'postscript_text', __('Postscript Text') ); ?>
@@ -49,19 +49,19 @@
 				  <p class="explanation"><?php echo __('OPTIONAL: Add postscript text to the end of the tour, for example, to thank a sponsor or add directional information.');?></p>
 				</div>
 			</div>
-		   
+
 		</fieldset>
-		
+
 		<fieldset id="tour-items-picker">
-			
+
 			<div class="field">
 				<div class="tour_item_ids hidden">
 				  <?php echo $this->formText( 'tour_item_ids', null ); ?>
 				</div>
-			</div>			
-			
+			</div>
+
 			<h2>Tour Items</h2>
-			<p>Search for items by title to add to tour.</p>
+			<p>Search for items with geolocations by title to add to tour.</p>
 			<div class="input-container">
 				<input type="search" id="tour-item-search" placeholder="Search by title..." onkeydown="if (event.keyCode == 13) return false"/>
 			</div>
@@ -75,71 +75,71 @@
 						echo $html;
 					}
 				} ?>
-			</ul>		
+			</ul>
 		</fieldset>
-	
+
 	</div>
   </div>
 
 </section>
 
 <script>
-	var allItems=<?php echo availableItemsJSON();?>;
+	var allItems=<?php echo availableLocationItemsJSON(); //echo availableItemsJSON();?>;
 	var svg_icon='<?php echo $svg_icon;?>';
-	
+
 	jQuery('#tour-item-search').on('focus', function() {
 		// give user some vertical space for autosuggest dropdown
 	    jQuery("html, body").animate({ scrollTop: jQuery('#tour-items-picker').position().top }, 'slow');
 	});
-	
+
 	jQuery( function() {
-		
+
 		jQuery.formCanSubmit = false;
-		
+
 		var tourItems=_itemsInTour();
 		jQuery('#tour_item_ids').val(tourItems);
-		
+
 		// UI BUTTONS
 		(function () {
 		    var _UIButtons;
-		    (_UIButtons = function (){ 
+		    (_UIButtons = function (){
 				jQuery('.remove').on('click',function(){
 					jQuery(this).parent().fadeOut(400,function(){
 						jQuery(this).remove();
 						// update list on remove
-						jQuery(document).trigger('tourItemsUpdated');						
+						jQuery(document).trigger('tourItemsUpdated');
 					});
 				});
 		    })();
-		
+
 		    //When list is updated, re-evaluate the list
 			jQuery(document).on('tourItemsUpdated',function(e){
 				_UIButtons();
 				tourItems=_itemsInTour();
 				jQuery('#tour_item_ids').val(tourItems);
-			});	
-		})();		
+			});
+		})();
 
 		function _itemsInTour(){
 			var inTour = new Array();
 			jQuery('#sortable li').each(function(){
 				inTour.push(parseInt(jQuery(this).attr('data-id')));
-			});	
-			return inTour;		
+			});
+			return inTour;
 		}
 
 		// SORTABLE
 		jQuery( "#sortable" ).sortable({
 	    	placeholder: "ui-state-highlight",
-	    	stop: function(event,ui){ 
+	    	stop: function(event,ui){
 		    	// update list on drag-end
 	    		jQuery(document).trigger('tourItemsUpdated');
 	    	}
 		});
-		
+
 		jQuery( "#sortable" ).disableSelection();
-		
-		
+
+
 		// AUTOCOMPLETE
 		function addItem( label, id ) {
 			if(jQuery.inArray(id, _itemsInTour(),0) >= 0){
@@ -151,7 +151,7 @@
 				jQuery(document).trigger('tourItemsUpdated');
 			}
 		}
-		
+
 		jQuery( "#tour-item-search" ).autocomplete({
 		  minLength: 2,
 		  source: allItems,
@@ -169,6 +169,6 @@
 		    .append( "<div>" + item.label + "</div>" )
 		    .appendTo( ul );
 		};
-				
+
 	});
 </script>

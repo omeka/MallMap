@@ -287,9 +287,11 @@ function mallMapJs(){
         }
 
         var mapCoverage = $('#map-coverage');
-        var itemType = $('#item-type');
-        var placeTypes = $('input[name=place-type]:checked');
-        var eventTypes = $('input[name=event-type]:checked');
+        var tourType = $('#tour-type');
+        console.log(tourType);
+        alert(tourType.val().toString());
+        // var placeTypes = $('input[name=place-type]:checked');
+        // var eventTypes = $('input[name=event-type]:checked');
 
         // Prepare POST data object for request.
         var postData = {
@@ -301,19 +303,19 @@ function mallMapJs(){
         if ('0' != mapCoverage.val()) {
             postData['mapCoverage'] = mapCoverage.val();
         }
-        if ('0' != itemType.val()) {
-            postData['itemType'] = itemType.val();
+        if ('0' != tourType.val()) {
+            postData['tourType'] = tourType.val();
         }
-        if (placeTypes.length) {
-            placeTypes.each(function () {
-                postData.placeTypes.push(this.value);
-            });
-        }
-        if (eventTypes.length) {
-            eventTypes.each(function () {
-                postData.eventTypes.push(this.value);
-            });
-        }
+        // if (placeTypes.length) {
+        //     placeTypes.each(function () {
+        //         postData.placeTypes.push(this.value);
+        //     });
+        // }
+        // if (eventTypes.length) {
+        //     eventTypes.each(function () {
+        //         postData.eventTypes.push(this.value);
+        //     });
+        // }
 
         // Make the POST request, handle the GeoJSON response, and add markers.
         jqXhr = $.post('mall-map/index/filter', postData, function (response) {
