@@ -21,8 +21,7 @@ function mallMapJs(){
     // var MAP_CENTER = [38.8891, -77.02949];
     var MAP_CENTER = [41.9001702, 12.4698422];
     //  MAP_ZOOM controls the default zoom of the map
-    var MAP_ZOOM = 17;
-    // var MAP_ZOOM = 15;
+    var MAP_ZOOM = 15;
     var MAP_MIN_ZOOM = 14;
     var MAP_MAX_ZOOM = 18;
     // MAP_MAX_BOUNDS controls the boundaries of the map
@@ -379,7 +378,6 @@ function mallMapJs(){
                 // document.head.appendChild(imported);
                 }
             }
-            console.log(i.toString());
             markers.addLayer(geoJsonLayer);
             map.addLayer(markers);
         });
