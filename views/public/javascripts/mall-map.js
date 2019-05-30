@@ -391,7 +391,7 @@ function mallMapJs(){
               pointList[i] = point;
             }
             var tourPolyline = new L.Polyline(pointList, {
-                color: 'black',
+                color: 'blue',
                 weight: 3,
                 opacity: 0.6,
                 smoothFactor: 1
