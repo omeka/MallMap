@@ -380,6 +380,29 @@ function mallMapJs(){
             }
             markers.addLayer(geoJsonLayer);
             map.addLayer(markers);
+
+            var json_response = eval ("(" + jqXhr.responseText + ")");
+            var json_content = json_response.features;
+            var pointList = [];
+            for(var i = 0; i < json_content.length; i++){
+              lat = json_content[i].geometry.coordinates[1];
+              lng = json_content[i].geometry.coordinates[0];
+              var point = new L.LatLng(lat, lng);
+              pointList[i] = point;
+            }
+            var tourPolyline = new L.Polyline(pointList, {
+                color: 'blue',
+                weight: 3,
+                opacity: 0.6,
+                smoothFactor: 1
+            });
+            for(var j = 0; j < Object.keys(map._layers).length; j++){
+              var feature = map._layers[Object.keys(map._layers)[j]];
+              if(feature._path){
+                map.removeLayer(feature); //map._layers[Object.keys(map._layers)[j]] = null;
+              }
+            }
+            tourPolyline.addTo(map);
         });
     }
 
