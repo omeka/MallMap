@@ -1,4 +1,4 @@
-$(document).ready(function () {
+jQuery(document).ready(function ($) {
 
     // Set map height to be window height minus header height.
     var windowheight = $(window).height();
