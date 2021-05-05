@@ -114,9 +114,11 @@ class MallMap_IndexController extends Omeka_Controller_AbstractActionController
 
         $this->view->tour_types = $_tourTypes;
         // $this->view->item_types = $this->_itemTypes;
-        $this->view->map_coverages = explode("\n", $mapCoverages->terms);
-        $this->view->place_types = explode("\n", $placeTypes->terms);
-        $this->view->event_types = explode("\n", $eventTypes->terms);
+        if ($mapCoverages && $placeTypes && $eventTypes) {
+            $this->view->map_coverages = explode("\n", $mapCoverages->terms);
+            $this->view->place_types = explode("\n", $placeTypes->terms);
+            $this->view->event_types = explode("\n", $eventTypes->terms);
+        }
 
         // Set the JS and CSS files.
         $this->view->headScript()
@@ -125,7 +127,9 @@ class MallMap_IndexController extends Omeka_Controller_AbstractActionController
             ->appendFile(src('jquery.cookie', 'javascripts', 'js'))
             ->appendFile('//cdn.leafletjs.com/leaflet-0.7/leaflet.js')
             ->appendFile(src('modernizr.custom.63332', 'javascripts', 'js'))
+            ->appendFile(src('leaflet_awesome_number_markers', 'javascripts', 'js'))
             ->appendFile(src('new_markercluster_src', 'javascripts', 'js')) //adding this so that the mall-map markers will load (most of the time; sometimes it breaks)
+            ->appendFile(src('leaflet.extra-markers.min', 'javascripts', 'js'))
             ->appendFile(src('mall-map', 'javascripts', 'js'));
         $this->view->headLink()
             ->appendStylesheet('//code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css', 'all')
@@ -134,6 +138,8 @@ class MallMap_IndexController extends Omeka_Controller_AbstractActionController
             ->appendStylesheet(src('MarkerCluster', 'css', 'css'))
             ->appendStylesheet(src('MarkerCluster.Default', 'css', 'css'))
             ->appendStylesheet(src('MarkerCluster.Default.ie', 'css', 'css'), 'all', 'lte IE 8')
+            ->appendStylesheet(src('leaflet_awesome_number_markers', 'css', 'css'))
+            ->appendStylesheet(src('leaflet.extra-markers.min', 'css', 'css'))
             ->appendStylesheet(src('mall-map', 'css', 'css'));
     }
 

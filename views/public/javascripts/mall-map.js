@@ -313,13 +313,53 @@ function mallMapJs(){
         //         postData.eventTypes.push(this.value);
         //     });
         // }
-
+        $.getScript("./src/leaflet_awesome_number_markers.js");
+        var geojsonMarkerOptions = {
+            radius: 8,
+            fillColor: "#ff7800",
+            color: "#000",
+            weight: 1,
+            opacity: 1,
+            fillOpacity: 0.8
+        };
+        var smallIcon = new L.Icon({
+            iconSize: [27, 27],
+            iconAnchor: [13, 27],
+            popupAnchor:  [1, -24],
+            iconUrl: './leaf-green.png'
+        });
+        var redMarker = L.ExtraMarkers.icon({
+            icon: 'fa-coffee',
+            markerColor: 'red',
+            shape: 'square',
+            prefix: 'fa'
+          });
         // Make the POST request, handle the GeoJSON response, and add markers.
         jqXhr = $.post('mall-map/index/filter', postData, function (response) {
           //response is an array of coordinate;
             var item = (1 == response.features.length) ? 'item' : 'items';
+            console.log(response.features);
             $('#marker-count').text(response.features.length + " " + item);
             var geoJsonLayer = L.geoJson(response, {
+                pointToLayer: function (feature, latlng) {
+                    // console.log(feature.properties.id);
+                    return L.circleMarker(latlng, geojsonMarkerOptions);
+                    // return L.marker(latlng, {
+                    //     icon: L.ExtraMarkers.icon({
+                    //       icon: 'fa-number',
+                    //       number: 1,
+                    //       markerColor: 'blue'
+                    //     })
+                    //   }
+                    // )
+                    // return L.marker(latlng, {icon: redMarker})
+                    // return L.marker(latlng, {
+                    //     icon: new L.AwesomeNumberMarkers({
+                    //       number: 1, 
+                    //       markerColor: "blue"
+                    //   })})
+                    // return L.Marker(latlng, {icon: smallIcon});
+                },
                 onEachFeature: function (feature, layer) {
                     layer.on('click', function (e) {
                         // Request the item data and populate and open the marker popup.
@@ -363,32 +403,55 @@ function mallMapJs(){
 
             //adding this so that the mall-map markers will load (most of the time; sometimes it breaks)
             for(var i = 0; i<100;i++){
-              try{
-                markers = new L.MarkerClusterGroup({
-                    showCoverageOnHover: false,
-                    maxClusterRadius: 40,
-                    spiderfyDistanceMultiplier: 2
-              });
-                break;
-              }
-              catch(err){
-                $.getScript("https://unpkg.com/leaflet.markercluster@1.3.0/dist/leaflet.markercluster.js");
-                // var imported = document.createElement("script");
-                // imported.src = "/cgmrdev/plugins/MallMap/views/public/javascripts/new_markercluster_src.js";
-                // document.head.appendChild(imported);
-                }
+            //   try{
+            //     markers = new L.MarkerClusterGroup({
+            //         showCoverageOnHover: false,
+            //         maxClusterRadius: 40,
+            //         spiderfyDistanceMultiplier: 2
+            //   });
+            //     break;
+            //   }
+            //   catch(err){
+            //     $.getScript("https://unpkg.com/leaflet.markercluster@1.3.0/dist/leaflet.markercluster.js");
+            //     // var imported = document.createElement("script");
+            //     // imported.src = "/cgmrdev/plugins/MallMap/views/public/javascripts/new_markercluster_src.js";
+            //     // document.head.appendChild(imported);
+            //     }
             }
-            markers.addLayer(geoJsonLayer);
-            map.addLayer(markers);
+            // markers.addLayer(geoJsonLayer);
+            // map.addLayer(markers);
 
             var json_response = eval ("(" + jqXhr.responseText + ")");
+            // console.log(json_response);
             var json_content = json_response.features;
+            // console.log(json_content);
             var pointList = [];
+            var test = [];
             for(var i = 0; i < json_content.length; i++){
-              lat = json_content[i].geometry.coordinates[1];
-              lng = json_content[i].geometry.coordinates[0];
-              var point = new L.LatLng(lat, lng);
-              pointList[i] = point;
+                lat = json_content[i].geometry.coordinates[1];
+                lng = json_content[i].geometry.coordinates[0];
+                var point = new L.LatLng(lat, lng);
+                //   markers.push(L.marker(point));
+                pointList[i] = point;
+                try{
+                    // markers.push(L.marker([lat,lng]));
+                    markers = new L.layerGroup();
+                //     markers = new L.MarkerClusterGroup({
+                //         showCoverageOnHover: false,
+                //         maxClusterRadius: 40,
+                //         spiderfyDistanceMultiplier: 2
+                //   });
+                    // break;
+                  }
+                  catch(err){
+                    $.getScript("https://unpkg.com/leaflet.markercluster@1.3.0/dist/leaflet.markercluster.js");
+                    // var imported = document.createElement("script");
+                    // imported.src = "/cgmrdev/plugins/MallMap/views/public/javascripts/new_markercluster_src.js";
+                    // document.head.appendChild(imported);
+                    }
+                    // markers[i].addTo(map);
+                // test[i].addTo(map);
+
             }
             var tourPolyline = new L.Polyline(pointList, {
                 color: 'blue',
@@ -398,10 +461,13 @@ function mallMapJs(){
             });
             for(var j = 0; j < Object.keys(map._layers).length; j++){
               var feature = map._layers[Object.keys(map._layers)[j]];
+              // what is the point of this if block?
               if(feature._path){
-                map.removeLayer(feature); //map._layers[Object.keys(map._layers)[j]] = null;
+                // map.removeLayer(feature); //map._layers[Object.keys(map._layers)[j]] = null;
               }
             }
+            markers.addLayer(geoJsonLayer);
+            map.addLayer(markers);
             tourPolyline.addTo(map);
         });
     }
