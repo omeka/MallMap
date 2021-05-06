@@ -94,8 +94,9 @@ class MallMap_IndexController extends Omeka_Controller_AbstractActionController
         //calls down the data table of the Simple Vocab plugin
         $simpleVocabTerm = $this->_helper->db->getTable('SimpleVocabTerm');
         $mapCoverages = $simpleVocabTerm->findByElementId(self::ELEMENT_ID_MAP_COVERAGE);
-        $placeTypes = $simpleVocabTerm->findByElementId(self::ELEMENT_ID_PLACE_TYPE);
-        $eventTypes = $simpleVocabTerm->findByElementId(self::ELEMENT_ID_EVENT_TYPE);
+        /* REMOVING ADDITIONAL SIMPLE VOCAB FILTERS -AM */
+        // $placeTypes = $simpleVocabTerm->findByElementId(self::ELEMENT_ID_PLACE_TYPE);
+        // $eventTypes = $simpleVocabTerm->findByElementId(self::ELEMENT_ID_EVENT_TYPE);
 
         // Get the database.
     		$db = get_db();
@@ -114,10 +115,12 @@ class MallMap_IndexController extends Omeka_Controller_AbstractActionController
 
         $this->view->tour_types = $_tourTypes;
         // $this->view->item_types = $this->_itemTypes;
-        if ($mapCoverages && $placeTypes && $eventTypes) {
+        /* REMOVING ADDITIONAL SIMPLE VOCAB FILTERS -AM */
+        // if ($mapCoverages && $placeTypes && $eventTypes) {
+            // $this->view->place_types = explode("\n", $placeTypes->terms);
+            // $this->view->event_types = explode("\n", $eventTypes->terms);
+        if ($mapCoverages) {
             $this->view->map_coverages = explode("\n", $mapCoverages->terms);
-            $this->view->place_types = explode("\n", $placeTypes->terms);
-            $this->view->event_types = explode("\n", $eventTypes->terms);
         }
 
         // Set the JS and CSS files.
@@ -190,6 +193,7 @@ class MallMap_IndexController extends Omeka_Controller_AbstractActionController
                      . $db->quoteInto("AND $alias.element_id = ?", self::ELEMENT_ID_MAP_COVERAGE);
             $wheres[] = $db->quoteInto("$alias.text = ?", $this->_request->getParam('mapCoverage'));
         }
+        /* REMOVING ADDITIONAL SIMPLE VOCAB FILTERS -AM */
         // // Filter place types (inclusive).
         // if ($this->_request->getParam('placeTypes')) {
         //     $alias = "place_types";
