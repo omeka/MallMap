@@ -11,22 +11,22 @@ function mallMapJs(){
     var windowheight = $(window).height();
     $('#map').css('height', windowheight - 54);
     //adding this so that the mall-map markers will load (most of the time; sometimes it breaks)
-    $.getScript("https://unpkg.com/leaflet.markercluster@1.3.0/dist/leaflet.markercluster.js");
-    var imported = document.createElement("script");
-    imported.src = "/cgmrdev/plugins/MallMap/views/public/javascripts/new_markercluster_src.js";
-    document.head.appendChild(imported);
+    // $.getScript("https://unpkg.com/leaflet.markercluster@1.3.0/dist/leaflet.markercluster.js");
+    // var imported = document.createElement("script");
+    // imported.src = "/cgmrdev/plugins/MallMap/views/public/javascripts/new_markercluster_src.js";
+    // document.head.appendChild(imported);
 
     var MAP_URL_TEMPLATE = 'https://stamen-tiles-{s}.a.ssl.fastly.net/terrain/{z}/{x}/{y}{r}.png';
     // MAP_CENTER controls the default starting place
     // var MAP_CENTER = [38.8891, -77.02949];
-    var MAP_CENTER = [41.9001702, 12.4698422];
+    var MAP_CENTER = [44.458498027103865, -93.15750479388674];
     //  MAP_ZOOM controls the default zoom of the map
     var MAP_ZOOM = 15;
     var MAP_MIN_ZOOM = 14;
     var MAP_MAX_ZOOM = 18;
     // MAP_MAX_BOUNDS controls the boundaries of the map
-    var MAP_MAX_BOUNDS = [[41.908628, 12.451941], [41.88927, 12.490607]];
-    var LOCATE_BOUNDS = [[41.908628, 12.451941], [41.88927, 12.490607]];
+    var MAP_MAX_BOUNDS = [[44.468498027103865, -93.13750479388674], [44.448498027103865, -93.17750479388674]];
+    var LOCATE_BOUNDS = [[44.468498027103865, -93.13750479388674], [44.448498027103865, -93.17750479388674]];
     var MAX_LOCATE_METERS = 8000;
 
     var map;
@@ -313,27 +313,27 @@ function mallMapJs(){
         //         postData.eventTypes.push(this.value);
         //     });
         // }
-        $.getScript("./src/leaflet_awesome_number_markers.js");
-        var geojsonMarkerOptions = {
-            radius: 8,
-            fillColor: "#ff7800",
-            color: "#000",
-            weight: 1,
-            opacity: 1,
-            fillOpacity: 0.8
-        };
-        var smallIcon = new L.Icon({
-            iconSize: [27, 27],
-            iconAnchor: [13, 27],
-            popupAnchor:  [1, -24],
-            iconUrl: './leaf-green.png'
-        });
-        var redMarker = L.ExtraMarkers.icon({
-            icon: 'fa-coffee',
-            markerColor: 'red',
-            shape: 'square',
-            prefix: 'fa'
-          });
+        // $.getScript("./src/leaflet_awesome_number_markers.js");
+        // var geojsonMarkerOptions = {
+        //     radius: 8,
+        //     fillColor: "#ff7800",
+        //     color: "#000",
+        //     weight: 1,
+        //     opacity: 1,
+        //     fillOpacity: 0.8
+        // };
+        // var smallIcon = new L.Icon({
+        //     iconSize: [27, 27],
+        //     iconAnchor: [13, 27],
+        //     popupAnchor:  [1, -24],
+        //     iconUrl: './leaf-green.png'
+        // });
+        // var redMarker = L.ExtraMarkers.icon({
+        //     icon: 'fa-coffee',
+        //     markerColor: 'red',
+        //     shape: 'square',
+        //     prefix: 'fa'
+        //   });
         // Make the POST request, handle the GeoJSON response, and add markers.
         jqXhr = $.post('mall-map/index/filter', postData, function (response) {
           //response is an array of coordinate;
@@ -343,15 +343,15 @@ function mallMapJs(){
             var geoJsonLayer = L.geoJson(response, {
                 pointToLayer: function (feature, latlng) {
                     // console.log(feature.properties.id);
-                    return L.circleMarker(latlng, geojsonMarkerOptions);
-                    // return L.marker(latlng, {
-                    //     icon: L.ExtraMarkers.icon({
-                    //       icon: 'fa-number',
-                    //       number: 1,
-                    //       markerColor: 'blue'
-                    //     })
-                    //   }
-                    // )
+                    // return L.circleMarker(latlng, geojsonMarkerOptions);
+                    return L.marker(latlng, {
+                        icon: L.ExtraMarkers.icon({
+                          icon: 'fa-number',
+                          number: 1,
+                          markerColor: 'blue'
+                        })
+                      }
+                    )
                     // return L.marker(latlng, {icon: redMarker})
                     // return L.marker(latlng, {
                     //     icon: new L.AwesomeNumberMarkers({
@@ -431,24 +431,24 @@ function mallMapJs(){
                 lat = json_content[i].geometry.coordinates[1];
                 lng = json_content[i].geometry.coordinates[0];
                 var point = new L.LatLng(lat, lng);
-                //   markers.push(L.marker(point));
+                  markers.push(L.marker(point));
                 pointList[i] = point;
-                try{
-                    // markers.push(L.marker([lat,lng]));
-                    markers = new L.layerGroup();
-                //     markers = new L.MarkerClusterGroup({
-                //         showCoverageOnHover: false,
-                //         maxClusterRadius: 40,
-                //         spiderfyDistanceMultiplier: 2
-                //   });
-                    // break;
-                  }
-                  catch(err){
-                    $.getScript("https://unpkg.com/leaflet.markercluster@1.3.0/dist/leaflet.markercluster.js");
-                    // var imported = document.createElement("script");
-                    // imported.src = "/cgmrdev/plugins/MallMap/views/public/javascripts/new_markercluster_src.js";
-                    // document.head.appendChild(imported);
-                    }
+                // try{
+//                     // markers.push(L.marker([lat,lng]));
+//                     markers = new L.layerGroup();
+//                 //     markers = new L.MarkerClusterGroup({
+//                 //         showCoverageOnHover: false,
+//                 //         maxClusterRadius: 40,
+//                 //         spiderfyDistanceMultiplier: 2
+//                 //   });
+//                     // break;
+//                   }
+//                   catch(err){
+//                     $.getScript("https://unpkg.com/leaflet.markercluster@1.3.0/dist/leaflet.markercluster.js");
+//                     // var imported = document.createElement("script");
+//                     // imported.src = "/cgmrdev/plugins/MallMap/views/public/javascripts/new_markercluster_src.js";
+//                     // document.head.appendChild(imported);
+//                     }
                     // markers[i].addTo(map);
                 // test[i].addTo(map);
 
