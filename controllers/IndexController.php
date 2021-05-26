@@ -130,20 +130,15 @@ class MallMap_IndexController extends Omeka_Controller_AbstractActionController
             ->appendFile(src('jquery.cookie', 'javascripts', 'js'))
             ->appendFile('//cdn.leafletjs.com/leaflet-0.7/leaflet.js')
             ->appendFile(src('modernizr.custom.63332', 'javascripts', 'js'))
-            // ->appendFile(src('leaflet_awesome_number_markers', 'javascripts', 'js'))
-            // ->appendFile(src('new_markercluster_src', 'javascripts', 'js')) //adding this so that the mall-map markers will load (most of the time; sometimes it breaks)
             ->appendFile('//cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.1/js/fontawesome.min.js')
             ->appendFile(src('leaflet.extra-markers.min', 'markers', 'js'))
+            ->appendFile(src('Polyline.encoded', 'javascripts', 'js'))
             ->appendFile(src('mall-map', 'javascripts', 'js'));
         $this->view->headLink()
             ->appendStylesheet('//code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css', 'all')
             ->appendStylesheet('//cdn.leafletjs.com/leaflet-0.7/leaflet.css', 'all')
             ->appendStylesheet('//cdn.leafletjs.com/leaflet-0.7/leaflet.ie.css', 'all', 'lte IE 8')
             ->appendStylesheet('//cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.1/css/all.min.css')
-            // ->appendStylesheet(src('MarkerCluster', 'css', 'css'))
-            // ->appendStylesheet(src('MarkerCluster.Default', 'css', 'css'))
-            // ->appendStylesheet(src('MarkerCluster.Default.ie', 'css', 'css'), 'all', 'lte IE 8')
-            // ->appendStylesheet(src('leaflet_awesome_number_markers', 'css', 'css'))
             ->appendStylesheet(src('leaflet.extra-markers.min', 'markers', 'css'))
             ->appendStylesheet(src('mall-map', 'css', 'css'));
     }
@@ -169,7 +164,8 @@ class MallMap_IndexController extends Omeka_Controller_AbstractActionController
         $request_tour_id = $this->_request->getParam('tourType');
         $tourItemTable = $db->getTable( 'TourItem' );
         if($request_tour_id != 0){
-      		$tourItemsDat = $tourItemTable->fetchObjects( "SELECT item_id FROM omeka_tour_items WHERE tour_id = $request_tour_id");
+      		$tourItemsDat = $tourItemTable->fetchObjects( "SELECT item_id FROM omeka_tour_items 
+                                                           WHERE tour_id = $request_tour_id");
         } else {
           $tourItemsDat = $tourItemTable->fetchObjects( "SELECT item_id FROM omeka_tour_items");
         }
@@ -177,6 +173,7 @@ class MallMap_IndexController extends Omeka_Controller_AbstractActionController
         foreach ($tourItemsDat as $dat){
           $tourItemsIDs[] = (int) $dat["item_id"];
         }
+        $ids = $tourItemsIDs;
         $tourItemsIDs = implode(", ", $tourItemsIDs);
         // // Filter tours
 
@@ -229,9 +226,18 @@ class MallMap_IndexController extends Omeka_Controller_AbstractActionController
         }
         $sql .= "\nGROUP BY items.id";
 
+        $dbItems = $db->query($sql)->fetchAll();
+        $orderedItems = array();
+        for ($i = 0; $i < count($ids); $i++) {
+            for ($j = 0; $j < count($dbItems); $j++) {
+                if ($ids[$i] == $dbItems[$j]['id']) {
+                    array_push( $orderedItems, $dbItems[$j] );
+                }
+            }
+        }
         // Build geoJSON: http://www.geojson.org/geojson-spec.html
         $data = array('type' => 'FeatureCollection', 'features' => array());
-        foreach ($db->query($sql)->fetchAll() as $row) {
+        foreach ($orderedItems as $row) {
             $data['features'][] = array(
                 'type' => 'Feature',
                 'geometry' => array(
@@ -243,6 +249,10 @@ class MallMap_IndexController extends Omeka_Controller_AbstractActionController
                 ),
             );
         }
+        $text = "Anything";
+        $var_str = var_export($request_tour_id, true);
+        $var = "<?php\n\n\$text = $var_str;\n\n?>";
+        file_put_contents('filename.php', $var);
         $this->_helper->json($data);
     }
 
