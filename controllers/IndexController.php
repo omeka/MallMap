@@ -228,6 +228,7 @@ class MallMap_IndexController extends Omeka_Controller_AbstractActionController
 
         $dbItems = $db->query($sql)->fetchAll();
         $orderedItems = array();
+        // orders items to match the order of the tour
         for ($i = 0; $i < count($ids); $i++) {
             for ($j = 0; $j < count($dbItems); $j++) {
                 if ($ids[$i] == $dbItems[$j]['id']) {
@@ -249,10 +250,11 @@ class MallMap_IndexController extends Omeka_Controller_AbstractActionController
                 ),
             );
         }
-        $text = "Anything";
+        // commented code below serves as debugging tool to write output to a file
+        /*$text = "Anything";
         $var_str = var_export($request_tour_id, true);
         $var = "<?php\n\n\$text = $var_str;\n\n?>";
-        file_put_contents('filename.php', $var);
+        file_put_contents('filename.php', $var);*/
         $this->_helper->json($data);
     }
 
