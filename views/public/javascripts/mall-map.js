@@ -317,6 +317,8 @@ function mallMapJs(){
         //         postData.eventTypes.push(this.value);
         //     });
         // }
+
+        // correctly formats coordinates as [lat, long] (API returns [long, lat])
         function orderCoords(path) {
             var directions = [];
             for (var i = 0; i < path.length; i++) {
@@ -325,6 +327,7 @@ function mallMapJs(){
             return directions;
         }
 
+        // API call to return walking coordinates between two points
         function getDirections(theUrl) {
             var xmlHttp = new XMLHttpRequest();
             xmlHttp.open( "GET", theUrl, false ); // false for synchronous request
@@ -333,6 +336,7 @@ function mallMapJs(){
             var path = json["features"][0]["geometry"]["coordinates"];
             return path;
         }
+
         var key = "5b3ce3597851110001cf62489dde4c6690bc423bb86bd99921c5da77";
         var startLat;
         var startLng;
@@ -348,6 +352,7 @@ function mallMapJs(){
             var i = 1;
             $('#marker-count').text(response.features.length + " " + item);
             var geoJsonLayer = L.geoJson(response, {
+                // adds the correct number to each marker based on order of tour
                 pointToLayer: function (feature, latlng) {
                     var numberIcon = L.divIcon({
                         className: "number-icon",
@@ -413,6 +418,7 @@ function mallMapJs(){
                     // document.head.appendChild(imported);
                     }
             }
+            // gets directions from one point to the next, adds this to the overall list of directions
             for (var i = 0; i < pointList.length - 1; i++) {
                 startLat = pointList[i]["lat"];
                 startLng = pointList[i]["lng"];
@@ -425,11 +431,10 @@ function mallMapJs(){
                     walkingPath.push(p);
                 }
             }
-            console.log(walkingPath);
             var tourPolyline = new L.Polyline(walkingPath, {
                 color: 'blue',
                 weight: 3,
-                opacity: 0.6,
+                opacity: 1,
                 smoothFactor: 1
             });
 
