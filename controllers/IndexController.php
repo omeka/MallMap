@@ -130,16 +130,12 @@ class MallMap_IndexController extends Omeka_Controller_AbstractActionController
             ->appendFile(src('jquery.cookie', 'javascripts', 'js'))
             ->appendFile('//cdn.leafletjs.com/leaflet-0.7/leaflet.js')
             ->appendFile(src('modernizr.custom.63332', 'javascripts', 'js'))
-            ->appendFile('//cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.1/js/fontawesome.min.js')
-            ->appendFile(src('leaflet.extra-markers.min', 'markers', 'js'))
             ->appendFile(src('Polyline.encoded', 'javascripts', 'js'))
             ->appendFile(src('mall-map', 'javascripts', 'js'));
         $this->view->headLink()
             ->appendStylesheet('//code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css', 'all')
             ->appendStylesheet('//cdn.leafletjs.com/leaflet-0.7/leaflet.css', 'all')
             ->appendStylesheet('//cdn.leafletjs.com/leaflet-0.7/leaflet.ie.css', 'all', 'lte IE 8')
-            ->appendStylesheet('//cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.1/css/all.min.css')
-            ->appendStylesheet(src('leaflet.extra-markers.min', 'markers', 'css'))
             ->appendStylesheet(src('mall-map', 'css', 'css'));
     }
 

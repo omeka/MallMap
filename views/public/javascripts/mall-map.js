@@ -16,7 +16,7 @@ function mallMapJs(){
     // imported.src = "/cgmrdev/plugins/MallMap/views/public/javascripts/new_markercluster_src.js";
     // document.head.appendChild(imported);
 
-    // var MAP_URL_TEMPLATE = 'https://stamen-tiles-{s}.a.ssl.fastly.net/terrain/{z}/{x}/{y}{r}.png';
+    var MAP_URL_TEMPLATE = 'https://stamen-tiles-{s}.a.ssl.fastly.net/terrain/{z}/{x}/{y}{r}.png';
 
     // MAP_CENTER controls the default starting place
     // var MAP_CENTER = [38.8891, -77.02949];
@@ -45,10 +45,10 @@ function mallMapJs(){
         maxBounds: MAP_MAX_BOUNDS,
         zoomControl: false
     });
-    // map.addLayer(L.tileLayer(MAP_URL_TEMPLATE));
-    map.addLayer(L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                }));
+    map.addLayer(L.tileLayer(MAP_URL_TEMPLATE));
+    // map.addLayer(L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    //                 attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    //             }));
     map.addControl(L.control.zoom({position: 'topleft'}));
     map.attributionControl.setPrefix('');
 
